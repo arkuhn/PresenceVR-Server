@@ -3,3 +3,5 @@ node_modules
 *.iml
 .vscode
 .DS_STORE
+*.swp
+*.swo
