@@ -1,9 +1,9 @@
 // Load required modules
-var http    = require("http");              // http server core module
-var express = require("express");           // web framework external module
-var serveStatic = require('serve-static');  // serve static files
-var socketIo = require("socket.io");        // web socket external module
-var easyrtc = require("../");               // EasyRTC external module
+var https   = require("https");     // https server core module
+var fs      = require("fs");        // file system core module
+var express = require("express");   // web framework external module
+var io      = require("socket.io"); // web socket external module
+var easyrtc = require("easyrtc");   // EasyRTC external module
 let request = require('request');
 const iceConfigs = require("./configs/iceConfigs");
 
@@ -11,11 +11,19 @@ const iceConfigs = require("./configs/iceConfigs");
 process.title = "node-easyrtc";
 
 // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
-var app = express();
-app.use(serveStatic('static', {'index': ['index.html']}));
+var httpApp = express();
+httpApp.use(serveStatic('static', {'index': ['index.html']}));
+httpApp.use(express.static(__dirname + "/static/thing/", {dotfiles:'allow'}));
+httpApp.use(express.static(__dirname + "/static/example/", {dotfiles:'allow'}));
+httpApp.use(express.static(__dirname + "/static/"));
 
-// Start Express http server on port 8080
-var webServer = http.createServer(app).listen(8080);
+// Start Express https server on port 8443
+var webServer = https.createServer(
+{
+    key:  fs.readFileSync("/pathtokeys/domain.key"),
+    cert: fs.readFileSync("/pathtokeys/domain.crt")
+},
+httpApp);
 
 // Start Socket.io so it attaches itself to Express server
 var socketServer = socketIo.listen(webServer, {"log level":1});
@@ -53,6 +61,8 @@ easyrtc.events.on("roomJoin", function(connectionObj, roomName, roomParameter, c
     console.log("["+connectionObj.getEasyrtcid()+"] Credential retrieved!", connectionObj.getFieldValueSync("credential"));
     easyrtc.events.defaultListeners.roomJoin(connectionObj, roomName, roomParameter, callback);
 });
+
+
 
 // Start EasyRTC server
 var rtc = easyrtc.listen(app, socketServer, null, function(err, rtcRef) {
