@@ -9,13 +9,16 @@ var socketIo = require("socket.io");        // web socket external module
 var easyrtc = require("../");               // EasyRTC external module
 let request = require('request');
 const configs = require("./configs/configs");
+let env = require('node-env-file');
+env(__dirname + '/.env');
+
 const HTTP_PORT = 80;
 const HTTPS_PORT = 443;
 let rest = [];
-let prod = false;
 let dir1, dir2;
-let args = process.argv;
-[dir1, dir2, prod, ...rest] = args;
+
+let prod = parseInt(process.env.PROD);
+
 if (prod) {
     console.log('Production Enabled');
 } else {
@@ -95,7 +98,6 @@ var rtc = easyrtc.listen(app, socketServer, null, function(err, rtcRef) {
 
     rtcRef.events.on("roomCreate", function(appObj, creatorConnectionObj, roomName, roomOptions, callback) {
         console.log("roomCreate fired! Trying to create: " + roomName);
-
         appObj.events.defaultListeners.roomCreate(appObj, creatorConnectionObj, roomName, roomOptions, callback);
     });
 
