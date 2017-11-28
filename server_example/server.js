@@ -35,7 +35,7 @@ app.use(express.static(__dirname + "/static/", {dotfiles:'allow'}));
 
 let httpServer = http.createServer(app);
 
-let options, socketServer;
+let options, socketServer, secureServer;
 
 if (prod) { 
     options = {
@@ -43,7 +43,7 @@ if (prod) {
         cert: fs.readFileSync(configs.https.cert)
     }
 
-    let secureServer = https.createServer( options, app);
+    secureServer = https.createServer( options, app);
     socketServer = socketIo.listen(secureServer, {"log level":1});
 } else {
     socketServer = socketIo.listen(httpServer, {"log level":1});
