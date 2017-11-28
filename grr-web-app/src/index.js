@@ -4,7 +4,8 @@ import './index.css';
 // import App from './App';
 // import Navbar from './'
 import registerServiceWorker from './registerServiceWorker';
-import Homepage from "./Homepage/Homepage";
+// import Homepage from "./Homepage/Homepage";
+import AssetMgmt from "./AssetMgmt/AssetMgmt";
 
-ReactDOM.render(<Homepage />, document.getElementById('root'));
+ReactDOM.render(<AssetMgmt />, document.getElementById('root'));
 registerServiceWorker();
