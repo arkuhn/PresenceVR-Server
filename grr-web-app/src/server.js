@@ -3,16 +3,16 @@ const http    = require("http");              // http server core module
 const https   = require("https");     // https server core module
 const fs = require("fs");
 var express = require("express");           // web framework external module
-let forceSsl = require('express-force-ssl');
+//let forceSsl = require('express-force-ssl');
 var serveStatic = require('serve-static');  // serve static files
 var socketIo = require("socket.io");        // web socket external module
-var easyrtc = require("../");               // EasyRTC external module
+var easyrtc = require("../../index");               // EasyRTC external module
 let request = require('request');
-const configs = require("./configs/configs");
+const configs = require("../../server_example/configs/configs");
 let env = require('node-env-file');
 env(__dirname + '/.env');
 
-const HTTP_PORT = 80;
+const HTTP_PORT = 8080;
 const HTTPS_PORT = 443;
 let rest = [];
 let dir1, dir2;
@@ -30,11 +30,11 @@ process.title = "node-easyrtc";
 
 // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
 var app = express();
-app.use(forceSsl);
-app.use(serveStatic('static', {'index': ['index.html']}));
+//app.use(forceSsl);
+app.use(serveStatic('static', {'index': ['../public/videoparse.html']}));
 app.use(express.static(__dirname + "/static/thing/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/static/example/", {dotfiles:'allow'}));
-app.use(express.static(__dirname + "/static/", {dotfiles:'allow'}));
+app.use(express.static( "../public/", {dotfiles:'allow'}));
 
 let httpServer = http.createServer(app);
 

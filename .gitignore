@@ -49,3 +49,12 @@ desktopCapture
 /api/labs/desktopCapture
 test/reports/
 bower_components/
+
+##IDE
+.idea
+*.iml
+.vscode
+.DS_STORE
+*.swp
+*.swo
+
