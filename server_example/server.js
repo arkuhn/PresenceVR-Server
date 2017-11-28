@@ -3,34 +3,57 @@ const http    = require("http");              // http server core module
 const https   = require("https");     // https server core module
 const fs = require("fs");
 var express = require("express");           // web framework external module
+let forceSsl = require('express-force-ssl');
 var serveStatic = require('serve-static');  // serve static files
 var socketIo = require("socket.io");        // web socket external module
 var easyrtc = require("../");               // EasyRTC external module
 let request = require('request');
 const configs = require("./configs/configs");
-const PORT = 80;
+const HTTP_PORT = 80;
+const HTTPS_PORT = 443;
+let rest = [];
+let prod = false;
+let dir1, dir2;
+let args = process.argv;
+[dir1, dir2, prod, ...rest] = args;
+if (prod) {
+    console.log('Production Enabled');
+} else {
+    console.log("Development Enabled");
+}
 
 // Set process name
 process.title = "node-easyrtc";
 
 // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
 var app = express();
+app.use(forceSsl);
 app.use(serveStatic('static', {'index': ['index.html']}));
 app.use(express.static(__dirname + "/static/thing/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/static/example/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/static/", {dotfiles:'allow'}));
 
+let httpServer = http.createServer(app);
+
+let options, socketServer;
+
+if (prod) { 
+    options = {
+        key:  fs.readFileSync(configs.https.key),
+        cert: fs.readFileSync(configs.https.cert)
+    }
+
+    let secureServer = https.createServer( options, app);
+    socketServer = socketIo.listen(secureServer, {"log level":1});
+} else {
+    socketServer = socketIo.listen(httpServer, {"log level":1});
+}
 // Start Express http server on port 8080
 //var webServer = http.createServer(app);
-var webServer = https.createServer(
-{
-    key:  fs.readFileSync(configs.https.key),
-    cert: fs.readFileSync(configs.https.cert)
-},
-httpApp);
+
 
 // Start Socket.io so it attaches itself to Express server
-var socketServer = socketIo.listen(webServer, {"log level":1});
+
 
 easyrtc.setOption("logLevel", "debug");
 
@@ -77,8 +100,13 @@ var rtc = easyrtc.listen(app, socketServer, null, function(err, rtcRef) {
     });
 
     //listen on PORT
-    webServer.close();
-    webServer.listen(PORT, function () {
-        console.log(`listening on http://localhost:${PORT}`);
-    }); 
+    if (prod) {
+        webServer.listen(HTTPS_PORT, function () {
+            console.log(`setup HTTPS Server`);
+        });
+    }
+
+    httpServer.listen(HTTP_PORT, function() {
+        console.log(`Setup HTTP Server`);
+    });
 });

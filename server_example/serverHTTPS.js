@@ -20,8 +20,8 @@ httpApp.use(express.static(__dirname + "/static/"));
 // Start Express https server on port 8443
 var webServer = https.createServer(
 {
-    key:  fs.readFileSync("/pathtokeys/domain.key"),
-    cert: fs.readFileSync("/pathtokeys/domain.crt")
+    key:  fs.readFileSync("/pathtokeys/domain.key").toString(),
+    cert: fs.readFileSync("/pathtokeys/domain.crt").toString()
 },
 httpApp);
 
