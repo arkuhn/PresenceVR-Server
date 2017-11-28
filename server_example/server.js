@@ -101,7 +101,7 @@ var rtc = easyrtc.listen(app, socketServer, null, function(err, rtcRef) {
 
     //listen on PORT
     if (prod) {
-        webServer.listen(HTTPS_PORT, function () {
+        secureServer.listen(HTTPS_PORT, function () {
             console.log(`setup HTTPS Server`);
         });
     }
