@@ -1,11 +1,13 @@
 // Load required modules
-var http    = require("http");              // http server core module
+const http    = require("http");              // http server core module
+const https   = require("https");     // https server core module
+const fs = require("fs");
 var express = require("express");           // web framework external module
 var serveStatic = require('serve-static');  // serve static files
 var socketIo = require("socket.io");        // web socket external module
 var easyrtc = require("../");               // EasyRTC external module
 let request = require('request');
-const iceConfigs = require("./configs/iceConfigs");
+const configs = require("./configs/configs");
 const PORT = 80;
 
 // Set process name
@@ -19,7 +21,13 @@ app.use(express.static(__dirname + "/static/example/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/static/", {dotfiles:'allow'}));
 
 // Start Express http server on port 8080
-var webServer = http.createServer(app);
+//var webServer = http.createServer(app);
+var webServer = https.createServer(
+{
+    key:  fs.readFileSync(configs.https.key),
+    cert: fs.readFileSync(configs.https.cert)
+},
+httpApp);
 
 // Start Socket.io so it attaches itself to Express server
 var socketServer = socketIo.listen(webServer, {"log level":1});
@@ -27,7 +35,7 @@ var socketServer = socketIo.listen(webServer, {"log level":1});
 easyrtc.setOption("logLevel", "debug");
 
 
-easyrtc.on("getIceConfig", request.bind(this, iceConfigs.request, (error, response, body) => {
+easyrtc.on("getIceConfig", request.bind(this, configs.request, (error, response, body) => {
     if (!error && response.statusCode == 200) {
         let info = JSON.parse(body);
         console.log(info.v.iceServers);

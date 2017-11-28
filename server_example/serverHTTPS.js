@@ -5,7 +5,7 @@ var express = require("express");   // web framework external module
 var io      = require("socket.io"); // web socket external module
 var easyrtc = require("easyrtc");   // EasyRTC external module
 let request = require('request');
-const iceConfigs = require("./configs/iceConfigs");
+const configs = require("./configs/configs");
 
 // Set process name
 process.title = "node-easyrtc";

@@ -15,13 +15,17 @@ const myIceConfigs = {
       "Authorization": "Basic " + new Buffer("lance13c:6a6903b0-a7b5-11e7-ac9b-1bba796619b2").toString("base64")
     }
   },
-  https: {
+  ice: {
     host: "global.xirsys.net",
     path: "/_turn/MyFirstApp",
     method: "PUT",
     headers: {
         "Authorization": "Basic " + new Buffer("lance13c:6a6903b0-a7b5-11e7-ac9b-1bba796619b2").toString("base64")
     }
+  },
+  https: {
+    cert: '/etc/letsencrypt/live/daad.ciciliostudio.com/fullchain.pem',
+    key: '/etc/letsencrypt/live/daad.ciciliostudio.com/privkey.pem'    
   },
   headers: {
       "Authorization": "Basic " + new Buffer("lance13c:6a6903b0-a7b5-11e7-ac9b-1bba796619b2").toString("base64")
