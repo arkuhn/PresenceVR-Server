@@ -51,10 +51,17 @@ class AssetMgmt extends Component {
                                 {/*</div>*/}
                             {/*</div>*/}
                             <a-scene embedded>
+                                <a-sky id="image-360" radius="10" src="#city"></a-sky>
+
                                 <a-assets>
                                     <img id="city" src={stock360} />
+                                        <video id="v" width="320" height="240" autoplay></video>
+                                        <canvas id="c" width="320" height="240"></canvas>
                                 </a-assets>
-                                <a-sky id="image-360" radius="15" src="#city"></a-sky>
+                                <a-video src="#c" width="5" height="2.5" rotation="-90 45 15" position="-6 -5 -1"></a-video>
+
+
+
                             </a-scene>
                         </div>
                     </div>

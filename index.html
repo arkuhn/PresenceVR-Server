@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Green Screen Video Parsing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aframe/0.7.0/aframe-master.js"></script>
+    <link href="main.css" rel="stylesheet" type="text/css">
+    <script src="grr-web-app/public/main.js"></script>
+</head>
+
+<body>
+<a-scene>
+    <a-sky id="image-360" radius="10" src="#city"></a-sky>
+
+    <a-assets>
+        <!-- Images. -->
+        <img id="city" src="grr-web-app/src/static/img/stock360.png">
+        <video id="v" width="320" height="240" autoplay></video>
+        <canvas id="c" width="320" height="240"></canvas>
+    </a-assets>
+    <!-- 360-degree image. -->
+    <a-video src="#c" width="5" height="2.5" rotation="-90 45 15" position="-6 -5 -1"></a-video>
+
+    <!-- Defining the URL inline. Not recommended but more comfortable for web developers. -->
+
+
+</a-scene>
+
+</body>
+</html>
+
+
