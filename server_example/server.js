@@ -6,6 +6,7 @@ var socketIo = require("socket.io");        // web socket external module
 var easyrtc = require("../");               // EasyRTC external module
 let request = require('request');
 const iceConfigs = require("./configs/iceConfigs");
+const PORT = 80;
 
 // Set process name
 process.title = "node-easyrtc";
@@ -18,7 +19,7 @@ app.use(express.static(__dirname + "/static/example/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/static/", {dotfiles:'allow'}));
 
 // Start Express http server on port 8080
-var webServer = http.createServer(app).listen(8080);
+var webServer = http.createServer(app);
 
 // Start Socket.io so it attaches itself to Express server
 var socketServer = socketIo.listen(webServer, {"log level":1});
@@ -67,9 +68,9 @@ var rtc = easyrtc.listen(app, socketServer, null, function(err, rtcRef) {
         appObj.events.defaultListeners.roomCreate(appObj, creatorConnectionObj, roomName, roomOptions, callback);
     });
 
-    //listen on port 8080
+    //listen on PORT
     webServer.close();
-    webServer.listen(8080, function () {
-        console.log('listening on http://localhost:8080');
+    webServer.listen(PORT, function () {
+        console.log(`listening on http://localhost:${PORT}`);
     }); 
 });
