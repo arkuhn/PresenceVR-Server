@@ -28,7 +28,6 @@
         easyrtc.setRoomOccupantListener( loggedInListener);
         var connectSuccess = function(myId) {
             //console.log("My easyrtcid is " + myId);
-            requestAnimationFrame(draw);
         }
         var connectFailure = function(errorCode, errText) {
             console.log(errText);
