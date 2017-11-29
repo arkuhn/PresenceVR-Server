@@ -34,7 +34,8 @@ var app = express();
 app.use(serveStatic('static', {'index': ['../public/videoparse.html']}));
 app.use(express.static(__dirname + "/static/thing/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/static/example/", {dotfiles:'allow'}));
-app.use(express.static( "../public/", {dotfiles:'allow'}));
+app.use(express.static( "../build/", {dotfiles:'allow'}));
+
 
 let httpServer = http.createServer(app);
 

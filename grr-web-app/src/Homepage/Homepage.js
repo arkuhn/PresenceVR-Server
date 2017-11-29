@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Button} from '@blueprintjs/core'
-import cslogo from '../../src/static/img/rit_oces.png'
-import ritlogo from '../../src/static/img/rit_logo.jpg'
+import cslogo from '../static/img/rit_oces.png'
+import ritlogo from '../static/img/rit_logo.jpg'
 import './Homepage.css';
 
 class Homepage extends Component {
