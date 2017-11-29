@@ -17,9 +17,18 @@
 
 
     function my_init() {
+        video = doc.getElementById("self");
+        width = video.width;
+        height = video.height;
+
+        // The target canvas.
+        var canvas = doc.getElementById("c");
+        context = canvas.getContext("2d");
+
         easyrtc.setRoomOccupantListener( loggedInListener);
         var connectSuccess = function(myId) {
-            console.log("My easyrtcid is " + myId);
+            //console.log("My easyrtcid is " + myId);
+            requestAnimationFrame(draw);
         }
         var connectFailure = function(errorCode, errText) {
             console.log(errText);
@@ -27,9 +36,10 @@
 
         easyrtc.initMediaSource(
             function(){        // success callback
-                var selfVideo = document.getElementById("v");
-                easyrtc.setVideoObjectSrc(selfVideo, easyrtc.getLocalStream());
+                //var selfVideo = document.getElementById("self");
+                easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
                 easyrtc.connect("Company_Chat_Line", connectSuccess, connectFailure);
+                requestAnimationFrame(draw);
             }, connectFailure);
     }
 
@@ -64,30 +74,18 @@
             });
     }
 
-    function initialize() {
 
-        // The source video.
-        video = doc.getElementById("v");
-        width = video.width;
-        height = video.height;
-
-        // The target canvas.
-        var canvas = doc.getElementById("c");
-        context = canvas.getContext("2d");
-
-        // Get the webcam's stream.
-        startStream(easyrtc.getLocalStream());
-
-    }
 
     function startStream(stream) {
-        video.src = window.URL.createObjectURL(stream);
+        video.src = URL.createObjectURL(stream);
         video.play();
+
         // Ready! Let's start drawing.
         requestAnimationFrame(draw);
     }
 
     function draw() {
+        console.log("draw");
         var frame = readFrame();
 
         if (frame) {
@@ -162,5 +160,5 @@
         return [h, s * 100, l * 100];
     }
 
-    addEventListener("DOMContentLoaded", initialize);
+    addEventListener("DOMContentLoaded", my_init);
 })(document, navigator);
