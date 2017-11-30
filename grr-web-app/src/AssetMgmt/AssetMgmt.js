@@ -55,11 +55,13 @@ class AssetMgmt extends Component {
                                     <img id="city" src="/stock360.png"></img>
                                         <video id="v" width="320" height="240" autoPlay></video>
                                         <canvas id="c" width="320" height="240"></canvas>
+                                        <canvas id="c2" width="320" height="240"></canvas>
                                         <video  id="self" width="300" height="200" autoPlay></video>
                                         <video  id="caller" width="300" height="200"></video>
                                 </a-assets>
                                 <a-sky id="image-360" radius="10" src="#city"></a-sky>
                                 <a-video src="#c" width="5" height="2.5" position="-6 -4 -2" rotation="-5 65 0"></a-video>
+                                {/* <a-video src="#c2" width="5" height="2.5" position="-12 -4 -2" rotation="-5 65 0"></a-video> */}
                                 <a-entity position="0 -5 0">
                                     <a-camera></a-camera>
                                 </a-entity>

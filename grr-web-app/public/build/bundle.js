@@ -5922,6 +5922,7 @@ var AssetMgmt = function (_Component) {
                                     _react2.default.createElement('img', { id: 'city', src: '/stock360.png' }),
                                     _react2.default.createElement('video', { id: 'v', width: '320', height: '240', autoPlay: true }),
                                     _react2.default.createElement('canvas', { id: 'c', width: '320', height: '240' }),
+                                    _react2.default.createElement('canvas', { id: 'c2', width: '320', height: '240' }),
                                     _react2.default.createElement('video', { id: 'self', width: '300', height: '200', autoPlay: true }),
                                     _react2.default.createElement('video', { id: 'caller', width: '300', height: '200' })
                                 ),

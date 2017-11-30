@@ -17,13 +17,20 @@
 
 
     function my_init() {
-        video = doc.getElementById("self");
-        width = video.width;
-        height = video.height;
+        let selfVideoEl = doc.getElementById("self");
+        let widthSelf = selfVideoEl.width;
+        let heightSelf = selfVideoEl.height;
+
+        let callerVideoEl = doc.getElementById("caller");
+        let widthCaller = callerVideoEl.width;
+        let heightCaller = callerVideoEl.height;
 
         // The target canvas.
-        var canvas = doc.getElementById("c");
-        context = canvas.getContext("2d");
+        let canvasSelf = doc.getElementById("c");
+        let contextSelf = canvasSelf.getContext("2d");
+
+        let canvasCaller = doc.getElementById("c2");
+        let contextCaller = canvasCaller.getContext("2d");
 
         easyrtc.setRoomOccupantListener( loggedInListener);
         var connectSuccess = function(myId) {
@@ -36,9 +43,12 @@
         easyrtc.initMediaSource(
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
-                easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
+                easyrtc.setVideoObjectSrc(selfVideoEl, easyrtc.getLocalStream());
                 easyrtc.connect("Company_Chat_Line", connectSuccess, connectFailure);
-                requestAnimationFrame(draw);
+                requestAnimationFrame(() => {
+                    draw(selfVideoEl, contextSelf, callerVideoEl, contextCaller, widthSelf, heightSelf, widthCaller, heightCaller);
+                });
+                
             }, connectFailure);
     }
 
@@ -83,24 +93,35 @@
         requestAnimationFrame(draw);
     }
 
-    function draw() {
-        console.log("draw");
-        var frame = readFrame();
+    function draw(selfVideoEl, contextSelf, callerVideoEl, contextCaller, widthSelf, heightSelf, widthCaller, heightCaller) {
+        //console.log("draw");
+        
+        var frameSelf = readFrame(selfVideoEl, contextSelf, widthSelf, heightSelf);
+        //var frameCaller = readFrame(callerVideoEl, contextCaller, widthCaller, heightCaller);
 
-        if (frame) {
-            replaceGreen(frame.data);
-            context.putImageData(frame, 0, 0);
+        if (frameSelf) {
+            replaceGreen(frameSelf.data);
+            contextSelf.putImageData(frameSelf, 0, 0);
         }
 
+        // if (frameCaller) {
+        //     replaceGreen(frameCaller.data);
+        //     contextCaller.putImageData(frameCaller, 0, 0);
+        // }
+
         // Wait for the next frame.
-        requestAnimationFrame(draw);
+        requestAnimationFrame(() => {
+            draw(selfVideoEl, contextSelf, callerVideoEl, contextCaller, widthSelf, heightSelf, widthCaller, heightCaller);
+        });
     }
 
-    function readFrame() {
+    function readFrame(videoEl, context, width, height) {
         try {
-            context.drawImage(video, 0, 0, width, height);
+            context.drawImage(videoEl, 0, 0, width, height);
+            console.log('drawn');
         } catch (e) {
             // The video may not be ready, yet.
+            console.log(e);
             return null;
         }
 
