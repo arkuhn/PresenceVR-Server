@@ -97,17 +97,17 @@
         //console.log("draw");
         
         var frameSelf = readFrame(selfVideoEl, contextSelf, widthSelf, heightSelf);
-        //var frameCaller = readFrame(callerVideoEl, contextCaller, widthCaller, heightCaller);
+        var frameCaller = readFrame(callerVideoEl, contextCaller, widthCaller, heightCaller);
 
         if (frameSelf) {
             replaceGreen(frameSelf.data);
             contextSelf.putImageData(frameSelf, 0, 0);
         }
 
-        // if (frameCaller) {
-        //     replaceGreen(frameCaller.data);
-        //     contextCaller.putImageData(frameCaller, 0, 0);
-        // }
+        if (frameCaller) {
+            replaceGreen(frameCaller.data);
+            contextCaller.putImageData(frameCaller, 0, 0);
+        }
 
         // Wait for the next frame.
         requestAnimationFrame(() => {
