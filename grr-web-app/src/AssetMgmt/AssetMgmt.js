@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Menu, MenuItem, MenuDivider} from '@blueprintjs/core'
 import GRRNavBar from '../GRRNavBar/GRRNavBar';
-import stock360 from '../stock360.png'
+//import stock360 from '../stock360.png';
 import './AssetMgmt.css';
 
 class AssetMgmt extends Component {
@@ -54,7 +54,7 @@ class AssetMgmt extends Component {
                                 <a-sky id="image-360" radius="10" src="#city"></a-sky>
 
                                 <a-assets>
-                                    <img id="city" src={stock360}></img>
+                                    {/* <img id="city" src={stock360}></img> */}
                                         <video id="v" width="320" height="240" autoplay></video>
                                         <canvas id="c" width="320" height="240"></canvas>
                                         <video  id="self" width="300" height="200" autoplay></video>
