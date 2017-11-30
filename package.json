@@ -1,67 +1,40 @@
 {
-  "name": "easyrtc",
-  "version": "1.1.0",
-  "homepage": "http://www.easyrtc.com/",
-  "author": "Priologic Software Inc. <info@priologic.com> (http://priologic.com/)",
-  "description": "EasyRTC enables quick development of webRTC",
-  "contributors": [
-    "Doug Pelton <doug@priologic.com>",
-    "Rod Apeldoorn <rod.apeldoorn@priologic.com>",
-    "Eric Davies <eric.davies@priologic.com>",
-    "Harold Thetiot <hthetiot@sylaps.com>"
-  ],
-  "keywords": [
-    "webRTC",
-    "easy",
-    "EasyRTC",
-    "RTC",
-    "server"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/priologic/easyrtc.git"
-  },
-  "bugs": {
-    "url": "https://github.com/priologic/easyrtc/issues"
-  },
-  "main": "index",
+  "name": "grr-web-app",
+  "version": "0.1.0",
   "dependencies": {
+    "@blueprintjs/core": "^1.33.0",
     "async": "0.2.x",
     "colors": "*",
+    "express": "^4.16.2",
+    "node-env-file": "^0.1.8",
+    "react": "^16.1.1",
+    "react-addons-css-transition-group": "^15.6.2",
+    "react-dom": "^16.1.1",
+    "request": "^2.83.0",
+    "socket.io": "^2.0.4",
     "underscore": "1.5.x"
   },
-  "analyze": false,
-  "license": "BSD-2-Clause",
-  "engines": {
-    "node": ">=0.8"
+  "proxy": "http://localhost:8080",
+  "scripts": {
+    "start": "nodemon src/server/index.js",
+    "webpack": "./node_modules/.bin/webpack -w",
+    "test": "mocha --compilers babel-core/register ./test/*test.js"
   },
   "devDependencies": {
-    "fs": "0.0.2",
-    "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-connect": "^1.0.2",
-    "grunt-contrib-csslint": "^1.0.0",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-requirejs": "^1.0.0",
-    "grunt-contrib-uglify": "^1.0.1",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-file-info": "^1.0.10",
-    "grunt-htmlhint": "^0.9.13",
-    "grunt-jsdoc": "^2.0.0",
-    "grunt-karma": "^1.0.0",
-    "jasmine-core": "^2.4.1",
-    "jsdoc-oblivion": "0.0.4",
-    "karma": "^0.13.22",
-    "karma-chrome-launcher": "^1.0.1",
-    "karma-coverage": "^1.0.0",
-    "karma-firefox-launcher": "^1.0.0",
-    "karma-ie-launcher": "^1.0.0",
-    "karma-jasmine": "^1.0.2",
-    "karma-phantomjs-launcher": "^1.0.0",
-    "karma-requirejs": "^1.0.0",
-    "phantomjs-prebuilt": "^2.1.7",
-    "requirejs": "^2.2.0",
-    "strip-json-comments": "^2.0.1",
-    "time-grunt": "^1.3.0"
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "chai": "^4.1.2",
+    "css-loader": "^0.28.7",
+    "enzyme": "^3.2.0",
+    "file-loader": "^1.1.5",
+    "image-webpack-loader": "^3.4.2",
+    "mocha": "^4.0.1",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.8.1"
   }
 }

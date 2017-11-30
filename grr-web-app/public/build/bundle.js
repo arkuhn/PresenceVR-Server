@@ -5915,16 +5915,17 @@ var AssetMgmt = function (_Component) {
                             { id: 'background-preview' },
                             _react2.default.createElement(
                                 'a-scene',
-                                { embedded: true },
-                                _react2.default.createElement('a-sky', { id: 'image-360', radius: '10', src: '#city' }),
+                                null,
                                 _react2.default.createElement(
                                     'a-assets',
                                     null,
-                                    _react2.default.createElement('video', { id: 'v', width: '320', height: '240', autoplay: true }),
+                                    _react2.default.createElement('img', { id: 'city', src: '/stock360.png' }),
+                                    _react2.default.createElement('video', { id: 'v', width: '320', height: '240', autoPlay: true }),
                                     _react2.default.createElement('canvas', { id: 'c', width: '320', height: '240' }),
-                                    _react2.default.createElement('video', { id: 'self', width: '300', height: '200', autoplay: true }),
+                                    _react2.default.createElement('video', { id: 'self', width: '300', height: '200', autoPlay: true }),
                                     _react2.default.createElement('video', { id: 'caller', width: '300', height: '200' })
                                 ),
+                                _react2.default.createElement('a-sky', { id: 'image-360', radius: '10', src: '#city' }),
                                 _react2.default.createElement('a-video', { src: '#c', width: '5', height: '2.5', rotation: '-90 45 15', position: '-6 -5 -1' })
                             )
                         )
