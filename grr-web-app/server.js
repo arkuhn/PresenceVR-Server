@@ -3,7 +3,7 @@ const http    = require("http");              // http server core module
 const https   = require("https");     // https server core module
 const fs = require("fs");
 var express = require("express");           // web framework external module
-//let forceSsl = require('express-force-ssl');
+let forceSsl = require('express-force-ssl');
 var serveStatic = require('serve-static');  // serve static files
 let socketIo = require("socket.io");        // web socket external module
 var easyrtc = require("../index");               // EasyRTC external module
@@ -30,7 +30,7 @@ process.title = "node-easyrtc";
 
 // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
 var app = express();
-//app.use(forceSsl);
+app.use(forceSsl);
 app.use(serveStatic('static', {'index': __dirname + '/public/videoparse.html'}));
 app.use(express.static(__dirname + "/src/static/thing/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/src/static/example/", {dotfiles:'allow'}));
