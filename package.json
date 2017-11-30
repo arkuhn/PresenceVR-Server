@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "@blueprintjs/core": "^1.33.0",
+    "aframe-look-at-component": "^0.6.0",
     "async": "0.2.x",
     "colors": "*",
     "express": "^4.16.2",

@@ -5926,7 +5926,12 @@ var AssetMgmt = function (_Component) {
                                     _react2.default.createElement('video', { id: 'caller', width: '300', height: '200' })
                                 ),
                                 _react2.default.createElement('a-sky', { id: 'image-360', radius: '10', src: '#city' }),
-                                _react2.default.createElement('a-video', { src: '#c', width: '5', height: '2.5', rotation: '-90 45 15', position: '-6 -5 -1' })
+                                _react2.default.createElement('a-video', { src: '#c', width: '5', height: '2.5', position: '-6 -4 -2', rotation: '-5 65 0' }),
+                                _react2.default.createElement(
+                                    'a-entity',
+                                    { position: '0 -5 0' },
+                                    _react2.default.createElement('a-camera', null)
+                                )
                             )
                         )
                     )
