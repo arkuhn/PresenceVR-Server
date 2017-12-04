@@ -30,7 +30,7 @@ process.title = "node-easyrtc";
 
 // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
 var app = express();
-//app.use(forceSsl);
+app.use(forceSsl);
 app.use(serveStatic('static', {'index': __dirname + '/public/videoparse.html'}));
 app.use(express.static(__dirname + "/src/static/thing/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/src/static/example/", {dotfiles:'allow'}));
