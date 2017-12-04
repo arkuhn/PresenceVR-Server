@@ -5,7 +5,6 @@
 
     var video, width, height, context;
 
-
     easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
         var video = document.getElementById('caller');
         easyrtc.setVideoObjectSrc(video, stream);
@@ -43,7 +42,9 @@
         easyrtc.initMediaSource(
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
-                easyrtc.setVideoObjectSrc(selfVideoEl, easyrtc.getLocalStream());
+                
+                let localStream = easyrtc.setVideoObjectSrc(selfVideoEl, easyrtc.getLocalStream());
+                easyrtc.enableMicrophone(false, localStream);
                 easyrtc.connect("Company_Chat_Line", connectSuccess, connectFailure);
                 requestAnimationFrame(() => {
                     draw(selfVideoEl, contextSelf, callerVideoEl, contextCaller, widthSelf, heightSelf, widthCaller, heightCaller);
