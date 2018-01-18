@@ -1,2 +1,0 @@
-# GRR
-Game Room Recruiting 
