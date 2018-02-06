@@ -2,17 +2,21 @@ var webpack = require('webpack');
 var path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 var BUILD_DIR = path.resolve(__dirname, './grr-ui/build');
 var APP_DIR = path.resolve(__dirname, './grr-ui/src');
+
+const pathsToClean = [
+  './grr-ui/build/bundle*.*',    // removes all files in 'build' folder
+]
 
 const config = {
    entry: {
      main: APP_DIR + '/index.js'
    },
    output: {
-     filename: 'bundle.js',
+     filename: 'bundle[hash].js',
      path: BUILD_DIR,
    },
    module: {
@@ -56,10 +60,14 @@ const config = {
 
   plugins: [
     new ExtractTextPlugin('style.css'),
+    new CleanWebpackPlugin(pathsToClean),
     new CopyWebpackPlugin([
       { from: './grr-ui/src/api', to: './api' },
-      { from: './grr-ui/src/assets', to: './assets'}
+      { from: './grr-ui/src/assets', to: './assets'},
+      { from: './grr-ui/src/favicon.ico'},
+      { from: './grr-ui/src/index.html'}
     ])
+    
   ]
 };
 
