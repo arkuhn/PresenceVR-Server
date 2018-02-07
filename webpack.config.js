@@ -46,7 +46,7 @@ const config = {
      },
      {
        test: /\.(jsx|js)?$/,
-       exclude: __dirname + '/grr-ui/src/api',
+       //exclude: __dirname + '/grr-ui/src/api',
        use: [{
          loader: "babel-loader",
          options: {
@@ -54,7 +54,7 @@ const config = {
            presets: ['react', 'es2016'] // Transpiles JSX and ES6
          }
        }],
-     }
+     },
     ],
 
   },
