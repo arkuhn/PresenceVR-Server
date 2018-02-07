@@ -13,7 +13,7 @@ class AssetMgmt extends Component {
                     <div className="list-container">
                         <Menu className="pt-large">
                             <li className="pt-menu-header centered-header">
-                                <h6>Default</h6>
+                                <h6>Default Test</h6>
                             </li>
                             <MenuItem text="GreySkies"/>
                             <MenuDivider/>
