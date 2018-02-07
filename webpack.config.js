@@ -16,7 +16,7 @@ const config = {
      main: APP_DIR + '/index.js'
    },
    output: {
-     filename: 'bundle[hash].js',
+     filename: 'bundle.js',
      path: BUILD_DIR,
    },
    module: {
@@ -46,13 +46,14 @@ const config = {
      },
      {
        test: /\.(jsx|js)?$/,
+       exclude: __dirname + '/grr-ui/src/api',
        use: [{
          loader: "babel-loader",
          options: {
            cacheDirectory: true,
-           presets: ['react', 'es2015'] // Transpiles JSX and ES6
+           presets: ['react', 'es2016'] // Transpiles JSX and ES6
          }
-       }]
+       }],
      }
     ],
 
@@ -65,7 +66,9 @@ const config = {
       { from: './grr-ui/src/api', to: './api' },
       { from: './grr-ui/src/assets', to: './assets'},
       { from: './grr-ui/src/favicon.ico'},
-      { from: './grr-ui/src/index.html'}
+      { from: './grr-ui/src/index.html'},
+      { from: './grr-ui/src/js', to:"./js"},
+      { from: './grr-ui/src/dependencies', to:"./dependencies"}
     ])
     
   ]

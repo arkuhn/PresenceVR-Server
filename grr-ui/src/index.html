@@ -5,40 +5,22 @@
   <title>Green Screen Video Parsing</title>
 
   <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
-  <script src="/aframe-look-at-component.min"></script>
-  <link rel="stylesheet" type="text/css" href="./assets/index.css" />
+  <script src="dependencies/aframe-look-at-component.min.js"></script>
+  <link href="https://unpkg.com/normalize.css@^4.1.1" rel="stylesheet" />
+  <link href="https://unpkg.com/@blueprintjs/core@^1.11.0/dist/blueprint.css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="./style.css" />
 
 
   <!---EasyRTC---->
   <link rel="stylesheet" type="text/css" href="/api/easyrtc.css" />
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
   <script type="text/javascript" src="/api/easyrtc.js"></script>
-  <script type="text/javascript" src="/js/main.js"></script>
-  <script src="./videoparse.js"></script>
+  <!-- <script type="text/javascript" src="/js/main.js"></script> -->
+  <!-- <script src="./js/videoparse.js"></script> --> -->
 
 </head>
 
-<body>
-<a-scene>
-  <a-sky id="image-360" radius="10" src="#city"></a-sky>
+<body id="root"></body>
 
-  <a-assets>
-    <!-- Images. -->
-    <img id="city" src="stock360.png">
-    <video id="v" width="320" height="240" autoplay></video>
-    <canvas id="c" width="320" height="240"></canvas>
-    <video style="float:left" id="self" width="300" height="200" autoplay></video>
-    <video style="float:left" id="caller" width="300" height="200"></video>
-  </a-assets>
-  <!-- 360-degree image. -->
-  <a-video src="#c" width="5" height="2.5" rotation="-90 45 15" position="-6 -5 -1"></a-video>
-
-  <div id="otherClients"> </div>
-
-  <!-- Defining the URL inline. Not recommended but more comfortable for web developers. -->
-
-
-</a-scene>
-
-</body>
+<script type="text/javascript" src="./bundle.js"></script>
 </html>
