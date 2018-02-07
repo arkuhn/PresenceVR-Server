@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Menu, MenuItem, MenuDivider} from '@blueprintjs/core'
 import GRRNavBar from '../GRRNavBar/GRRNavBar';
+import Keyer from '../Keyer/Keyer';
 //import stock360 from '../stock360.png';
 import './AssetMgmt.css';
 
@@ -8,12 +9,13 @@ class AssetMgmt extends Component {
     render() {
         return (
             <div>
+                <Keyer></Keyer>
                 <GRRNavBar/>
                 <div className="flex-container">
                     <div className="list-container">
                         <Menu className="pt-large">
                             <li className="pt-menu-header centered-header">
-                                <h6>Default</h6>
+                                <h6>Default Test</h6>
                             </li>
                             <MenuItem text="GreySkies"/>
                             <MenuDivider/>
@@ -52,7 +54,7 @@ class AssetMgmt extends Component {
                             {/*</div>*/}
                             <a-scene>
                                 <a-assets>
-                                    <img id="city" src="/stock360.png"></img>
+                                    <img id="city" src="/assets/images/stock360.png"></img>
                                         <video id="v" width="320" height="240" autoPlay></video>
                                         <canvas id="c" width="320" height="240"></canvas>
                                         <canvas id="c2" width="320" height="240"></canvas>

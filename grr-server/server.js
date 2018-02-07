@@ -32,10 +32,10 @@ process.title = "node-easyrtc";
 var app = express();
 //Disbale forceSsl in dev
 //app.use(forceSsl);
-app.use(serveStatic('static', {'index': 'grr-ui/public/videoparse.html'}));
-app.use(express.static("grr-ui/src/static/thing/", {dotfiles:'allow'}));
-app.use(express.static("grr-ui/src/static/example/", {dotfiles:'allow'}));
-app.use(express.static("grr-ui/public/", {dotfiles:'allow'}));
+//app.use(serveStatic('static', {'index': 'grr-ui/build/index.html'}));
+app.use(express.static(__dirname + "/../grr-ui/build/https/", {dotfiles:'allow'}));
+app.use(express.static(__dirname + "/../grr-ui/build/https2/", {dotfiles:'allow'}));
+app.use(express.static(__dirname + "/../grr-ui/build/", {dotfiles:'allow'}));
 
 
 let httpServer = http.createServer(app);
