@@ -118,5 +118,6 @@
     "indent"        : 4,         // Specify indentation spacing
     "globals"       : {
         "getUserMedia": true
-    } 
+    } ,
+    "esversion": 6
 }
