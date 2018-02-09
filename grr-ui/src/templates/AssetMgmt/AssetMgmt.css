@@ -18,6 +18,8 @@
 
 #previewItemTitle {
     text-align: right;
+    margin-left: auto;
+    padding-top: 2em;
 }
 
 .centered-header {
