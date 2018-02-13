@@ -199,7 +199,6 @@ class AssetMgmt extends Component {
                 <a-scene>
                     <a-assets>
                         <img id="city" src="/assets/images/stock360.png"></img>
-                        <video id="v" ref="v" width="320" height="240" autoPlay></video>
                         <canvas id="c" ref="c" width="320" height="240"></canvas>
                         <canvas id="c2" ref="c2" width="320" height="240"></canvas>
                         <video  id="self" ref="self" width="300" height="200" autoPlay></video>
@@ -218,10 +217,9 @@ class AssetMgmt extends Component {
         } else {
             vidBackground = <div id="background-preview">
 
-                        <video id="v" ref="v" width="320" height="240" autoPlay></video>
                         <canvas id="c" ref="c" width="320" height="240"></canvas>
                         <canvas id="c2" ref="c2" width="320" height="240"></canvas>
-                        <video  id="self" ref="self" width="300" height="200" autoPlay></video>
+                        <video  id="self" ref="self" width="300" height="200" muted="muted" autoPlay></video>
                         <video  id="caller" ref="caller" width="300" height="200"></video>
                         </div>
         }
