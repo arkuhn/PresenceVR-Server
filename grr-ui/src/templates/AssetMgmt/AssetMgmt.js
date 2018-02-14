@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import {Menu, MenuItem, MenuDivider, Switch} from '@blueprintjs/core';
 import GRRNavBar from '../GRRNavBar/GRRNavBar';
 import Keyer from '../Keyer/Keyer';
+import BackgroundImageList from '../BackgroundImageList/BackgroundImageList';
 //import stock360 from '../stock360.png';
 import './AssetMgmt.css';
 
@@ -11,9 +12,8 @@ class AssetMgmt extends Component {
     constructor(props){
         super(props);
         this.toggleVRMode = this.toggleVRMode.bind(this);
-        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null};
-
-
+        this.selectBackground = this.selectBackground.bind(this);
+        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, selectedBackground: 'stock360.png'};
     }
 
     toggleVRMode(){
@@ -21,6 +21,10 @@ class AssetMgmt extends Component {
         let video = document.getElementById("self");
         easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
 
+    }
+
+    selectBackground (backgroundTitle) {
+        this.setState({selectedBackground: backgroundTitle});
     }
 
     componentDidMount(){
@@ -198,14 +202,15 @@ class AssetMgmt extends Component {
             vidBackground = <div id="background-preview">
                 <a-scene>
                     <a-assets>
-                        <img id="city" src="/assets/images/stock360.png"></img>
+
+                        <img id="city" src={`/assets/images/${this.state.selectedBackground}`}></img>
                         <video id="v" ref="v" width="320" height="240" autoPlay></video>
                         <canvas id="c" ref="c" width="320" height="240"></canvas>
                         <canvas id="c2" ref="c2" width="320" height="240"></canvas>
                         <video  id="self" ref="self" width="300" height="200" autoPlay></video>
                         <video  id="caller" ref="caller" width="300" height="200"></video>
                     </a-assets>
-                    <a-sky id="image-360" radius="10" src="#city"></a-sky>
+                    <a-sky id="image-360" radius="10" src={`/assets/images/${this.state.selectedBackground}`}></a-sky>
                     <a-video src="#c" width="5" height="2.5" position="-6 -4 -2" rotation="-5 65 0"></a-video>
                     <a-video src="#c2" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
                     <a-entity position="0 -5 0">
@@ -228,40 +233,12 @@ class AssetMgmt extends Component {
 
         return (
             <div>
-                <Keyer></Keyer>
                 <GRRNavBar/>
                 <div className="flex-container">
-                    <div className="list-container">
-                        <Menu className="pt-large">
-                            <li className="pt-menu-header centered-header">
-                                <h6>Default Test</h6>
-                            </li>
-                            <MenuItem text="GreySkies"/>
-                            <MenuDivider/>
-                            <MenuItem text="MunsonOffice1"/>
-                            <MenuDivider/>
-                            <MenuItem text="BLRoom3"/>
-                            <li className="pt-menu-header centered-header">
-                                <h6>Uploaded</h6>
-                            </li>
-                            <MenuItem text="MtRushmore"/>
-                            <MenuDivider/>
-                            <MenuItem text="CourtRoom"/>
-                            <MenuDivider/>
-                            <MenuItem text="BLRoom2"/>
-                            <li className="pt-menu-header centered-header">
-                                <h6>User-Contributed</h6>
-                            </li>
-                            <MenuItem text="PortfolioRoom1"/>
-                            <MenuDivider/>
-                            <MenuItem text="PortfolioRoom2"/>
-                            <MenuDivider/>
-                            <MenuItem text="PortfolioRoom3"/>
-                        </Menu>
-                    </div>
+                    <BackgroundImageList onSelectedBackground={this.selectBackground}></BackgroundImageList>
                     <div className="preview-container" >
                         <h6 id="previewItemTitle">
-                            <Switch checked={this.state.vrMode} labelElement={<strong>VR Mode Enabled</strong>} onChange={this.toggleVRMode} />
+                            <Switch checked={this.state.vrMode} labelElement={<strong>VR Mode Enabled </strong>} onChange={this.toggleVRMode} />
                         </h6>
                         {vidBackground}
                     </div>
