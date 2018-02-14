@@ -13,7 +13,7 @@ class AssetMgmt extends Component {
         super(props);
         this.toggleVRMode = this.toggleVRMode.bind(this);
         this.selectBackground = this.selectBackground.bind(this);
-        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, selectedBackground: 'stock360.png'};
+        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, currentBackground: 'stock360.png'};
     }
 
     toggleVRMode(){
@@ -24,7 +24,7 @@ class AssetMgmt extends Component {
     }
 
     selectBackground (backgroundTitle) {
-        this.setState({selectedBackground: backgroundTitle});
+        this.setState({currentBackground: backgroundTitle});
     }
 
     componentDidMount(){
@@ -202,13 +202,13 @@ class AssetMgmt extends Component {
             vidBackground = <div id="background-preview">
                 <a-scene>
                     <a-assets>
-                        <img id="city" src={`/assets/images/${this.state.selectedBackground}`}></img>
+                        <img id="city" src={`/assets/images/${this.state.currentBackground}`}></img>
                         <canvas id="c" ref="c" width="320" height="240"></canvas>
                         <canvas id="c2" ref="c2" width="320" height="240"></canvas>
                         <video  id="self" ref="self" width="300" height="200" autoPlay></video>
                         <video  id="caller" ref="caller" width="300" height="200"></video>
                     </a-assets>
-                    <a-sky id="image-360" radius="10" src={`/assets/images/${this.state.selectedBackground}`}></a-sky>
+                    <a-sky id="image-360" radius="10" src={`/assets/images/${this.state.currentBackground}`}></a-sky>
                     <a-video src="#c" width="5" height="2.5" position="-6 -4 -2" rotation="-5 65 0"></a-video>
                     <a-video src="#c2" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
                     <a-entity position="0 -5 0">
