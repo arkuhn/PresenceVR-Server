@@ -8,6 +8,7 @@ class BackgroundImageList extends Component {
     constructor(){
         super();
         this.handleClick = this.handleClick.bind(this);
+        this.state = {defaultImages: ["stock360.png", "puydesancy.jpg", "city.jpg", "bridge.png"]};
     }
 
     handleClick(e){
@@ -15,20 +16,15 @@ class BackgroundImageList extends Component {
         this.props.onSelectedBackground(selectedImage);
     }
 
-
     render() {
         return (<div className="list-container">
             <Menu className="pt-large">
                 <li className="pt-menu-header centered-header">
                     <h6>Default Background Options</h6>
                 </li>
-                <MenuItem text="stock360.png" onClick={this.handleClick}/>
-                <MenuDivider/>
-                <MenuItem text="puydesancy.jpg" onClick={this.handleClick}/>
-                <MenuDivider/>
-                <MenuItem text="city.jpg" onClick={this.handleClick}/>
-                <MenuDivider/>
-                <MenuItem text="bridge.png" onClick={this.handleClick}/>
+                {this.state.defaultImages.map(image => {
+                    return <span key={image}><MenuItem key={image} text={image} onClick={this.handleClick}/><MenuDivider /></span>
+                })}
             </Menu>
         </div>);
     }
