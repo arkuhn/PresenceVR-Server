@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import './BackgroundImageList.css';
 import {Menu, MenuItem, MenuDivider, Switch} from '@blueprintjs/core';
-
+import axios from 'axios';
+import {API_URL} from "../api.config";
 
 class BackgroundImageList extends Component {
 
@@ -10,7 +11,6 @@ class BackgroundImageList extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.uploadCustomBackground = this.uploadCustomBackground.bind(this);
         this.setBackground = this.setBackground.bind(this);
-        this.state = {defaultImages: ["stock360.png", "puydesancy.jpg", "city.jpg", "bridge.png"], customImage: []};
     }
 
     handleClick(e){
@@ -26,18 +26,19 @@ class BackgroundImageList extends Component {
         e.preventDefault();
         let fileInput = document.getElementById("customUpload");
         fileInput.click();
-        let reader = new FileReader();
         let file = e.target.files[0];
 
-        reader.onloadend = () => {
-            this.setState({
-                customImage: this.state.customImage.concat([{name: file.name, file:reader.result }])
-            });
-            this.props.onSelectedBackground(reader.result);
 
-        }
+        let formData = new FormData();
 
-        reader.readAsDataURL(file);
+        formData.append('backgroundImage', file);
+        console.log(file.name);
+
+        axios.patch(API_URL+'/api/rooms/default', formData).then((result) =>{
+            //self.setState({currentBackground: result.data.currentBackground});
+            this.props.onSelectedBackground(file.name);
+        });
+
         e.target.value = null;
     }
 
@@ -50,9 +51,6 @@ class BackgroundImageList extends Component {
                 </li>
                 {this.props.backgroundImgs.map(image => {
                     return <span key={image}><MenuItem key={image} text={image} onClick={this.handleClick}/><MenuDivider /></span>
-                })}
-                {this.state.customImage.map(image => {
-                    return <span key={image.name}><MenuItem key={image.name} text={image.name} onClick={() => this.setBackground(image.file)}/><MenuDivider /></span>
                 })}
                     <input id="customUpload"
                            type="file"
