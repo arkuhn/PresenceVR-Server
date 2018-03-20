@@ -97,8 +97,6 @@ exports.patchRoom = function(req, res) {
             return res.status(404).send({message: "Room not found with id " + req.params.roomName});
         }
 
-        console.log(req.files[0]);
-
         if(req.body.name) {
             room.name = req.body.name;
         }
