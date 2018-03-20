@@ -11,6 +11,29 @@ let request = require('request');
 const configs = require("./configs/configs");
 let env = require('node-env-file');
 env(__dirname + '/.env');
+var bodyParser = require('body-parser');
+var cors = require('cors');
+
+
+//database configs
+var dbConfig = require('./configs/database.config.js');
+var mongoose = require('mongoose');
+
+//database setup
+mongoose.connect(dbConfig.url, {
+    useMongoClient: true
+});
+
+mongoose.connection.on('error', function() {
+    console.log('Could not connect to the database. Exiting now...');
+    process.exit();
+});
+
+mongoose.connection.once('open', function() {
+    console.log("Successfully connected to the database");
+})
+
+
 
 const HTTP_PORT = 8080;
 const HTTPS_PORT = 8000;
@@ -30,12 +53,23 @@ process.title = "node-easyrtc";
 
 // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
 var app = express();
+
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// parse requests of content-type - application/json
+app.use(bodyParser.json());
+app.use(cors());
+
 //Disbale forceSsl in dev
 //app.use(forceSsl);
 //app.use(serveStatic('static', {'index': 'grr-ui/build/index.html'}));
 app.use(express.static(__dirname + "/../grr-ui/build/https/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/../grr-ui/build/https2/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/../grr-ui/build/", {dotfiles:'allow'}));
+app.use('/images', express.static(__dirname + "/../grr-server/uploads/"));
+
+require('./app/routes/room.routes')(app);
 
 
 let httpServer = http.createServer(app);
