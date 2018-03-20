@@ -67,6 +67,8 @@ app.use(cors());
 app.use(express.static(__dirname + "/../grr-ui/build/https/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/../grr-ui/build/https2/", {dotfiles:'allow'}));
 app.use(express.static(__dirname + "/../grr-ui/build/", {dotfiles:'allow'}));
+app.use('/images', express.static(__dirname + "/../grr-server/uploads/"));
+
 require('./app/routes/room.routes')(app);
 
 

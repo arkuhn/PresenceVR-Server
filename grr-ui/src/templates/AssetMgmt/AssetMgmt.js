@@ -52,6 +52,7 @@ class AssetMgmt extends Component {
         var self = this;
         axios.get(API_URL+'/api/rooms/default').then((result) =>{
             self.setState({vrMode: result.data.vrMode, currentBackground: result.data.currentBackground});
+            console.log(result.data.currentBackground);
         });
     }
 

@@ -1,5 +1,6 @@
 var Room = require('../models/room.model.js');
 
+
 exports.create = function(req, res) {
     // Create and Save a new Note
     console.log(req.body);
@@ -8,7 +9,8 @@ exports.create = function(req, res) {
     }
 
     var room = new Room({name: req.body.name || "Untitled Room", vrMode: false,
-        currentBackground: req.body.currentBackground});
+        currentBackground: req.body.currentBackground, backgroundImages: ["bridge.png", "city.jpg",
+            "puydesancy.jpg", "stock360.png", "vr_background.jpg"]});
 
     room.save(function(err, data) {
         if(err) {
@@ -95,14 +97,27 @@ exports.patchRoom = function(req, res) {
             return res.status(404).send({message: "Room not found with id " + req.params.roomName});
         }
 
+        console.log(req.files[0]);
+
         if(req.body.name) {
             room.name = req.body.name;
         }
-        if(req.body.vrMode) {
-            room.vrMode = !room.vrMode;
+        if(req.body.vrMode === true) {
+            room.vrMode = true;
+        }
+        if(req.body.vrMode === false) {
+            room.vrMode = false;
         }
         if(req.body.currentBackground) {
             room.currentBackground = req.body.currentBackground;
+        }
+        if(req.files) {
+            if(req.files[0].fieldname === "backgroundImage") {
+                room.backgroundImages.push(req.files[0].originalname);
+            }
+            if(req.files[0].fieldname === "assetImage") {
+                room.assetImages.push(req.files[0].originalname);
+            }
         }
 
         room.save(function(err, data){

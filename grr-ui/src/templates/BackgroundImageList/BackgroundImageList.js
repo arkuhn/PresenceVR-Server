@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './BackgroundImageList.css';
 import {Menu, MenuItem, MenuDivider, Switch} from '@blueprintjs/core';
+import {API_URL} from "../api.config";
 
 
 class BackgroundImageList extends Component {
@@ -15,7 +16,7 @@ class BackgroundImageList extends Component {
 
     handleClick(e){
         var selectedImage = e.target.textContent;
-        this.props.onSelectedBackground("/assets/images/"+selectedImage);
+        this.props.onSelectedBackground(API_URL+"/images/"+selectedImage);
     }
 
     setBackground(src){

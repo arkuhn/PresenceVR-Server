@@ -1,6 +1,20 @@
+
 module.exports = function(app) {
 
     var rooms = require('../controllers/room.controller.js');
+    const multer = require('multer');
+    const path = require('path');
+    const UPLOAD_PATH = path.resolve(__dirname, "../../uploads");
+    console.log(UPLOAD_PATH);
+    const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, UPLOAD_PATH);
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.originalname);
+        }
+    })
+    app.use(multer({storage: storage}).any());
 
     // Create a new room
     app.post('/api/rooms', rooms.create);
@@ -18,5 +32,5 @@ module.exports = function(app) {
     app.patch('/api/rooms/:roomName', rooms.patchRoom);
 
     // Delete a room with roomId
-    app.delete('/api/rooms/:roomId', rooms.delete);
+    app.delete('/api/rooms/:roomName', rooms.delete);
 }
