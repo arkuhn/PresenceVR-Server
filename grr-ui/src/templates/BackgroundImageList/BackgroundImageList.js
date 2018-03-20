@@ -15,7 +15,7 @@ class BackgroundImageList extends Component {
 
     handleClick(e){
         var selectedImage = e.target.textContent;
-        this.props.onSelectedBackground("/assets/images/"+selectedImage);
+        this.props.onSelectedBackground(selectedImage);
     }
 
     setBackground(src){
@@ -48,7 +48,7 @@ class BackgroundImageList extends Component {
                 <li className="pt-menu-header centered-header">
                     <h6>Background Options</h6>
                 </li>
-                {this.state.defaultImages.map(image => {
+                {this.props.backgroundImgs.map(image => {
                     return <span key={image}><MenuItem key={image} text={image} onClick={this.handleClick}/><MenuDivider /></span>
                 })}
                 {this.state.customImage.map(image => {
