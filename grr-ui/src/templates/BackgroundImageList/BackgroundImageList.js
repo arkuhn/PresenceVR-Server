@@ -60,6 +60,20 @@ class BackgroundImageList extends Component {
                 <MenuItem text={"Add custom background"} onClick={(e) => this.customUpload.click()}/><MenuDivider />
 
 
+                <li className="pt-menu-header centered-header">
+                    <h6>Asset Images</h6>
+                </li>
+                {this.props.assetImgs.map(image => {
+                    return <span key={image}><MenuItem key={image} text={image} onClick={this.handleClick}/><MenuDivider /></span>
+                })}
+                <input id="customUpload"
+                       type="file"
+                       style={{display:"none"}}
+                       ref={(ref) => this.customUpload = ref}
+                       onChange={(e)=>this.uploadCustomBackground(e)} />
+                <MenuItem text={"Add custom background"} onClick={(e) => this.customUpload.click()}/><MenuDivider />
+
+
             </Menu>
         </div>);
     }

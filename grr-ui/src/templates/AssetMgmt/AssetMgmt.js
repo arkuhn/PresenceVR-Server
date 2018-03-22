@@ -16,7 +16,7 @@ class AssetMgmt extends Component {
         this.toggleVRMode = this.toggleVRMode.bind(this);
         this.selectBackground = this.selectBackground.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
-        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, currentBackground: 'stock360.png', backgroundImages: []};
+        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
     }
 
     toggleVRMode(){
@@ -52,7 +52,7 @@ class AssetMgmt extends Component {
         var self = this;
         axios.get(API_URL+'/api/rooms/default').then((result) =>{
             self.setState({vrMode: result.data.vrMode, currentBackground: result.data.currentBackground,
-                backgroundImages: result.data.backgroundImages});
+                backgroundImages: result.data.backgroundImages, assetImages: result.data.assetImages});
             console.log(this.state);
         });
     }
@@ -257,7 +257,7 @@ class AssetMgmt extends Component {
                 <div id="otherClients"></div>
                 <GRRNavBar/>
                 <div className="flex-container">
-                    <BackgroundImageList onSelectedBackground={this.selectBackground} backgroundImgs={this.state.backgroundImages}></BackgroundImageList>
+                    <BackgroundImageList onSelectedBackground={this.selectBackground} backgroundImgs={this.state.backgroundImages} assetImgs={this.state.assetImages}></BackgroundImageList>
                     <div className="preview-container" >
                         <h6 id="previewItemTitle">
                             <Switch checked={this.state.vrMode} labelElement={<strong>VR Mode Enabled </strong>} onChange={this.toggleVRMode} />
