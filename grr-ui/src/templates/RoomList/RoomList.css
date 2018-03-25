@@ -51,3 +51,11 @@
 .pt-card {
     width: 300px;
 }
+
+#createButton {
+    margin: 0 auto 10px;
+}
+
+#createRoomInput {
+    margin: 0 auto 10px;
+}

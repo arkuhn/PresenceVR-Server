@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Card} from '@blueprintjs/core';
+import {Button, Card, Collapse} from '@blueprintjs/core';
 import GRRNavBar from "../GRRNavBar/GRRNavBar";
 import './RoomList.css';
 import axios from 'axios';
@@ -13,7 +13,8 @@ class RoomList extends Component {
         this.getRoomListFromEasyRTCServer = this.getRoomListFromEasyRTCServer.bind(this);
         this.joinRoom = this.joinRoom.bind(this);
         this.createRoom = this.createRoom.bind(this);
-        this.state = {rooms: []};
+        this.handleCreateNewRoomClick = this.handleCreateNewRoomClick.bind(this);
+        this.state = {rooms: [], clickToShowCreateRoomTextArea: true};
     }
 
     getRoomListFromEasyRTCServer() {
@@ -54,22 +55,26 @@ class RoomList extends Component {
     }
 
     createRoom() {
-        var tempRoomName = "bossssman";
+        this.handleCreateNewRoomClick();
+        var input = document.getElementById("createRoomInput");
+        var newRoomName = input.value;
+        input.value = "";
+
         var joinClause = {"joinOnCompletion": false};
         var self = this;
 
-        easyrtc.joinRoom(tempRoomName, joinClause, function (roomName) {
-            console.log("Created " + tempRoomName);
-            
+        easyrtc.joinRoom(newRoomName, joinClause, function (roomName) {
+            console.log("Created " + newRoomName);
+
             axios.post(API_URL + '/api/rooms/', {
-                name: tempRoomName,
+                name: newRoomName,
                 currentBackground: "city.jpg"
             }).then((result) => {
                 self.getRoomListFromEasyRTCServer();
             });
 
         }, function (errorCode, errorText) {
-            
+
         });
     }
 
@@ -84,6 +89,10 @@ class RoomList extends Component {
         });
     }
 
+    handleCreateNewRoomClick () {
+        var self = this;
+        self.setState({clickToShowCreateRoomTextArea: !this.state.clickToShowCreateRoomTextArea});
+    }
     render() {
         return (
             <div>
@@ -94,7 +103,12 @@ class RoomList extends Component {
                         <div className="options-container">
                             <div className="pt-vertical full-width">
                                 <Button className="pt-intent-success vertical-button" text="Refresh Rooms List" onClick={(e) => this.getRoomListFromEasyRTCServer()}/>
-                                <Button className="pt-intent-primary vertical-button" text="Create New Room" onClick={(e) => this.createRoom()}/>
+                                <Button className="pt-intent-primary vertical-button" text={this.state.clickToShowCreateRoomTextArea ? "Create New Room (show)" : "Create New Room (hide)"}
+                                    onClick={(e) => this.handleCreateNewRoomClick()}/>
+                                <Collapse isOpen={!this.state.clickToShowCreateRoomTextArea}>
+                                    <input className="pt-input vertical-button" id="createRoomInput" type="text" placeholder="Room Name" />
+                                    <Button className="pt-intent-success full-width" id="createButton" text="Create" onClick={(e) => this.createRoom()}/>
+                                </Collapse>
                                 <p className="centered full-width" id="last-update-time"></p>
                             </div>
                         </div>
