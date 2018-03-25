@@ -80,12 +80,12 @@ class RoomList extends Component {
 
     joinRoom (roomName) {
         var joinClause = {"joinOnCompletion": true};
-        easyrtc.joinRoom("Test", null, function (roomName) {
+        easyrtc.joinRoom(roomName, joinClause, function (roomName) {
             console.log("Joined " + roomName);
+            //TODO: Should route to individual room page if less than 2 people are in room
 
         }, function (errorCode, errorText) {
-            console.log("Error Code = " + errorCode);
-            console.log("Error Text = " + errorText);
+
         });
     }
 
@@ -122,7 +122,7 @@ class RoomList extends Component {
                                                 <p>People here: {room.numberClients}</p>
                                                 <p>Privacy level: PRIVATE</p>
                                                 {/*<p># of available backgrounds: 0</p>*/}
-                                                <Button className="pt-intent-primary full-width" text="Join"/>
+                                                <Button className="pt-intent-primary full-width" text="Join" onClick={(e) => this.joinRoom(room.roomName)}/>
                                             </Card>
                                         </div>);
                                 })}
