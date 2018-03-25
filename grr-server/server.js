@@ -119,7 +119,7 @@ easyrtc.events.on("easyrtcAuth", function(socket, easyrtcid, msg, socketCallback
 });
 
 easyrtc.events.on("msgTypeGetRoomList", function (connectionObj, socketCallback, next) {
-    easyrtc.util.logDebug("getRoomList fired! Checking GRR DB to find rooms");
+    easyrtc.util.logDebug("getRoomList received from client! Checking GRR DB to find rooms");
     let appObj = connectionObj.getApp();
     roomModel.find(function (err, rooms) {
         if(err) {
@@ -166,15 +166,99 @@ easyrtc.events.on("msgTypeGetRoomList", function (connectionObj, socketCallback,
     });
 });
 
+easyrtc.events.on("msgTypeRoomJoin", function (connectionObj, rooms, socketCallback, next) {
+    easyrtc.util.logDebug("msgTypeRoomJoin received from client!");
+    var appObj = connectionObj.getApp();
+    var roomObject = rooms[Object.keys(rooms)[0]];
+    console.log(roomObject);
+    roomModel.findOne({'name': roomObject['roomName']}, function (err, room) {
+        if (err) {
+            console.log(err);
+            if(err.kind === 'ObjectId') {
+                easyrtc.util.logDebug("Cannot find room. Attempting to create");
+                appObj.createRoom(roomObject['roomName'], null, function (err, roomObj) {
+                    if (err) {
+
+                    }
+
+                    if(roomObject['roomParameter']['joinOnCompletion']) {
+                        appObj.events.defaultListeners.roomJoin(connectionObj, roomObject['roomName'], null, next);
+                    }
+                    else {
+                        easyrtc.util.sendSocketCallbackMsg(connectionObj.getEasyrtcid(), socketCallback, {"msgType": "roomData", "msgData":{"roomData": roomObj.toString()}}, appObj);
+                    }
+                });
+            }
+        }
+
+        if (!room) {
+            easyrtc.util.logDebug("Room object false. Attempting to create ");
+            appObj.createRoom(roomObject['roomName'], null, function (err, roomObj) {
+                if (err) {
+
+                }
+
+                if(roomObject['roomParameter']['joinOnCompletion']) {
+                    appObj.events.defaultListeners.roomJoin(connectionObj, roomObject['roomName'], null, next);
+                }
+                else {
+                    var roomName = roomObject['roomName'];
+                    var roomDataobj = {
+                        roomName : {
+                            "roomName": roomName
+                        }
+                    };
+
+                    easyrtc.util.sendSocketCallbackMsg(connectionObj.getEasyrtcid(), socketCallback, {"msgType": "roomData", "msgData":{"roomData": roomDataobj}}, appObj);
+                }
+            });
+        }
+
+        // room exists in GRR DB so check to see if it exists in EasyRTC Server
+        // if yes, join if joinOnCompletion is true
+        //      otherwise (joinOnCompletion is false),  stop and send message back to client
+        // if no, create (and join) if joinOnCompletion is true
+        //      otherwise (joinOnCompletion is false),  stop and send message back to client
+
+
+    });
+});
+
 easyrtc.events.on("roomCreate", function(appObj, creatorConnectionObj, roomName, roomOptions, callback) {
-    easyrtc.util.logDebug("roomCreate fired! Trying to create: " + roomName);
-    appObj.events.defaultListeners.roomCreate(appObj, creatorConnectionObj, roomName, roomOptions, callback);
+    easyrtc.util.logDebug("roomCreate fired! Checking GRR DB for room: " + roomName);
+    // roomModel.findOne({'name': roomName}, function (err, room) {
+    //     if(err) {
+    //         console.log(err);
+    //         if(err.kind === 'ObjectId') {
+    //             // appObj.emitError("Cannot ")
+    //             easyrtc.util.logDebug("Cannot find room. Attempting to create");
+    //             appObj.events.defaultListeners.roomCreate(appObj, creatorConnectionObj, roomName, roomOptions, callback);
+    //         }
+    //     }
+    //
+    //     if (!room) {
+    //         easyrtc.util.logDebug("Cannot find room. Attempting to create");
+    //         appObj.events.defaultListeners.roomCreate(appObj, creatorConnectionObj, roomName, roomOptions, callback);
+    //     }
+    //
+    //     easyrtc.util.logDebug("Room '" + roomName + "' already exists.");
+    // });
+
 });
 
 easyrtc.events.on("roomJoin", function(connectionObj, roomName, roomParameter, callback) {
-    easyrtc.util.logDebug("aRE YOY SHOUWING");
-    console.log("["+connectionObj.getEasyrtcid()+"] Credential retrieved!", connectionObj.getFieldValueSync("credential"));
+    easyrtc.util.logDebug("roomJoin fired! Attempting to join room");
     easyrtc.events.defaultListeners.roomJoin(connectionObj, roomName, roomParameter, callback);
+
+    // console.log("["+connectionObj.getEasyrtcid()+"] Credential retrieved!", connectionObj.getFieldValueSync("credential"));
+    // // TODO: Make an if else clause to check if call was from createNewRoom button or joinRoom button (use room options JSON object)
+    // if (roomParameter['joinOnCompletion']) {
+    //     easyrtc.util.logDebug("Room '" + roomName + "' to be created and joined");
+    // }
+    // else {
+    //     easyrtc.util.logDebug("Room '" + roomName + "' to be created");
+    //
+    // }
 });
 
 // Start EasyRTC server

@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import {Menu, MenuItem, MenuDivider, Button, Card, Elevation} from '@blueprintjs/core';
+import {Button, Card} from '@blueprintjs/core';
 import GRRNavBar from "../GRRNavBar/GRRNavBar";
 import './RoomList.css';
+import axios from 'axios';
+import {API_URL} from "../api.config";
 
 class RoomList extends Component {
 
@@ -10,6 +12,7 @@ class RoomList extends Component {
         this.refreshAndShowRoomList = this.refreshAndShowRoomList.bind(this);
         this.getRoomListFromEasyRTCServer = this.getRoomListFromEasyRTCServer.bind(this);
         this.joinRoom = this.joinRoom.bind(this);
+        this.createRoom = this.createRoom.bind(this);
         this.state = {rooms: []};
     }
 
@@ -31,14 +34,10 @@ class RoomList extends Component {
     }
 
     refreshAndShowRoomList(data) {
-        console.log(data);
-
         var self = this;
         self.setState({rooms: []});
 
         Object.keys(data).forEach(function (key) {
-
-            console.log(self.state);
 
             self.setState({
                 rooms: self.state.rooms.concat(data[key])
@@ -55,17 +54,34 @@ class RoomList extends Component {
     }
 
     createRoom() {
+        var tempRoomName = "bossssman";
+        var joinClause = {"joinOnCompletion": false};
+        var self = this;
+
+        easyrtc.joinRoom(tempRoomName, joinClause, function (roomName) {
+            console.log("Created " + tempRoomName);
+            
+            axios.post(API_URL + '/api/rooms/', {
+                name: tempRoomName,
+                currentBackground: "city.jpg"
+            }).then((result) => {
+                self.getRoomListFromEasyRTCServer();
+            });
+
+        }, function (errorCode, errorText) {
+            
+        });
+    }
+
+    joinRoom (roomName) {
+        var joinClause = {"joinOnCompletion": true};
         easyrtc.joinRoom("Test", null, function (roomName) {
             console.log("Joined " + roomName);
 
         }, function (errorCode, errorText) {
             console.log("Error Code = " + errorCode);
             console.log("Error Text = " + errorText);
-        })
-    }
-
-    joinRoom (roomName) {
-        console.log("Trying to join room: " + roomName);
+        });
     }
 
     render() {
@@ -78,7 +94,7 @@ class RoomList extends Component {
                         <div className="options-container">
                             <div className="pt-vertical full-width">
                                 <Button className="pt-intent-success vertical-button" text="Refresh Rooms List" onClick={(e) => this.getRoomListFromEasyRTCServer()}/>
-                                <Button className="pt-intent-primary vertical-button" text="Create New Room"/>
+                                <Button className="pt-intent-primary vertical-button" text="Create New Room" onClick={(e) => this.createRoom()}/>
                                 <p className="centered full-width" id="last-update-time"></p>
                             </div>
                         </div>
