@@ -42,6 +42,28 @@ class BackgroundImageList extends Component {
         e.target.value = null;
     }
 
+    uploadCustomAsset(e){
+        e.preventDefault();
+        let fileInput = document.getElementById("customUpload");
+        fileInput.click();
+        let file = e.target.files[0];
+
+
+        let formData = new FormData();
+
+        formData.append('assetImage', file);
+        console.log(file.name);
+
+        axios.patch(API_URL+'/api/rooms/default', formData).then((result) =>{
+            //self.setState({currentBackground: result.data.currentBackground});
+            this.props.onRefreshSettings();
+        });
+
+        e.target.value = null;
+    }
+
+
+
 
     render() {
         return (<div className="list-container">
@@ -66,12 +88,12 @@ class BackgroundImageList extends Component {
                 {this.props.assetImgs.map(image => {
                     return <span key={image}><MenuItem key={image} text={image} onClick={this.handleClick}/><MenuDivider /></span>
                 })}
-                <input id="customUpload"
+                <input id="assetUpload"
                        type="file"
                        style={{display:"none"}}
-                       ref={(ref) => this.customUpload = ref}
-                       onChange={(e)=>this.uploadCustomBackground(e)} />
-                <MenuItem text={"Add custom background"} onClick={(e) => this.customUpload.click()}/><MenuDivider />
+                       ref={(ref) => this.assetUpload = ref}
+                       onChange={(e)=>this.uploadCustomAsset(e)} />
+                <MenuItem text={"Add custom background"} onClick={(e) => this.assetUpload.click()}/><MenuDivider />
 
 
             </Menu>
