@@ -1,3 +1,7 @@
+    function sayHello(){
+        return 'hello';
+    }
+
 
     easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
         var video = document.getElementById('caller');
