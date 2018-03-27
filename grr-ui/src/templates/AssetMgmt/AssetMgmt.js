@@ -38,7 +38,7 @@ class AssetMgmt extends Component {
         axios.patch(API_URL+'/api/rooms/default', {
             currentBackground: backgroundTitle
         }).then((result) =>{
-            self.setState({currentBackground: result.data.currentBackground, backgroundImages: result.data.backgroundImages});
+            this.refreshSettings();
         });
 
     }
