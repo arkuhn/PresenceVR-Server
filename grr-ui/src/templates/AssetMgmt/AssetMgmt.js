@@ -257,11 +257,14 @@ class AssetMgmt extends Component {
                 <div id="otherClients"></div>
                 <GRRNavBar/>
                 <div className="flex-container">
+                <div class="settings-container list-container">
+                    <Switch checked={this.state.vrMode} labelElement={<strong>VR Mode Enabled </strong>} onChange={this.toggleVRMode} />
+                    <button type="button" className="pt-button pt-icon-refresh" onClick={this.refreshSettings}></button>
                     <BackgroundImageList onSelectedBackground={this.selectBackground} onRefreshSettings={this.refreshSettings} backgroundImgs={this.state.backgroundImages} assetImgs={this.state.assetImages}></BackgroundImageList>
+                </div>
                     <div className="preview-container" >
                         <h6 id="previewItemTitle">
-                            <Switch checked={this.state.vrMode} labelElement={<strong>VR Mode Enabled </strong>} onChange={this.toggleVRMode} />
-                            <button type="button" className="pt-button pt-icon-refresh" onClick={this.refreshSettings}></button>
+                        Room Name:
                         </h6>
                         {vidBackground}
                     </div>

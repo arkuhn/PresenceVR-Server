@@ -6,4 +6,4 @@ var React = require('react');
 
 let root = document.getElementById('root');
 
-ReactDOM.render(<RoomList/>, root);
+ReactDOM.render(<AssetMgmt/>, root);

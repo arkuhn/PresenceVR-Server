@@ -16,8 +16,14 @@
     min-height: 100%;
 }
 
+.settings-container {
+    flex-basis: 25%;
+    flex-direction: column;
+    min-height: 100%;
+}
+
 #previewItemTitle {
-    text-align: right;
+    text-align: left;
     margin-left: auto;
     padding-top: 2em;
 }
