@@ -68,6 +68,10 @@ class BackgroundImageList extends Component {
     render() {
         return (<div className="list-container">
             <Menu className="pt-large">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/test">Test</a></li>
+                </ul>
                 <li className="pt-menu-header centered-header">
                     <h6>Background Options</h6>
                 </li>
