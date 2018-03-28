@@ -4,7 +4,7 @@ import GRRNavBar from "../GRRNavBar/GRRNavBar";
 import './RoomList.css';
 import axios from 'axios';
 import {API_URL} from "../api.config";
-import { Switch, Route, Router } from 'react-router-dom';
+import { Switch, Route, Router, Link } from 'react-router-dom';
 import AssetMgmt from '../AssetMgmt/AssetMgmt.js';
 
 class RoomList extends Component {
@@ -102,8 +102,8 @@ class RoomList extends Component {
                 <div className="container-fluid">
                     <div>
                     <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/test">Test</a></li>
+                        <li><Link to="/">Home</Link></li>
+                        <li><Link to="/test">Test</Link></li>
                     </ul>
 
                     
