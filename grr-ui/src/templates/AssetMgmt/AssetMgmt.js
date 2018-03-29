@@ -238,9 +238,7 @@ class AssetMgmt extends Component {
                     <a-entity position="0 -5 0">
                         <a-camera></a-camera>
                     </a-entity>
-
                 </a-scene>
-
             </div>;
         } else {
             vidBackground = <div id="background-preview">
@@ -265,8 +263,6 @@ class AssetMgmt extends Component {
                     </div>
                 </div>
             </div>
-
-
         );
     }
 }

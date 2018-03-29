@@ -69,8 +69,6 @@ class BackgroundImageList extends Component {
 
 
         return (
-
-
             <div>
             <Menu className="pt-large">
                 <li className="pt-menu-header centered-header">
@@ -138,23 +136,6 @@ class BackgroundImageList extends Component {
                         <button type="button" className="pt-button pt-small pt-icon-upload pt-intent-primary" onClick={(e) => this.assetUpload.click()}></button>
                     </div>
                 </div>
-
-
-                {/*
-                <li className="pt-menu-header centered-header">
-                    <h6>Asset Images</h6>
-                </li>
-                {this.props.assetImages.map(image => {
-                    return <span key={image}><MenuItem key={image} text={image} onClick={this.changeBackground}/><MenuDivider /></span>
-                })}
-                <input id="assetUpload"
-                       type="file"
-                       style={{display:"none"}}
-                       ref={(ref) => this.assetUpload = ref}
-                       onChange={(e)=>this.uploadCustomAsset(e)} />
-                <MenuItem text={"Add custom background"} onClick={(e) => this.assetUpload.click()}/><MenuDivider />
-                */}
-
             </Menu>
         </div>);
     }
