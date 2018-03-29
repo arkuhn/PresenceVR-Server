@@ -14,7 +14,7 @@ env(__dirname + '/.env');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 var roomModel = require("./app/models/room.model");
-
+var path = require("path");
 
 //database configs
 var dbConfig = require('./configs/database.config.js');
@@ -67,6 +67,14 @@ app.use(express.static(__dirname + "/../grr-ui/build/", {dotfiles:'allow'}));
 app.use('/images', express.static(__dirname + "/../grr-server/uploads/"));
 
 require('./app/routes/room.routes')(app);
+
+app.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname, '/../grr-ui/build/index.html'), function(err) {
+        if (err) {
+            res.status(500).send(err)
+        }
+    })
+})
 
 
 let httpServer = http.createServer(app);
