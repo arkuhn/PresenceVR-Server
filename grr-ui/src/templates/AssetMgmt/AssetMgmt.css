@@ -17,15 +17,15 @@
 }
 
 .settings-container {
-    flex-basis: 25%;
     flex-direction: column;
     min-height: 100%;
 }
 
 #previewItemTitle {
     text-align: left;
-    margin-left: auto;
+    margin: 0 auto;
     padding-top: 2em;
+    padding-bottom: 2em;
 }
 
 .centered-header {

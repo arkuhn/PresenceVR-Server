@@ -16,7 +16,7 @@ class AssetMgmt extends Component {
         this.toggleVRMode = this.toggleVRMode.bind(this);
         this.selectBackground = this.selectBackground.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
-        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
+        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
     }
 
     toggleVRMode(){
@@ -51,7 +51,7 @@ class AssetMgmt extends Component {
     refreshSettings(){
         var self = this;
         axios.get(API_URL+'/api/rooms/default').then((result) =>{
-            self.setState({vrMode: result.data.vrMode, currentBackground: result.data.currentBackground,
+            self.setState({roomName: result.data.name ,vrMode: result.data.vrMode, currentBackground: result.data.currentBackground,
                 backgroundImages: result.data.backgroundImages, assetImages: result.data.assetImages});
             console.log(this.state);
         });
@@ -257,15 +257,11 @@ class AssetMgmt extends Component {
                 <div id="otherClients"></div>
                 <GRRNavBar/>
                 <div className="flex-container">
-                <div class="settings-container list-container">
-                    <Switch checked={this.state.vrMode} labelElement={<strong>VR Mode Enabled </strong>} onChange={this.toggleVRMode} />
-                    <button type="button" className="pt-button pt-icon-refresh" onClick={this.refreshSettings}></button>
-                    <BackgroundImageList onSelectedBackground={this.selectBackground} onRefreshSettings={this.refreshSettings} backgroundImgs={this.state.backgroundImages} assetImgs={this.state.assetImages}></BackgroundImageList>
+                <div className="list-container">
+                    <BackgroundImageList {...this.state} onToggleVRMode={this.toggleVRMode} onSelectedBackground={this.selectBackground} onRefreshSettings={this.refreshSettings}></BackgroundImageList>
                 </div>
                     <div className="preview-container" >
-                        <h6 id="previewItemTitle">
-                        Room Name:
-                        </h6>
+                        <h6 id="previewItemTitle">Room Name: {this.state.roomName}</h6>
                         {vidBackground}
                     </div>
                 </div>
