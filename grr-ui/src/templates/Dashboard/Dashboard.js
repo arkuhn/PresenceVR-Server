@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {Button, Card, Collapse} from '@blueprintjs/core';
 import GRRNavBar from "../GRRNavBar/GRRNavBar";
-import './RoomList.css';
+import './Dashboard.css';
 import axios from 'axios';
 import {API_URL} from "../api.config";
 import { Switch, Route, Router, Link } from 'react-router-dom';
 import AssetMgmt from '../AssetMgmt/AssetMgmt.js';
 
-class RoomList extends Component {
+class Dashboard extends Component {
 
     constructor() {
         super();
@@ -100,7 +100,20 @@ class RoomList extends Component {
             <div>
                 <GRRNavBar/>
                 <div className="container-fluid">
-                    <h1 className="centered" id="header-text">Room Management</h1>
+                    <div>
+                    <ul>
+                        <li><Link to="/">Dashboard</Link></li>
+                        <li><Link to="/rooms">RoomList</Link></li>
+                        <li><Link to="/assets">AssetMgmt</Link></li>
+                    </ul>
+                    </div>
+                    <div className="pt-button-group pt-vertical">
+                        <button id="vert-group-button"><Link to="/">Dashboard</Link></button>
+                        <button id="vert-group-button"><Link to="/rooms">Rooms</Link></button>
+                        <button id="vert-group-button"><Link to="/assets">Video</Link></button>
+                        
+                    </div>
+                    <h1 className="centered" id="header-text">Dashboard</h1>
                     <div className="flex-container">
                         <div className="options-container">
                             <div className="pt-vertical full-width">
@@ -140,4 +153,4 @@ class RoomList extends Component {
     }
 }
 
-export default RoomList;
+export default Dashboard;
