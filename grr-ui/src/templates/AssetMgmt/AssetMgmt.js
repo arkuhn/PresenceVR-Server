@@ -261,7 +261,6 @@ class AssetMgmt extends Component {
                     <BackgroundImageList {...this.state} onToggleVRMode={this.toggleVRMode} onSelectedBackground={this.selectBackground} onRefreshSettings={this.refreshSettings}></BackgroundImageList>
                 </div>
                     <div className="preview-container" >
-                        <h6 id="previewItemTitle">Room Name: {this.state.roomName}</h6>
                         {vidBackground}
                     </div>
                 </div>

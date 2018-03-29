@@ -74,7 +74,10 @@ class BackgroundImageList extends Component {
             <div>
             <Menu className="pt-large">
                 <li className="pt-menu-header centered-header">
-                    <h6>Room Settings</h6>
+                    <h6>Room Name: {this.props.roomName}</h6>
+                </li>
+                <li className="pt-menu-header centered-header">
+                    <h6>Settings</h6>
                 </li>
                 <div className="pt-form-group">
                     <label className="pt-label" for="example-form-group-input-a">
