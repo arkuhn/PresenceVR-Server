@@ -12,7 +12,7 @@ class Homepage extends Component {
                     <div className="pt-button-group pt-vertical">
                         <Link to="/"><button id="vert-group-button fullwidth">Dashboard</button></Link>
                         <Link to="/rooms"><button id="vert-group-button fullwidth">Rooms</button></Link>
-                        <Link to="/assets"><button id="vert-group-button">Video</button></Link>
+                        <Link to="/vrcall"><button id="vert-group-button fullwidth">Video</button></Link>
                         
                     </div>
                 </div>
