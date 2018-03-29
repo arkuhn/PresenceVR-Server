@@ -3,6 +3,7 @@ import './BackgroundImageList.css';
 import {Menu, MenuItem, MenuDivider, Switch} from '@blueprintjs/core';
 import axios from 'axios';
 import {API_URL} from "../api.config";
+import {Link} from 'react-router-dom';
 
 class BackgroundImageList extends Component {
 
@@ -69,8 +70,8 @@ class BackgroundImageList extends Component {
         return (<div className="list-container">
             <Menu className="pt-large">
                 <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/test">Test</a></li>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/test">Test</Link></li>
                 </ul>
                 <li className="pt-menu-header centered-header">
                     <h6>Background Options</h6>
