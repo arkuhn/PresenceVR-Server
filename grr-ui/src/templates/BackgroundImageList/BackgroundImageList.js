@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import './BackgroundImageList.css';
-import {Menu, MenuItem, MenuDivider, Switch} from '@blueprintjs/core';
+import {Menu, MenuItem, MenuDivider} from '@blueprintjs/core';
 import axios from 'axios';
 import {API_URL} from "../api.config";
-import {Link} from 'react-router-dom';
 
 class BackgroundImageList extends Component {
 

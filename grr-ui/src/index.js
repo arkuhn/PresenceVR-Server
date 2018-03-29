@@ -1,11 +1,6 @@
 import AssetMgmt from "./templates/AssetMgmt/AssetMgmt";
-
 import RoomList from "./templates/RoomList/RoomList";
-
-import Dashboard from "./templates/Dashboard/Dashboard";
-
 import Homepage from "./templates/Homepage/Homepage";
-
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 var ReactDOM = require('react-dom');

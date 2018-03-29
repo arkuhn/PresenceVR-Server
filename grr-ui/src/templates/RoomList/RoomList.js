@@ -4,8 +4,6 @@ import GRRNavBar from "../GRRNavBar/GRRNavBar";
 import './RoomList.css';
 import axios from 'axios';
 import {API_URL} from "../api.config";
-import { Switch, Route, Router, Link } from 'react-router-dom';
-import AssetMgmt from '../AssetMgmt/AssetMgmt.js';
 
 class RoomList extends Component {
 
