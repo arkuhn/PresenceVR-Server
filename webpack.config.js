@@ -17,12 +17,8 @@ const config = {
    },
    output: {
      filename: 'bundle.js',
-     path: BUILD_DIR,
-     publicPath: '/'
+     path: BUILD_DIR
    },
-   devServer: {
-    historyApiFallback: true,
-  },
    module: {
      rules: [
       {
