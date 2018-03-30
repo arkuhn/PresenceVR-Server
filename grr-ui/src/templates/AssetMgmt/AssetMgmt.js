@@ -44,8 +44,6 @@ class AssetMgmt extends Component {
     }
 
     componentDidMount(){
-        //console.log(this.props.param.roomID);
-        console.log(this.props);
         this.myinit();
         this.refreshSettings();
     }
@@ -55,7 +53,6 @@ class AssetMgmt extends Component {
         axios.get(API_URL+'/api/rooms/'+this.props.match.params.roomID).then((result) =>{
             self.setState({roomName: result.data.name ,vrMode: result.data.vrMode, currentBackground: result.data.currentBackground,
                 backgroundImages: result.data.backgroundImages, assetImages: result.data.assetImages});
-            console.log(this.state);
         });
     }
 
