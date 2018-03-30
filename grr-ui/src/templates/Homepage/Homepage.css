@@ -22,16 +22,8 @@
     margin-bottom: 10px;
 }
 
-#oces-logo {
-    position: fixed;
-    bottom: 0;
-    right: 0;
+.fullwidth {
+    width:100%;
+    text-align:center;
 }
 
-#rit-logo {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    height: 25px;
-    padding-bottom: 5px;
-}

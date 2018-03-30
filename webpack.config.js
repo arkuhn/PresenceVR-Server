@@ -17,7 +17,7 @@ const config = {
    },
    output: {
      filename: 'bundle.js',
-     path: BUILD_DIR,
+     path: BUILD_DIR
    },
    module: {
      rules: [
