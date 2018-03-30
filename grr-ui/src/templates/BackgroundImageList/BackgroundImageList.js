@@ -80,7 +80,7 @@ class BackgroundImageList extends Component {
                     <h6>Settings</h6>
                 </li>
                 <div className="pt-form-group">
-                    <label className="pt-label" for="example-form-group-input-a">
+                    <label className="pt-label">
                         Refresh Settings
                     </label>
                     <div className="pt-form-content">
@@ -88,7 +88,7 @@ class BackgroundImageList extends Component {
                     </div>
                 </div>
                 <div className="pt-form-group">
-                    <label className="pt-label" for="example-form-group-input-a">
+                    <label className="pt-label" >
                         VR Mode
                     </label>
                     <div className="pt-form-content">
@@ -96,7 +96,7 @@ class BackgroundImageList extends Component {
                     </div>
                 </div>
                 <div className="pt-form-group">
-                    <label className="pt-label" for="example-form-group-input-a">
+                    <label className="pt-label">
                         Background Image
                     </label>
                     <div className="pt-form-content">
@@ -117,7 +117,7 @@ class BackgroundImageList extends Component {
                     </div>
                 </div>
                 <div className="pt-form-group">
-                    <label className="pt-label" for="example-form-group-input-a">
+                    <label className="pt-label">
                         Selected Asset
                     </label>
                     <div className="pt-form-content">
