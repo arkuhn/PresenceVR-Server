@@ -43,6 +43,10 @@ class AssetMgmt extends Component {
 
     }
 
+    isConnected() {
+        return !!easyrtc.applicationName;
+    }
+
     componentDidMount(){
         this.myinit();
         this.refreshSettings();
@@ -57,6 +61,25 @@ class AssetMgmt extends Component {
     }
 
     myinit(){
+
+        // If not connected when hitting this page, try to connect to EasyRTC server
+        if(!this.isConnected()) {
+            easyrtc.connect('GameRoomRecruiting', function (id, owner) {
+                console.log("Connected to EasyRTC server");
+            }, function (errorCode, errorText) {
+                console.log("Not connected to EasyRTC server");
+            });
+        }
+
+        // If not in the room when hitting this page, try to join the EasyRTC room with the corresponding name
+        if(Object.keys(easyrtc.getRoomsJoined).length === 0) {
+            var joinClause = {"joinOnCompletion": true};
+            easyrtc.joinRoom(this.props.match.params.roomID, joinClause, function (roomName) {
+                console.log("Joined " + roomName);
+            }, function (errorCode, errorText) {
+
+            });
+        }
 
         easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
             var video = document.getElementById('caller');
@@ -90,7 +113,6 @@ class AssetMgmt extends Component {
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
                 easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
-                easyrtc.connect("Company_Chat_Line", connectSuccess, connectFailure);
                 window.requestAnimationFrame(self.draw.bind(self));
             }, connectFailure);
     }
