@@ -12,8 +12,8 @@ ReactDOM.render((
 	<BrowserRouter>
 		<Switch>
 			<Route exact path='/' component = {Homepage} />
-			<Route path='/rooms' component = {RoomList} />
-			<Route path='/vrcall' component = {AssetMgmt} />
+			<Route exact path='/rooms' component = {RoomList} />
+			<Route path='/rooms/:roomID' component = {AssetMgmt} />
 		</Switch>
 	</BrowserRouter>
 ), root);

@@ -14,6 +14,7 @@ class BackgroundImageList extends Component {
     }
 
     changeBackground(e){
+        console.log(this.props);
         var selectedImage = e.target.value;
         this.props.onSelectedBackground(selectedImage);
     }
@@ -32,9 +33,8 @@ class BackgroundImageList extends Component {
         let formData = new FormData();
 
         formData.append('backgroundImage', file);
-        console.log(file.name);
 
-        axios.patch(API_URL+'/api/rooms/default', formData).then((result) =>{
+        axios.patch(API_URL+'/api/rooms/'+this.props.roomName, formData).then((result) =>{
             //self.setState({currentBackground: result.data.currentBackground});
             this.props.onSelectedBackground(file.name);
         });
@@ -52,9 +52,8 @@ class BackgroundImageList extends Component {
         let formData = new FormData();
 
         formData.append('assetImage', file);
-        console.log(file.name);
 
-        axios.patch(API_URL+'/api/rooms/default', formData).then((result) =>{
+        axios.patch(API_URL+'/api/rooms/'+this.props.roomName, formData).then((result) =>{
             //self.setState({currentBackground: result.data.currentBackground});
             this.props.onRefreshSettings();
         });
