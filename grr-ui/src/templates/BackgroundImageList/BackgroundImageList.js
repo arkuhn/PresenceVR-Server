@@ -14,7 +14,6 @@ class BackgroundImageList extends Component {
     }
 
     changeBackground(e){
-        console.log(this.props);
         var selectedImage = e.target.value;
         this.props.onSelectedBackground(selectedImage);
     }
