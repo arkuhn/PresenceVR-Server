@@ -14,7 +14,7 @@ class Homepage extends Component {
                     <div className="pt-button-group pt-vertical">
                         <Link to="/"><Button className="pt-intent-primary vert-group-button">Dashboard</Button></Link>
                         <Link to="/rooms"><Button className="pt-intent-primary vert-group-button">Rooms</Button></Link>
-                        <Link to="/vrcall"><Button className="pt-intent-primary vert-group-button">Video</Button></Link>
+                        <Link to="/rooms/default"><Button className="pt-intent-primary vert-group-button">Video</Button></Link>
                         
                     </div>
                 </div>
