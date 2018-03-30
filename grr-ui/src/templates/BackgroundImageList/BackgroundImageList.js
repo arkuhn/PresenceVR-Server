@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './BackgroundImageList.css';
-import {Menu, MenuItem, MenuDivider, Switch, Popover, Position, Button} from '@blueprintjs/core';
+import {Menu, MenuItem, MenuDivider, Switch, Dialog, Intent, Button} from '@blueprintjs/core';
 import axios from 'axios';
 import {API_URL} from "../api.config";
 
@@ -11,6 +11,8 @@ class BackgroundImageList extends Component {
         this.changeBackground = this.changeBackground.bind(this);
         this.uploadCustomBackground = this.uploadCustomBackground.bind(this);
         this.setBackground = this.setBackground.bind(this);
+        this.toggleDialog = this.toggleDialog.bind(this);
+        this.state = {assetUpload: {mtlFile: '', objFile: ''}, isOpen: false};
     }
 
     changeBackground(e){
@@ -24,8 +26,7 @@ class BackgroundImageList extends Component {
 
     uploadCustomBackground(e){
         e.preventDefault();
-        let fileInput = document.getElementById("customUpload");
-        fileInput.click();
+
         let file = e.target.files[0];
 
 
@@ -41,10 +42,31 @@ class BackgroundImageList extends Component {
         e.target.value = null;
     }
 
+
+    validateAssetUpload(e)  {
+        const state = this.state;
+
+        switch (e.target.name) {
+            case 'mtlFile':
+                state.assetUpload.mtlFile = e.target.files[0];
+                break;
+            case 'objFile':
+                state.assetUpload.objFile = e.target.files[1];
+                break;
+            default:
+
+        }
+
+        this.setState(state);
+    }
+
     uploadCustomAsset(e){
         e.preventDefault();
-        let fileInput = document.getElementById("customUpload");
-        fileInput.click();
+
+        console.log(e.target.files[0]);
+        console.log(e.target.files[1]);
+
+        /*
         let file = e.target.files[0];
 
 
@@ -55,16 +77,20 @@ class BackgroundImageList extends Component {
         axios.patch(API_URL+'/api/rooms/'+this.props.roomName, formData).then((result) =>{
             //self.setState({currentBackground: result.data.currentBackground});
             this.props.onRefreshSettings();
-        });
+        });*/
 
         e.target.value = null;
+    }
+
+    toggleDialog () {
+        this.setState({ isOpen: !this.state.isOpen });
     }
 
 
 
 
-    render() {
 
+    render() {
 
         return (
             <div>
@@ -82,7 +108,7 @@ class BackgroundImageList extends Component {
                         Refresh Settings
                     </label>
                     <div className="pt-form-content">
-                        <button type="button" className="pt-button pt-small pt-icon-refresh" onClick={this.props.onRefreshSettings}></button>
+                        <Button type="button" className="pt-button pt-small pt-icon-refresh" onClick={this.props.onRefreshSettings}></Button>
                     </div>
                 </div>
                 <div className="pt-form-group">
@@ -111,7 +137,7 @@ class BackgroundImageList extends Component {
                                ref={(ref) => this.customUpload = ref}
                                onChange={(e)=>this.uploadCustomBackground(e)} />
                         &nbsp;
-                        <button type="button" className="pt-button pt-small pt-icon-upload pt-intent-primary" onClick={(e) => this.customUpload.click()}></button>
+                        <Button type="button" className="pt-button pt-small pt-icon-upload pt-intent-primary" onClick={(e) => this.customUpload.click()}></Button>
                     </div>
                 </div>
                 <div className="pt-form-group">
@@ -128,12 +154,63 @@ class BackgroundImageList extends Component {
                             </select>
                         </div>
                         <input id="assetUpload"
+                               multiple
                                type="file"
                                style={{display:"none"}}
                                ref={(ref) => this.assetUpload = ref}
                                onChange={(e)=>this.uploadCustomAsset(e)} />
                         &nbsp;
-                        <button type="button" className="pt-button pt-small pt-icon-upload pt-intent-primary" onClick={(e) => this.assetUpload.click()}></button>
+                        {/*<Button type="button" className="pt-button pt-small pt-icon-upload pt-intent-primary" onClick={(e) => this.assetUpload.click()}></Button>*/}
+                        <Button type="button" className="pt-button pt-small pt-icon-upload pt-intent-primary" onClick={this.toggleDialog}></Button>
+
+                        <div>
+                            <Dialog
+                                icon="inbox"
+                                isOpen={this.state.isOpen}
+                                onClose={this.toggleDialog.bind(this)}
+                                title="Dialog header"
+                            >
+
+                                <div className="pt-form-group pt-inline">
+                                    <label className="pt-label">
+                                        Please select .mtl file
+                                    </label>
+                                    <div className="pt-form-content">
+                                        <div className="pt-input-group">
+                                            <span className="pt-icon pt-icon-document"></span>
+                                            <input id="example-form-group-input-d" className="pt-input"  type="file"  dir="auto" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="pt-form-group pt-inline">
+                                    <label className="pt-label">
+                                        Please select .obj file
+                                    </label>
+                                    <div className="pt-form-content">
+                                        <div className="pt-input-group">
+                                            <span className="pt-icon pt-icon-document"></span>
+                                            <input id="example-form-group-input-d" className="pt-input"  type="file"  dir="auto" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div className="pt-dialog-footer">
+                                    <div className="pt-dialog-footer-actions">
+                                        <Button
+                                            intent={Intent.PRIMARY}
+                                            onClick={this.toggleDialog}
+                                            text="Primary"
+                                        />
+                                    </div>
+                                </div>
+                            </Dialog>
+                        </div>
+
                     </div>
                 </div>
             </Menu>
