@@ -71,6 +71,8 @@ class BackgroundImageList extends Component {
         return (
             <div>
             <Menu className="pt-large">
+                
+
                 <li className="pt-menu-header centered-header">
                     <h6>Room Name: {this.props.roomName}</h6>
                 </li>
