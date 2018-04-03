@@ -21,10 +21,12 @@ class AssetMgmt extends Component {
 
     toggleVRMode(){
         let video = document.getElementById("self");
+        easyrtc.clearMediaStream(video);
         easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
 
         if(this.state.callerId){
             let caller_video = document.getElementById("caller");
+            
             easyrtc.setVideoObjectSrc(caller_video, easyrtc.getRemoteStream(this.state.callerId));
             // console.log(easyrtc.getRemoteStream(this.state.callerId));
         }
