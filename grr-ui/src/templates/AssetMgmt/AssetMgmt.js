@@ -25,6 +25,7 @@ class AssetMgmt extends Component {
         easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
 
         if(this.state.callerId){
+            this.performCall(this.state.callerId);
             let caller_video = document.getElementById("caller");
             
             easyrtc.setVideoObjectSrc(caller_video, easyrtc.getRemoteStream(this.state.callerId));
@@ -266,7 +267,7 @@ class AssetMgmt extends Component {
                     </a-assets>
                     <a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.state.currentBackground}></a-sky>
                     <a-video src="#c" width="5" height="2.5" position="-6 -4 -2" rotation="-5 65 0"></a-video>
-                    <a-video src="#c2" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
+                    <a-video src="#caller" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
                     <a-entity position="0 -5 0">
                         <a-camera></a-camera>
                     </a-entity>
