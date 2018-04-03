@@ -16,7 +16,7 @@ class AssetMgmt extends Component {
         this.toggleVRMode = this.toggleVRMode.bind(this);
         this.selectBackground = this.selectBackground.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
-        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
+        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
     }
 
     toggleVRMode(){
@@ -24,7 +24,7 @@ class AssetMgmt extends Component {
         easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
 
         var self = this;
-        axios.patch(API_URL+'/api/rooms/default', {
+        axios.patch(API_URL+'/api/rooms/'+this.props.match.params.roomID, {
             vrMode: !self.state.vrMode
         }).then((result) =>{
             self.setState({vrMode: !self.state.vrMode});
@@ -35,7 +35,7 @@ class AssetMgmt extends Component {
     selectBackground (backgroundTitle) {
 
         var self = this;
-        axios.patch(API_URL+'/api/rooms/default', {
+        axios.patch(API_URL+'/api/rooms/'+this.props.match.params.roomID, {
             currentBackground: backgroundTitle
         }).then((result) =>{
             this.refreshSettings();
@@ -50,10 +50,9 @@ class AssetMgmt extends Component {
 
     refreshSettings(){
         var self = this;
-        axios.get(API_URL+'/api/rooms/default').then((result) =>{
-            self.setState({vrMode: result.data.vrMode, currentBackground: result.data.currentBackground,
+        axios.get(API_URL+'/api/rooms/'+this.props.match.params.roomID).then((result) =>{
+            self.setState({roomName: result.data.name ,vrMode: result.data.vrMode, currentBackground: result.data.currentBackground,
                 backgroundImages: result.data.backgroundImages, assetImages: result.data.assetImages});
-            console.log(this.state);
         });
     }
 
@@ -229,7 +228,7 @@ class AssetMgmt extends Component {
                         <img id="city" src={API_URL+"/images/"+this.state.currentBackground}></img>
                         <canvas id="c" ref="c" width="320" height="240"></canvas>
                         <canvas id="c2" ref="c2" width="320" height="240"></canvas>
-                        <video  id="self" ref="self" width="300" height="200" style={{visibility: "hidden"}} autoPlay></video>
+                        <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
                         <video  id="caller" ref="caller" width="300" height="200"></video>
                     </a-assets>
                     <a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.state.currentBackground}></a-sky>
@@ -238,9 +237,7 @@ class AssetMgmt extends Component {
                     <a-entity position="0 -5 0">
                         <a-camera></a-camera>
                     </a-entity>
-
                 </a-scene>
-
             </div>;
         } else {
             vidBackground = <div id="background-preview">
@@ -257,18 +254,14 @@ class AssetMgmt extends Component {
                 <div id="otherClients"></div>
                 <GRRNavBar/>
                 <div className="flex-container">
-                    <BackgroundImageList onSelectedBackground={this.selectBackground} onRefreshSettings={this.refreshSettings} backgroundImgs={this.state.backgroundImages} assetImgs={this.state.assetImages}></BackgroundImageList>
+                <div className="list-container">
+                    <BackgroundImageList {...this.state} onToggleVRMode={this.toggleVRMode} onSelectedBackground={this.selectBackground} onRefreshSettings={this.refreshSettings}></BackgroundImageList>
+                </div>
                     <div className="preview-container" >
-                        <h6 id="previewItemTitle">
-                            <Switch checked={this.state.vrMode} labelElement={<strong>VR Mode Enabled </strong>} onChange={this.toggleVRMode} />
-                            <button type="button" className="pt-button pt-icon-refresh" onClick={this.refreshSettings}></button>
-                        </h6>
                         {vidBackground}
                     </div>
                 </div>
             </div>
-
-
         );
     }
 }

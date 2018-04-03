@@ -22,8 +22,23 @@
     margin-bottom: 10px;
 }
 
-.fullwidth {
-    width:100%;
-    text-align:center;
+.full-width {
+    width: 100%;
 }
 
+.card-wrapper {
+    margin-bottom: 30px;
+}
+
+.centered {
+    text-align: center;
+}
+
+.left-align {
+    text-align: left;
+}
+
+.font-size-adjust li{
+    font-size:18px;
+    margin: 10px;
+}

@@ -4,8 +4,8 @@ import GRRNavBar from "../GRRNavBar/GRRNavBar";
 import './RoomList.css';
 import axios from 'axios';
 import {API_URL} from "../api.config";
-import { Switch, Route, Router, Link } from 'react-router-dom';
-import AssetMgmt from '../AssetMgmt/AssetMgmt.js';
+import { Link } from 'react-router-dom';
+
 
 class RoomList extends Component {
 
@@ -124,7 +124,7 @@ class RoomList extends Component {
                                                 <p>People here: {room.numberClients}</p>
                                                 <p>Privacy level: PRIVATE</p>
                                                 {/*<p># of available backgrounds: 0</p>*/}
-                                                <Button className="pt-intent-primary full-width" text="Join" onClick={(e) => this.joinRoom(room.roomName)}/>
+                                                <Link to={"/rooms/"+room.roomName}><Button className="pt-intent-primary full-width" text="Join" onClick={(e) => this.joinRoom(room.roomName)}/></Link>
                                             </Card>
                                         </div>);
                                 })}
