@@ -16,12 +16,18 @@ class AssetMgmt extends Component {
         this.toggleVRMode = this.toggleVRMode.bind(this);
         this.selectBackground = this.selectBackground.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
-        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
+        this.state = {callerId: "", vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
     }
 
     toggleVRMode(){
         let video = document.getElementById("self");
         easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
+
+        if(this.state.callerId){
+            let caller_video = document.getElementById("caller");
+            easyrtc.setVideoObjectSrc(caller_video, easyrtc.getRemoteStream(this.state.callerId));
+            // console.log(easyrtc.getRemoteStream(this.state.callerId));
+        }
 
         var self = this;
         axios.patch(API_URL+'/api/rooms/'+this.props.match.params.roomID, {
@@ -62,6 +68,8 @@ class AssetMgmt extends Component {
 
     myinit(){
 
+        var self = this;
+
         // If not connected when hitting this page, try to connect to EasyRTC server
         if(!this.isConnected()) {
             easyrtc.connect('GameRoomRecruiting', function (id, owner) {
@@ -82,6 +90,7 @@ class AssetMgmt extends Component {
         }
 
         easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
+            self.setState({callerId:callerEasyrtcid});
             var video = document.getElementById('caller');
             easyrtc.setVideoObjectSrc(video, stream);
         });
@@ -108,7 +117,7 @@ class AssetMgmt extends Component {
         var connectFailure = function(errorCode, errText) {
             console.log(errText);
         }
-        let self = this;
+        // let self = this;
         easyrtc.initMediaSource(
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
