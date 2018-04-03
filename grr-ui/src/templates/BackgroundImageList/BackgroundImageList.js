@@ -9,15 +9,22 @@ class BackgroundImageList extends Component {
     constructor(){
         super();
         this.changeBackground = this.changeBackground.bind(this);
+        this.changeAsset = this.changeAsset.bind(this);
         this.uploadCustomBackground = this.uploadCustomBackground.bind(this);
         this.setBackground = this.setBackground.bind(this);
         this.toggleDialog = this.toggleDialog.bind(this);
+        this.validateAssetUpload = this.validateAssetUpload.bind(this);
         this.state = {assetUpload: {mtlFile: '', objFile: ''}, isOpen: false};
     }
 
     changeBackground(e){
         var selectedImage = e.target.value;
         this.props.onSelectedBackground(selectedImage);
+    }
+
+    changeAsset(e){
+        var selectedAsset = e.target.value;
+        this.props.onSelectedAsset(selectedAsset);
     }
 
     setBackground(src){
@@ -51,7 +58,7 @@ class BackgroundImageList extends Component {
                 state.assetUpload.mtlFile = e.target.files[0];
                 break;
             case 'objFile':
-                state.assetUpload.objFile = e.target.files[1];
+                state.assetUpload.objFile = e.target.files[0];
                 break;
             default:
 
@@ -61,25 +68,23 @@ class BackgroundImageList extends Component {
     }
 
     uploadCustomAsset(e){
+
+        console.log(this.state);
+
         e.preventDefault();
-
-        console.log(e.target.files[0]);
-        console.log(e.target.files[1]);
-
-        /*
-        let file = e.target.files[0];
-
-
         let formData = new FormData();
 
-        formData.append('assetImage', file);
+        formData.append('mtlFile', this.state.assetUpload.mtlFile);
+        formData.append('objFile', this.state.assetUpload.objFile);
 
         axios.patch(API_URL+'/api/rooms/'+this.props.roomName, formData).then((result) =>{
             //self.setState({currentBackground: result.data.currentBackground});
+            this.toggleDialog();
             this.props.onRefreshSettings();
-        });*/
+        });
 
         e.target.value = null;
+
     }
 
     toggleDialog () {
@@ -146,19 +151,13 @@ class BackgroundImageList extends Component {
                     </label>
                     <div className="pt-form-content">
                         <div className="pt-select">
-                            <select value="">
+                            <select value={this.props.currentAsset} onChange={this.changeAsset}>
                                 <option  value="">Choose an asset...</option>
                                 {this.props.assetImages.map(image => {
                                     return <option key={image} value={image}>{image}</option>
                                 })}
                             </select>
                         </div>
-                        <input id="assetUpload"
-                               multiple
-                               type="file"
-                               style={{display:"none"}}
-                               ref={(ref) => this.assetUpload = ref}
-                               onChange={(e)=>this.uploadCustomAsset(e)} />
                         &nbsp;
                         {/*<Button type="button" className="pt-button pt-small pt-icon-upload pt-intent-primary" onClick={(e) => this.assetUpload.click()}></Button>*/}
                         <Button type="button" className="pt-button pt-small pt-icon-upload pt-intent-primary" onClick={this.toggleDialog}></Button>
@@ -167,10 +166,11 @@ class BackgroundImageList extends Component {
                             <Dialog
                                 icon="inbox"
                                 isOpen={this.state.isOpen}
-                                onClose={this.toggleDialog.bind(this)}
-                                title="Dialog header"
+                                onClose={this.toggleDialog}
+                                title="Asset Upload"
                             >
 
+                                <form onSubmit={(e) => {this.uploadCustomAsset(e)}}>
                                 <div className="pt-form-group pt-inline">
                                     <label className="pt-label">
                                         Please select .mtl file
@@ -178,10 +178,11 @@ class BackgroundImageList extends Component {
                                     <div className="pt-form-content">
                                         <div className="pt-input-group">
                                             <span className="pt-icon pt-icon-document"></span>
-                                            <input id="example-form-group-input-d" className="pt-input"  type="file"  dir="auto" />
+                                            <input id="example-form-group-input-d" className="pt-input" name="mtlFile" accept=".mtl" onChange={(e) => this.validateAssetUpload(e)}  type="file"  dir="auto" required />
                                         </div>
                                     </div>
                                 </div>
+
                                 <div className="pt-form-group pt-inline">
                                     <label className="pt-label">
                                         Please select .obj file
@@ -189,25 +190,29 @@ class BackgroundImageList extends Component {
                                     <div className="pt-form-content">
                                         <div className="pt-input-group">
                                             <span className="pt-icon pt-icon-document"></span>
-                                            <input id="example-form-group-input-d" className="pt-input"  type="file"  dir="auto" />
+                                            <input id="example-form-group-input-d" className="pt-input" name="objFile" accept=".obj" onChange={(e) => this.validateAssetUpload(e)}   type="file"  dir="auto" required />
                                         </div>
                                     </div>
                                 </div>
 
-
-
-
-
-
-                                <div className="pt-dialog-footer">
-                                    <div className="pt-dialog-footer-actions">
-                                        <Button
-                                            intent={Intent.PRIMARY}
-                                            onClick={this.toggleDialog}
-                                            text="Primary"
-                                        />
+                                    <div className="pt-dialog-footer">
+                                        <div className="pt-dialog-footer-actions">
+                                            <Button
+                                                intent={Intent.PRIMARY}
+                                                text="Upload"
+                                                type="submit"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
+
+                                </form>
+
+
+
+
+
+
+
                             </Dialog>
                         </div>
 
