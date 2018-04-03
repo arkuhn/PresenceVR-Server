@@ -18,6 +18,7 @@ class Homepage extends Component {
                                 <ul class="font-size-adjust">
                                     <li>You can create or join a room from the Rooms List page.</li>
                                     <li>Click the example video call to view a default room.</li>
+                                    <li>From any other page, click the "Game Room Recruiting" button in the top left to return here.</li>
                                 </ul>
                             </div>
                         </div>
