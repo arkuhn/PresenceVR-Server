@@ -14,12 +14,13 @@ class Homepage extends Component {
                     <div className="homepage-container">
 
                         <div className="options-container">
-                            <div className="pt-vertical full-width options-container fixed-size vert-align">
+                            <div className="block-center fixed-size vert-align">
+                                <h2 className="centered">Get Started</h2>
                                 <p className="text-settings">
-                                    We've created a system that aims to provide an immersive experience that
-                                    emulates physical interviews. It will allow interviewers and interviewees to
-                                    stream themselves to each other in a customizeable virtual reality space, and 
-                                    display uploadable assets such as past work or accomplishments. 
+                                    To create or join a call, start by navigating to the room section below. Once 
+                                    you've entered a room, you can edit the settings and upload assets as you see fit. 
+                                    Make sure VR mode is toggled on to get the full experience. If you're 
+                                    ever lost, remember you can click the button in the top left to return here!
                                 </p>
                             </div>
                         </div>
@@ -28,8 +29,8 @@ class Homepage extends Component {
                             <div className="fixed-size block-center vert-align">
                                 <h2 className="centered">Rooms</h2>
                                 <p className="text-settings">
-                                    From here, you can create a new room starting with our provided template, <br />
-                                    or join an existing room that you've been invited to.
+                                    From here, you can create a new room starting with our provided template, 
+                                    or join an existing room that you've been invited to. 
                                 </p>
                                 <Link to="/rooms"><Button className="pt-intent-primary vert-group-button full-width">View Room List</Button></Link>
                             </div>
