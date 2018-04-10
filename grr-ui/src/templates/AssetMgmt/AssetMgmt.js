@@ -236,12 +236,8 @@ class AssetMgmt extends Component {
         let vidBackground = null;
         if (isVrMode) {
             vidBackground = <div id="background-preview">
-<<<<<<< HEAD
-                <VRScene {...this.state}></VRScene></div>;
-=======
                 <VRScene {...this.state}></VRScene>
             </div>;
->>>>>>> 44b59032be1594477f47eda8015152e5dc6b9719
         } else {
             vidBackground = <div id="background-preview">
 
