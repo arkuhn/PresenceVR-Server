@@ -3,6 +3,8 @@ import {Button, Card} from '@blueprintjs/core'
 import './Homepage.css';
 import { Link } from 'react-router-dom';
 import GRRNavBar from "../GRRNavBar/GRRNavBar";
+import vrimage from "../../assets/images/vrimage.png";
+
 
 class Homepage extends Component {
     render() {
@@ -13,7 +15,13 @@ class Homepage extends Component {
                 <h3 className="centered" id="header-text">The future of remote interviewing</h3>
                     <div className="homepage-container">
 
-                        <div className="options-container">
+                        <div>
+                            <div className="block-center">
+                                <img src={"/assets/images/vrimage.png"} alt="vr image" />
+                            </div>
+                        </div>
+
+                        <div className="grey-bg">
                             <div className="block-center fixed-size vert-align">
                                 <h2 className="centered">Get Started</h2>
                                 <p className="text-settings">
@@ -25,7 +33,7 @@ class Homepage extends Component {
                             </div>
                         </div>
 
-                        <div className="options-container grey-bg">
+                        <div>
                             <div className="fixed-size block-center vert-align">
                                 <h2 className="centered">Rooms</h2>
                                 <p className="text-settings">
@@ -33,19 +41,7 @@ class Homepage extends Component {
                                     or join an existing room that you've been invited to. 
                                 </p>
                                 <Link to="/rooms"><Button className="pt-intent-primary vert-group-button full-width">View Room List</Button></Link>
-                            </div>
-                            
-                        </div>
-
-                        <div className="options-container">
-                            <div className="fixed-size block-center vert-align">
-                                <h2 className="centered">The Team</h2>
-                                <p className="text-settings">
-                                    Team DAAD: Dominic Cicilio, Arshdeep Khalsa, Allen Liu, Daniel Roach <br />
-                                    Sponsor: Jim Bondi <br />
-                                    Faculty Coach: Yasmine El-glaly
-                                </p>     
-                            </div>
+                            </div>                       
                         </div>
                         
                     </div>
