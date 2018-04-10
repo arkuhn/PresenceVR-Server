@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, Card} from '@blueprintjs/core'
+import {Button} from '@blueprintjs/core'
 import './Homepage.css';
 import { Link } from 'react-router-dom';
 import GRRNavBar from "../GRRNavBar/GRRNavBar";
