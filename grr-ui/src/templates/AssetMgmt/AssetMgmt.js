@@ -275,7 +275,7 @@ class AssetMgmt extends Component {
         } else {
             vidBackground = <div id="background-preview">
 
-                        <canvas id="c" ref="c" width="320" height="240"></canvas>
+                        <canvas id="c" ref="c" width="320" height="240" style={{visibility: "hidden"}}></canvas>
                         <canvas id="c2" ref="c2" width="320" height="240"></canvas>
                         <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
                         <video  id="caller" ref="caller" width="300" height="200"></video>

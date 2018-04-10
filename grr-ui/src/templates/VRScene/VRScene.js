@@ -108,13 +108,12 @@ class VRScene extends React.Component {
         <a-scene className={styles.vrScene}>
 
                 <a-assets>
-                    <canvas id="c" ref="c" width="320" height="240"></canvas>
+                    <canvas id="c" ref="c" width="320" height="240" style={{visibility: "hidden"}}></canvas>
                     <canvas id="c2" ref="c2" width="320" height="240"></canvas>
                     <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
                     <video  id="caller" ref="caller" width="300" height="200"></video>
                 </a-assets>
                 <a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.props.currentBackground}></a-sky>
-                <a-video src="#c" width="5" height="2.5" position="-6 -4 -2" rotation="-5 65 0" style={{visibility: "hidden"}}></a-video>
                 <a-video src="#caller" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
 
                 <a-entity position="0 -5 0">
