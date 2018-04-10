@@ -1,0 +1,57 @@
+<a-scene>
+    <a-assets>
+        <img id="city" src={API_URL+"/images/"+this.state.currentBackground}></img>
+        <canvas id="c" ref="c" width="320" height="240"></canvas>
+        <canvas id="c2" ref="c2" width="320" height="240"></canvas>
+        <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
+        <video  id="caller" ref="caller" width="300" height="200"></video>
+    </a-assets>
+    <a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.state.currentBackground}></a-sky>
+    <a-video src="#c" width="5" height="2.5" position="-6 -4 -2" rotation="-5 65 0"></a-video>
+    <a-video src="#c2" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
+    
+    
+    <a-entity hand-controls="left" grab-assets aabb-collider="objects: .collides">
+        <a-sphere class="sphere-controller" radius="0.03" color="blue" position="0 -0.01 0.2"></a-sphere>
+        <a-entity class="testSelector" item-selector></a-entity>
+    </a-entity>
+    <a-entity hand-controls="right" grab-assets aabb-collider="objects: .collides">
+        <a-sphere class="sphere-controller" radius="0.03" color="blue" position="0 -0.01 0.2"></a-sphere>
+    </a-entity>
+
+    <a-entity position="0 -5 0">
+        <a-entity id="camera" camera></a-entity>
+    </a-entity>
+</a-scene>
+
+
+<!-- <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script> -->
+  <!-- <script src="https://unpkg.com/aframe-aabb-collider-component/dist/aframe-aabb-collider-component.min.js"></script> -->
+  <!-- <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.13.1/dist/aframe-extras.min.js"></script> -->
+  <!-- <script src="/dependencies/aframe-look-at-component.min.js"></script> -->
+
+  // import grabAsset from "./js/aframe_components/grab-assets";
+// import itemSelector from "./js/aframe_components/grab-assets";
+// import previewIcon from "./js/aframe_components/grab-assets";
+
+
+
+<link href="https://unpkg.com/normalize.css@^4.1.1" rel="stylesheet" />
+<link href="https://unpkg.com/@blueprintjs/core@^1.11.0/dist/blueprint.css" rel="stylesheet" />
+<link rel="stylesheet" type="text/css" href="/style.css" />
+
+
+<!---EasyRTC---->
+<link rel="stylesheet" type="text/css" href="/api/easyrtc.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script type="text/javascript" src="/api/easyrtc.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<a-assets>
+    <img id="city" src={API_URL+"/images/"+this.state.currentBackground}></img>
+    <canvas id="c" ref="c" width="320" height="240"></canvas>
+    <canvas id="c2" ref="c2" width="320" height="240"></canvas>
+    <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
+    <video  id="caller" ref="caller" width="300" height="200"></video>
+</a-assets>
+<a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.state.currentBackground}></a-sky>

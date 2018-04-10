@@ -4,6 +4,7 @@ var RoomSchema = mongoose.Schema({
     name: String,
     vrMode: Boolean,
     currentBackground: String,
+    currentAsset: String,
     backgroundImages: [String],
     assetImages: [String]
 }, {
