@@ -9,7 +9,7 @@ class GRRNavBar extends Component {
             <nav className="pt-navbar pt-dark">
                 <div style={{margin: "0 auto; width: 480px"}}>
                     <div className="pt-navbar-group pt-align-left">
-                        <Link to="/"><div className="pt-navbar-heading" id="logo">Game Room Recruiting</div></Link>
+                        <Link to="/"><button className="pt-button pt-minimal">Game Room Recruiting</button></Link>
                     </div>
                     <div className="pt-navbar-group pt-align-right">
                         <button className="pt-button pt-minimal pt-icon-history">Room History</button>

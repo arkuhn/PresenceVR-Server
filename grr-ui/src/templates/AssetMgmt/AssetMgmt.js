@@ -8,6 +8,7 @@ import BackgroundImageList from '../BackgroundImageList/BackgroundImageList';
 import './AssetMgmt.css';
 import axios from 'axios';
 import {API_URL} from "../api.config";
+import VRScene from "../VRScene/VRScene";
 
 class AssetMgmt extends Component {
 
@@ -102,7 +103,7 @@ class AssetMgmt extends Component {
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
                 easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
-                easyrtc.connect("Company_Chat_Line", connectSuccess, connectFailure);
+                easyrtc.connect("GameRoomRecruiting", connectSuccess, connectFailure);
                 window.requestAnimationFrame(self.draw.bind(self));
             }, connectFailure);
     }
@@ -235,25 +236,7 @@ class AssetMgmt extends Component {
         let vidBackground = null;
         if (isVrMode) {
             vidBackground = <div id="background-preview">
-                <a-scene>
-                    <a-assets>
-                        <img crossOrigin="anonymous" id="city" src={API_URL+"/images/"+this.state.currentBackground}></img>
-                        <canvas id="c" ref="c" width="320" height="240"></canvas>
-                        <canvas id="c2" ref="c2" width="320" height="240"></canvas>
-                        <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
-                        <video  id="caller" ref="caller" width="300" height="200"></video>
-                        <a-asset-item crossOrigin="anonymous" id="objAsset" src={API_URL+"/images/"+this.state.currentAsset+".obj"}></a-asset-item>
-                        <a-asset-item crossOrigin="anonymous" id="mtlAsset" src={API_URL+"/images/"+this.state.currentAsset+".mtl"}></a-asset-item>
-                    </a-assets>
-                    <a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.state.currentBackground}></a-sky>
-                    <a-video src="#c" width="5" height="2.5" position="-6 -4 -2" rotation="-5 65 0"></a-video>
-                    <a-video src="#c2" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
-                    <a-obj-model src={API_URL+"/images/"+this.state.currentAsset+".obj"} mtl={API_URL+"/images/"+this.state.currentAsset+".mtl"} scale=".075 .075 .075" position="-8 -4 .9"
-                                 rotation="180 180 0"                  ></a-obj-model>
-                    <a-entity position="0 -5 0">
-                        <a-camera></a-camera>
-                    </a-entity>
-                </a-scene>
+                <VRScene {...this.state}></VRScene>
             </div>;
         } else {
             vidBackground = <div id="background-preview">
