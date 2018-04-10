@@ -15,7 +15,7 @@ class AssetMgmt extends Component {
     constructor(props){
         super(props);
         this.toggleVRMode = this.toggleVRMode.bind(this);
-        //this.selectBackground = this.selectBackground.bind(this);
+        this.selectBackground = this.selectBackground.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
         this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
     }
@@ -91,7 +91,7 @@ class AssetMgmt extends Component {
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
                 easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
-                easyrtc.connect("Company_Chat_Line", connectSuccess, connectFailure);
+                easyrtc.connect("GameRoomRecruiting", connectSuccess, connectFailure);
                 window.requestAnimationFrame(self.draw.bind(self));
             }, connectFailure);
     }
@@ -224,7 +224,7 @@ class AssetMgmt extends Component {
         let vidBackground = null;
         if (isVrMode) {
             vidBackground = <div id="background-preview">
-                <VRScene></VRScene>
+                <VRScene {...this.state}></VRScene>
             </div>;
         } else {
             vidBackground = <div id="background-preview">
