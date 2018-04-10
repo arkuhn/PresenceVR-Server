@@ -16,8 +16,9 @@ class AssetMgmt extends Component {
         super(props);
         this.toggleVRMode = this.toggleVRMode.bind(this);
         this.selectBackground = this.selectBackground.bind(this);
+        this.selectAsset = this.selectAsset.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
-        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
+        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', currentAsset:'', backgroundImages: [], assetImages: []};
     }
 
     toggleVRMode(){
@@ -44,6 +45,17 @@ class AssetMgmt extends Component {
 
     }
 
+    selectAsset (assetTitle) {
+
+        var self = this;
+        axios.patch(API_URL+'/api/rooms/'+this.props.match.params.roomID, {
+            currentAsset: assetTitle
+        }).then((result) =>{
+            this.refreshSettings();
+        });
+
+    }
+
     componentDidMount(){
         this.myinit();
         this.refreshSettings();
@@ -53,7 +65,7 @@ class AssetMgmt extends Component {
         var self = this;
         axios.get(API_URL+'/api/rooms/'+this.props.match.params.roomID).then((result) =>{
             self.setState({roomName: result.data.name ,vrMode: result.data.vrMode, currentBackground: result.data.currentBackground,
-                backgroundImages: result.data.backgroundImages, assetImages: result.data.assetImages});
+                currentAsset: result.data.currentAsset ,backgroundImages: result.data.backgroundImages, assetImages: result.data.assetImages});
         });
     }
 
@@ -242,7 +254,7 @@ class AssetMgmt extends Component {
                 <GRRNavBar/>
                 <div className="flex-container">
                 <div className="list-container">
-                    <BackgroundImageList {...this.state} onToggleVRMode={this.toggleVRMode} onSelectedBackground={this.selectBackground} onRefreshSettings={this.refreshSettings}></BackgroundImageList>
+                    <BackgroundImageList {...this.state} onToggleVRMode={this.toggleVRMode} onSelectedBackground={this.selectBackground} onSelectedAsset={this.selectAsset} onRefreshSettings={this.refreshSettings}></BackgroundImageList>
                 </div>
                     <div className="preview-container" >
                         {vidBackground}

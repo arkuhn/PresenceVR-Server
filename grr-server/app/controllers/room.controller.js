@@ -9,7 +9,7 @@ exports.create = function(req, res) {
     }
 
     var room = new Room({name: req.body.name || "Untitled Room", vrMode: false,
-        currentBackground: req.body.currentBackground, backgroundImages: ["bridge.png", "city.jpg",
+        currentBackground: req.body.currentBackground, currentAsset: '', backgroundImages: ["bridge.png", "city.jpg",
             "puydesancy.jpg", "stock360.png", "vr_background.jpg"]});
 
     room.save(function(err, data) {
@@ -109,13 +109,24 @@ exports.patchRoom = function(req, res) {
         if(req.body.currentBackground) {
             room.currentBackground = req.body.currentBackground;
         }
+        if(req.body.currentAsset || req.body.currentAsset === "") {
+            room.currentAsset = req.body.currentAsset;
+        }
         if(req.files) {
             if(req.files[0].fieldname === "backgroundImage") {
+                console.log(req.files[0]);
                 room.backgroundImages.push(req.files[0].originalname);
             }
+            if(req.files.length > 1){
+                if(req.files[0].fieldname === "mtlFile" && req.files[1].fieldname === "objFile") {
+
+                    room.assetImages.push(req.files[0].originalname.replace(/\.[^/.]+$/, ""));
+                }
+            }
+            /*
             if(req.files[0].fieldname === "assetImage") {
                 room.assetImages.push(req.files[0].originalname);
-            }
+            }*/
         }
 
         room.save(function(err, data){
