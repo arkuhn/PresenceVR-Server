@@ -12,6 +12,8 @@ const pathsToClean = [
 ]
 
 const config = {
+  devtool: "source-map",
+
    entry: {
      main: APP_DIR + '/index.js'
    },
