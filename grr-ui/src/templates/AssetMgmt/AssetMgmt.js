@@ -248,8 +248,8 @@ class AssetMgmt extends Component {
                     <a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.state.currentBackground}></a-sky>
                     <a-video src="#c" width="5" height="2.5" position="-6 -4 -2" rotation="-5 65 0"></a-video>
                     <a-video src="#c2" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
-                    <a-obj-model gltf-model-legacy={API_URL+"/images/test.gltf"} scale=".1 .1 .1" position="5 5 5"
-                                      ></a-obj-model>
+                    <a-obj-model src={API_URL+"/images/"+this.state.currentAsset+".obj"} mtl={API_URL+"/images/"+this.state.currentAsset+".mtl"} scale=".075 .075 .075" position="-8 -4 .9"
+                                 rotation="180 180 0"                  ></a-obj-model>
                     <a-entity position="0 -5 0">
                         <a-camera></a-camera>
                     </a-entity>
