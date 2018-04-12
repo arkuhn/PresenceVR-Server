@@ -27,7 +27,7 @@
     "start": "./node_modules/.bin/nodemon ./grr-server/server.js",
     "devstart": "./node_modules/.bin/webpack -w & ./node_modules/.bin/nodemon ./grr-server/server.js",
     "build": "./node_modules/.bin/webpack -w",
-    "install": "cd grr-ui && npm install && npm run build && cd ..",
+    "install": "cd grr-ui && npm install && cd ..",
     "test": "mocha --compilers babel-core/register ./test/*test.js"
   },
   "devDependencies": {
