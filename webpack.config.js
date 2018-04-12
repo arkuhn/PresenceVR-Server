@@ -63,7 +63,6 @@ const config = {
 
   plugins: [
     new ExtractTextPlugin('style.css'),
-    new CleanWebpackPlugin(pathsToClean),
     new CopyWebpackPlugin([
       { from: './grr-ui/src/api', to: './api' },
       { from: './grr-ui/src/assets', to: './assets'},
