@@ -1,2 +1,2 @@
-web: node ./grr-server/server.js
+web: webpack -w & nodemon ./grr-server/server.js
 
