@@ -16,11 +16,21 @@ class RoomList extends Component {
         this.joinRoom = this.joinRoom.bind(this);
         this.createRoom = this.createRoom.bind(this);
         this.handleCreateNewRoomClick = this.handleCreateNewRoomClick.bind(this);
+        this.isConnected = this.isConnected.bind(this);
         this.state = {rooms: [], clickToShowCreateRoomTextArea: true};
     }
 
     getRoomListFromEasyRTCServer() {
-        easyrtc.getRoomList(this.refreshAndShowRoomList, function (errorCode, errorText) {})
+        console.log("Trying to get room list from EasyRTCServer");
+        easyrtc.getRoomList(this.refreshAndShowRoomList,
+            function (errorCode, errorText) {
+            console.log("errorText: " + errorText);
+            console.log("errorCode: " + errorCode);
+            })
+    }
+
+    isConnected() {
+        return !!easyrtc.applicationName;
     }
 
     getAndDisplayCurrentTimeString() {
@@ -37,6 +47,7 @@ class RoomList extends Component {
     }
 
     refreshAndShowRoomList(data) {
+        console.log("Trying to set rooms state");
         var self = this;
         self.setState({rooms: []});
 
@@ -51,7 +62,16 @@ class RoomList extends Component {
     }
 
     componentDidMount() {
-        easyrtc.connect('GameRoomRecruiting', function (id, owner) {}, function (errorCode, errorText) {});
+
+        if (!this.isConnected()) {
+            easyrtc.connect('GameRoomRecruiting', function (id, owner) {
+                console.log("Connected to EasyRTC server");
+            }, function (errorCode, errorText) {
+                console.log("Not connected to EasyRTC server");
+            });
+        }
+
+        this.getRoomListFromEasyRTCServer();
         this.getRoomListFromEasyRTCServer();
         this.getAndDisplayCurrentTimeString();
     }

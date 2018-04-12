@@ -18,12 +18,22 @@ class AssetMgmt extends Component {
         this.selectBackground = this.selectBackground.bind(this);
         this.selectAsset = this.selectAsset.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
-        this.state = {vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', currentAsset:'', backgroundImages: [], assetImages: []};
+        this.state = {callerId: "", vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
+
     }
 
     toggleVRMode(){
         let video = document.getElementById("self");
+        easyrtc.clearMediaStream(video);
         easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
+
+        if(this.state.callerId){
+            this.performCall(this.state.callerId);
+            let caller_video = document.getElementById("caller");
+            
+            easyrtc.setVideoObjectSrc(caller_video, easyrtc.getRemoteStream(this.state.callerId));
+            // console.log(easyrtc.getRemoteStream(this.state.callerId));
+        }
 
         var self = this;
         axios.patch(API_URL+'/api/rooms/'+this.props.match.params.roomID, {
@@ -45,7 +55,10 @@ class AssetMgmt extends Component {
 
     }
 
-    selectAsset (assetTitle) {
+    isConnected() {
+        return !!easyrtc.applicationName;
+    }
+      selectAsset (assetTitle) {
 
         var self = this;
         axios.patch(API_URL+'/api/rooms/'+this.props.match.params.roomID, {
@@ -71,7 +84,29 @@ class AssetMgmt extends Component {
 
     myinit(){
 
+        var self = this;
+
+        // If not connected when hitting this page, try to connect to EasyRTC server
+        if(!this.isConnected()) {
+            easyrtc.connect('GameRoomRecruiting', function (id, owner) {
+                console.log("Connected to EasyRTC server");
+            }, function (errorCode, errorText) {
+                console.log("Not connected to EasyRTC server");
+            });
+        }
+
+        // If not in the room when hitting this page, try to join the EasyRTC room with the corresponding name
+        if(Object.keys(easyrtc.getRoomsJoined).length === 0) {
+            var joinClause = {"joinOnCompletion": true};
+            easyrtc.joinRoom(this.props.match.params.roomID, joinClause, function (roomName) {
+                console.log("Joined " + roomName);
+            }, function (errorCode, errorText) {
+
+            });
+        }
+
         easyrtc.setStreamAcceptor( function(callerEasyrtcid, stream) {
+            self.setState({callerId:callerEasyrtcid});
             var video = document.getElementById('caller');
             easyrtc.setVideoObjectSrc(video, stream);
         });
@@ -98,12 +133,11 @@ class AssetMgmt extends Component {
         var connectFailure = function(errorCode, errText) {
             console.log(errText);
         }
-        let self = this;
+        // let self = this;
         easyrtc.initMediaSource(
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
                 easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
-                easyrtc.connect("GameRoomRecruiting", connectSuccess, connectFailure);
                 window.requestAnimationFrame(self.draw.bind(self));
             }, connectFailure);
     }
@@ -241,7 +275,7 @@ class AssetMgmt extends Component {
         } else {
             vidBackground = <div id="background-preview">
 
-                        <canvas id="c" ref="c" width="320" height="240"></canvas>
+                        <canvas id="c" ref="c" width="320" height="240" style={{visibility: "hidden"}}></canvas>
                         <canvas id="c2" ref="c2" width="320" height="240"></canvas>
                         <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
                         <video  id="caller" ref="caller" width="300" height="200"></video>
