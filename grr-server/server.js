@@ -32,8 +32,8 @@ mongoose.connection.once('open', function() {
     console.log("Successfully connected to the database");
 });
 
-const HTTP_PORT = 8080;
-const HTTPS_PORT = 8000;
+const HTTP_PORT = process.env.PORT || 8080;
+const HTTPS_PORT = process.env.PORT || 8000;
 let rest = [];
 let dir1, dir2;
 
