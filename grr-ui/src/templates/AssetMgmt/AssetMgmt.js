@@ -30,7 +30,9 @@ class AssetMgmt extends Component {
         if(this.state.callerId){
             this.performCall(this.state.callerId);
             let caller_video = document.getElementById("caller");
-            
+            easyrtc.clearMediaStream(video);
+
+
             easyrtc.setVideoObjectSrc(caller_video, easyrtc.getRemoteStream(this.state.callerId));
             // console.log(easyrtc.getRemoteStream(this.state.callerId));
         }
@@ -138,7 +140,7 @@ class AssetMgmt extends Component {
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
                 easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
-                window.requestAnimationFrame(self.draw.bind(self));
+                //window.requestAnimationFrame(self.draw.bind(self));
             }, connectFailure);
     }
 
