@@ -18,7 +18,7 @@ class AssetMgmt extends Component {
         this.selectBackground = this.selectBackground.bind(this);
         this.selectAsset = this.selectAsset.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
-        this.state = {callerId: "", vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
+        this.state = {callerId: "", vrMode: false, video:null, clientVideo:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
 
     }
 
@@ -30,8 +30,6 @@ class AssetMgmt extends Component {
         if(this.state.callerId){
             this.performCall(this.state.callerId);
             let caller_video = document.getElementById("caller");
-            easyrtc.clearMediaStream(video);
-
 
             easyrtc.setVideoObjectSrc(caller_video, easyrtc.getRemoteStream(this.state.callerId));
             // console.log(easyrtc.getRemoteStream(this.state.callerId));
@@ -60,7 +58,7 @@ class AssetMgmt extends Component {
     isConnected() {
         return !!easyrtc.applicationName;
     }
-      selectAsset (assetTitle) {
+    selectAsset (assetTitle) {
 
         var self = this;
         axios.patch(API_URL+'/api/rooms/'+this.props.match.params.roomID, {
@@ -111,6 +109,8 @@ class AssetMgmt extends Component {
             self.setState({callerId:callerEasyrtcid});
             var video = document.getElementById('caller');
             easyrtc.setVideoObjectSrc(video, stream);
+            window.requestAnimationFrame(self.draw.bind(self));
+            self.setState({clientVideo: video});
         });
 
         easyrtc.setOnStreamClosed( function (callerEasyrtcid) {
@@ -120,7 +120,7 @@ class AssetMgmt extends Component {
         let video = document.getElementById("self");
         let width = video.width;
         let height = video.height;
-        this.setState({video: document.getElementById("self"), clientVideo: document.getElementById("caller")});
+        this.setState({video: document.getElementById("self")});
         this.setState({width: document.getElementById("self").width});
         this.setState({height: document.getElementById("self").height});
 
@@ -140,7 +140,6 @@ class AssetMgmt extends Component {
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
                 easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
-                //window.requestAnimationFrame(self.draw.bind(self));
             }, connectFailure);
     }
 
@@ -165,14 +164,12 @@ class AssetMgmt extends Component {
 
 
     performCall(easyrtcid) {
-        var self = this;
         easyrtc.call(
             easyrtcid,
             function(easyrtcid) { console.log("completed call to " + easyrtcid);},
             function(errorCode, errorText) { console.log("err:" + errorText);},
             function(accepted, bywho) {
                 console.log((accepted?"accepted":"rejected")+ " by " + bywho);
-                window.requestAnimationFrame(self.draw.bind(self));
             });
     }
 
@@ -187,7 +184,7 @@ class AssetMgmt extends Component {
     }
 
     draw() {
-        let canvas = document.getElementById("c2");
+        let canvas = document.getElementById("c");
         let context = canvas.getContext("2d");
         var frame = this.readFrame();
 
@@ -201,7 +198,7 @@ class AssetMgmt extends Component {
     }
 
     readFrame() {
-        let canvas = document.getElementById("c2");
+        let canvas = document.getElementById("c");
         let context = canvas.getContext("2d");
         try {
             context.drawImage(this.state.clientVideo, 0, 0, this.state.width, this.state.height);
@@ -279,11 +276,11 @@ class AssetMgmt extends Component {
         } else {
             vidBackground = <div id="background-preview">
 
-                        <canvas id="c" ref="c" width="320" height="240" style={{visibility: "hidden"}}></canvas>
-                        <canvas id="c2" ref="c2" width="320" height="240"></canvas>
-                        <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
-                        <video  id="caller" ref="caller" width="300" height="200" style={{visibility: "hidden"}}></video>
-                        </div>
+                <canvas id="c" ref="c" width="320" height="240"></canvas>
+                <canvas id="c2" ref="c2" width="320" height="240"></canvas>
+                <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
+                <video  id="caller" ref="caller" width="300" height="200" style={{visibility: "hidden"}}></video>
+            </div>
         }
 
         return (
@@ -291,9 +288,9 @@ class AssetMgmt extends Component {
                 <div id="otherClients"></div>
                 <GRRNavBar/>
                 <div className="flex-container">
-                <div className="list-container">
-                    <BackgroundImageList {...this.state} onToggleVRMode={this.toggleVRMode} onSelectedBackground={this.selectBackground} onSelectedAsset={this.selectAsset} onRefreshSettings={this.refreshSettings}></BackgroundImageList>
-                </div>
+                    <div className="list-container">
+                        <BackgroundImageList {...this.state} onToggleVRMode={this.toggleVRMode} onSelectedBackground={this.selectBackground} onSelectedAsset={this.selectAsset} onRefreshSettings={this.refreshSettings}></BackgroundImageList>
+                    </div>
                     <div className="preview-container" >
                         {vidBackground}
                     </div>
