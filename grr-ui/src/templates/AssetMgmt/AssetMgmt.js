@@ -118,7 +118,7 @@ class AssetMgmt extends Component {
         let video = document.getElementById("self");
         let width = video.width;
         let height = video.height;
-        this.setState({video: document.getElementById("self")});
+        this.setState({video: document.getElementById("self"), clientVideo: document.getElementById("caller")});
         this.setState({width: document.getElementById("self").width});
         this.setState({height: document.getElementById("self").height});
 
@@ -163,12 +163,14 @@ class AssetMgmt extends Component {
 
 
     performCall(easyrtcid) {
+        var self = this;
         easyrtc.call(
             easyrtcid,
             function(easyrtcid) { console.log("completed call to " + easyrtcid);},
             function(errorCode, errorText) { console.log("err:" + errorText);},
             function(accepted, bywho) {
                 console.log((accepted?"accepted":"rejected")+ " by " + bywho);
+                window.requestAnimationFrame(self.draw.bind(self));
             });
     }
 
@@ -183,7 +185,7 @@ class AssetMgmt extends Component {
     }
 
     draw() {
-        let canvas = document.getElementById("c");
+        let canvas = document.getElementById("c2");
         let context = canvas.getContext("2d");
         var frame = this.readFrame();
 
@@ -197,10 +199,10 @@ class AssetMgmt extends Component {
     }
 
     readFrame() {
-        let canvas = document.getElementById("c");
+        let canvas = document.getElementById("c2");
         let context = canvas.getContext("2d");
         try {
-            context.drawImage(this.state.video, 0, 0, this.state.width, this.state.height);
+            context.drawImage(this.state.clientVideo, 0, 0, this.state.width, this.state.height);
         } catch (e) {
             // The video may not be ready, yet.
             return null;
@@ -278,7 +280,7 @@ class AssetMgmt extends Component {
                         <canvas id="c" ref="c" width="320" height="240" style={{visibility: "hidden"}}></canvas>
                         <canvas id="c2" ref="c2" width="320" height="240"></canvas>
                         <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
-                        <video  id="caller" ref="caller" width="300" height="200"></video>
+                        <video  id="caller" ref="caller" width="300" height="200" style={{visibility: "hidden"}}></video>
                         </div>
         }
 
