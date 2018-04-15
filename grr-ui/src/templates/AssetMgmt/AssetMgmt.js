@@ -72,6 +72,26 @@ class AssetMgmt extends Component {
     componentDidMount(){
         this.myinit();
         this.refreshSettings();
+        // window.addEventListener("beforeunload", this.onUnload);
+    }
+
+    onUnload(event) {
+        alert("Wanna try and leave the room: " + this.props.match.package.roomID);
+    }
+
+    // TODO: Will work for navigating within GRR
+    componentWillUnmount() {
+
+        var self = this;
+        let video = document.getElementById("self");
+        easyrtc.clearMediaStream(video);
+
+        easyrtc.leaveRoom(self.state.roomName, function (roomName) {
+            console.log("Left room: " + self.state.roomName);
+        }, function (errorCode, errorText, roomName) {
+            
+        });
+
     }
 
     refreshSettings(){
