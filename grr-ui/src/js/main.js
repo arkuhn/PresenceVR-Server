@@ -31,32 +31,54 @@
     }
 
 
-    function loggedInListener(roomName, otherPeers) {
-        var otherClientDiv = document.getElementById('otherClients');
-        while (otherClientDiv.hasChildNodes()) {
-            otherClientDiv.removeChild(otherClientDiv.lastChild);
-        }
-        for(var i in otherPeers) {
-            var button = document.createElement('button');
-            button.onclick = function(easyrtcid) {
-                return function() {
-                    performCall(easyrtcid);
-                }
-            }(i);
+    // function loggedInListener(roomName, otherPeers) {
+    //     var otherClientDiv = document.getElementById('otherClients');
+    //     while (otherClientDiv.hasChildNodes()) {
+    //         otherClientDiv.removeChild(otherClientDiv.lastChild);
+    //     }
+    //     for(var i in otherPeers) {
+    //         var button = document.createElement('button');
+    //         button.onclick = function(easyrtcid) {
+    //             return function() {
+    //                 performCall(easyrtcid);
+    //             }
+    //         }(i);
+    //
+    //         label = document.createTextNode(i);
+    //         button.appendChild(label);
+    //         otherClientDiv.appendChild(button);
+    //     }
+    // }
 
-            label = document.createTextNode(i);
-            button.appendChild(label);
-            otherClientDiv.appendChild(button);
-        }
-    }
+    // function loggedInListener(roomName, otherPeers) {
+    //     var otherClientDiv = document.getElementById('otherClients');
+    //     while (otherClientDiv.hasChildNodes()) {
+    //         otherClientDiv.removeChild(otherClientDiv.lastChild);
+    //     }
+    //     var self = this;
+    //
+    //     for(var i in otherPeers) {
+    //         self.setState({dialogOpen: true});
+    //     }
+    // }
 
+    // function performCall(easyrtcid) {
+    //     easyrtc.call(
+    //     easyrtcid,
+    //     function(easyrtcid) { console.log("completed call to " + easyrtcid);},
+    //     function(errorCode, errorText) { console.log("err:" + errorText);},
+    //     function(accepted, bywho) {
+    //         console.log((accepted?"accepted":"rejected")+ " by " + bywho);
+    //     });
+    // }
 
     function performCall(easyrtcid) {
+        // this.setState({dialogOpen : false});
         easyrtc.call(
-        easyrtcid,
-        function(easyrtcid) { console.log("completed call to " + easyrtcid);},
-        function(errorCode, errorText) { console.log("err:" + errorText);},
-        function(accepted, bywho) {
-            console.log((accepted?"accepted":"rejected")+ " by " + bywho);
-        });
+            easyrtcid,
+            function(easyrtcid) { console.log("completed call to " + easyrtcid);},
+            function(errorCode, errorText) { console.log("err:" + errorText);},
+            function(accepted, bywho) {
+                console.log((accepted?"accepted":"rejected")+ " by " + bywho);
+            });
     }

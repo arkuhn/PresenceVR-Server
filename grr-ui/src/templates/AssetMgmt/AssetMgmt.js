@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import ReactDOM from "react-dom";
-import {Menu, MenuItem, MenuDivider, Switch} from '@blueprintjs/core';
+import {Button, Dialog} from '@blueprintjs/core';
 import GRRNavBar from '../GRRNavBar/GRRNavBar';
 import Keyer from '../Keyer/Keyer';
 import BackgroundImageList from '../BackgroundImageList/BackgroundImageList';
@@ -18,7 +18,10 @@ class AssetMgmt extends Component {
         this.selectBackground = this.selectBackground.bind(this);
         this.selectAsset = this.selectAsset.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
-        this.state = {callerId: "", vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
+        this.performCall = this.performCall.bind(this);
+        this.toggleCallerDialog = this.toggleCallerDialog.bind(this);
+        this.myRef = React.createRef();
+        this.state = {callerId: "", vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: [], dialogOpen: false};
 
     }
 
@@ -146,13 +149,13 @@ class AssetMgmt extends Component {
         let canvas = document.getElementById("c");
         let context = canvas.getContext("2d");
 
-        easyrtc.setRoomOccupantListener( loggedInListener);
+        easyrtc.setRoomOccupantListener(this.loggedInListener);
         var connectSuccess = function(myId) {
             //console.log("My easyrtcid is " + myId);
-        }
+        };
         var connectFailure = function(errorCode, errText) {
             console.log(errText);
-        }
+        };
         // let self = this;
         easyrtc.initMediaSource(
             function(){        // success callback
@@ -162,27 +165,40 @@ class AssetMgmt extends Component {
             }, connectFailure);
     }
 
-    loggedInListener(roomName, otherPeers) {
-        var otherClientDiv = document.getElementById('otherClients');
-        while (otherClientDiv.hasChildNodes()) {
-            otherClientDiv.removeChild(otherClientDiv.lastChild);
-        }
-        for(var i in otherPeers) {
-            var button = document.createElement('button');
-            button.onclick = function(easyrtcid) {
-                return function() {
-                    performCall(easyrtcid);
-                }
-            }(i);
-
-            var label = document.createTextNode(i);
-            button.appendChild(label);
-            otherClientDiv.appendChild(button);
-        }
+    toggleCallerDialog() {
+        var value = this.state.dialogOpen;
+        this.setState({dialogOpen: !value});
     }
 
+    // loggedInListener(roomName, otherPeers) {
+    //         var otherClientDiv = document.getElementById('otherClients');
+    //         while (otherClientDiv.hasChildNodes()) {
+    //             otherClientDiv.removeChild(otherClientDiv.lastChild);
+    //         }
+    //         for(var i in otherPeers) {
+    //             var button = document.createElement('button');
+    //             button.onclick = function(easyrtcid) {
+    //                 return function() {
+    //                     performCall(easyrtcid);
+    //                 }
+    //             }(i);
+    //
+    //             label = document.createTextNode(i);
+    //             button.appendChild(label);
+    //             otherClientDiv.appendChild(button);
+    //         }
+    // }
+
+    // TODO: need to fix scope (trying to call toggleCallerDialog but it shows up as undefined)
+    // TODO: think there's an issue with scoping since method call is from a listener
+    // TODO:    so keyword 'this' doesn't refer to REACR
+    loggedInListener(roomName, otherPeers) {
+
+        while(Object.keys(otherPeers).length === 1  ) {toggleCallerDialog();}
+    }
 
     performCall(easyrtcid) {
+        this.setState({dialogOpen : false});
         easyrtc.call(
             easyrtcid,
             function(easyrtcid) { console.log("completed call to " + easyrtcid);},
@@ -304,7 +320,17 @@ class AssetMgmt extends Component {
 
         return (
             <div>
-                <div id="otherClients"></div>
+                <Dialog isOpen={this.state.dialogOpen} title={"Accept?"} iconName={"phone"}>
+                    <div className="pt-dialog-body">
+                        Do you want to accept this call?
+                        EasyRTC ID:<p id="callerID">{this.state.callerId}</p>
+                    </div>
+                    <div className="pt-dialog-footer">
+                        <div className="pt-dialog-footer-actions">
+                            <Button className="pt-intent-success" onClick={(e) => this.performCall(this.state.callerId)}>Accept</Button>
+                        </div>
+                    </div>
+                </Dialog>
                 <GRRNavBar/>
                 <div className="flex-container">
                 <div className="list-container">
