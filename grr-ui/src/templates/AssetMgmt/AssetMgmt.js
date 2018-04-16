@@ -149,7 +149,7 @@ class AssetMgmt extends Component {
         let canvas = document.getElementById("c");
         let context = canvas.getContext("2d");
 
-        easyrtc.setRoomOccupantListener(this.loggedInListener);
+        easyrtc.setRoomOccupantListener(this.loggedInListener.bind(this));
         var connectSuccess = function(myId) {
             //console.log("My easyrtcid is " + myId);
         };
@@ -193,8 +193,12 @@ class AssetMgmt extends Component {
     // TODO: think there's an issue with scoping since method call is from a listener
     // TODO:    so keyword 'this' doesn't refer to REACR
     loggedInListener(roomName, otherPeers) {
-
-        while(Object.keys(otherPeers).length === 1  ) {toggleCallerDialog();}
+        for(var i in otherPeers){
+            this.setState({callerId: i});
+            if(Object.keys(otherPeers).length === 1  ) {
+                this.toggleCallerDialog();
+            }
+        }
     }
 
     performCall(easyrtcid) {
@@ -320,7 +324,7 @@ class AssetMgmt extends Component {
 
         return (
             <div>
-                <Dialog isOpen={this.state.dialogOpen} title={"Accept?"} iconName={"phone"}>
+                <Dialog isOpen={this.state.dialogOpen} onClose={this.toggleCallerDialog} title={"Accept?"} iconName={"phone"}>
                     <div className="pt-dialog-body">
                         Do you want to accept this call?
                         EasyRTC ID:<p id="callerID">{this.state.callerId}</p>
