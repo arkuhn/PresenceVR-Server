@@ -14,7 +14,7 @@
 3. Change the 'api.config.js' (located in grr-ui/src/templates/api.config.js) file's url variable to your respective domain
 
         export const API_URL = '<YOUR_DOMAIN_HERE>';
-        example. export const API_URL = 'http://localhost:8080';
+                ex. export const API_URL = 'http://localhost:8080';
 4. Run the following command to build the UI code
 
         npm run build
