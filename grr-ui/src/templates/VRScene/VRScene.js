@@ -6,8 +6,8 @@ import ReactDOM from 'react-dom';
 import grabAsset from "../../js/aframe_components/grab-assets";
 import itemSelector from "../../js/aframe_components/vr-arm-item-selector";
 import previewIcon from "../../js/aframe_components/vr-arm-preview-icon";
-import previewIcon from "../../js/aframe_components/vr-eraser";
-import previewIcon from "../../js/aframe_components/vr-eraser-toggle";
+import vrEraser from "../../js/aframe_components/vr-eraser";
+import vrEraserToggle from "../../js/aframe_components/vr-eraser-toggle";
 import {API_URL} from "../api.config";
 
 
