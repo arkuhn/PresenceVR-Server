@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import ReactDOM from "react-dom";
-import {Menu, MenuItem, MenuDivider, Switch} from '@blueprintjs/core';
+import {Button, Dialog} from '@blueprintjs/core';
 import GRRNavBar from '../GRRNavBar/GRRNavBar';
 import Keyer from '../Keyer/Keyer';
 import BackgroundImageList from '../BackgroundImageList/BackgroundImageList';
@@ -18,7 +17,9 @@ class AssetMgmt extends Component {
         this.selectBackground = this.selectBackground.bind(this);
         this.selectAsset = this.selectAsset.bind(this);
         this.refreshSettings = this.refreshSettings.bind(this);
-        this.state = {callerId: "", vrMode: false, video:null, clientVideo:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: []};
+        this.performCall = this.performCall.bind(this);
+        this.toggleCallerDialog = this.toggleCallerDialog.bind(this);
+        this.state = {callerId: "", vrMode: false, video:null, clientVideo:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: [], dialogOpen: false};
 
     }
 
@@ -72,6 +73,21 @@ class AssetMgmt extends Component {
     componentDidMount(){
         this.myinit();
         this.refreshSettings();
+    }
+
+    // TODO: Will work for navigating within GRR
+    componentWillUnmount() {
+
+        var self = this;
+        let video = document.getElementById("self");
+        easyrtc.clearMediaStream(video);
+
+        easyrtc.leaveRoom(self.state.roomName, function (roomName) {
+            console.log("Left room: " + self.state.roomName);
+        }, function (errorCode, errorText, roomName) {
+            
+        });
+
     }
 
     refreshSettings(){
@@ -128,13 +144,13 @@ class AssetMgmt extends Component {
         let canvas = document.getElementById("c");
         let context = canvas.getContext("2d");
 
-        easyrtc.setRoomOccupantListener( loggedInListener);
+        easyrtc.setRoomOccupantListener(this.loggedInListener.bind(this));
         var connectSuccess = function(myId) {
             //console.log("My easyrtcid is " + myId);
-        }
+        };
         var connectFailure = function(errorCode, errText) {
             console.log(errText);
-        }
+        };
         // let self = this;
         easyrtc.initMediaSource(
             function(){        // success callback
@@ -143,27 +159,27 @@ class AssetMgmt extends Component {
             }, connectFailure);
     }
 
-    loggedInListener(roomName, otherPeers) {
-        var otherClientDiv = document.getElementById('otherClients');
-        while (otherClientDiv.hasChildNodes()) {
-            otherClientDiv.removeChild(otherClientDiv.lastChild);
-        }
-        for(var i in otherPeers) {
-            var button = document.createElement('button');
-            button.onclick = function(easyrtcid) {
-                return function() {
-                    performCall(easyrtcid);
-                }
-            }(i);
+    toggleCallerDialog() {
+        var value = this.state.dialogOpen;
+        this.setState({dialogOpen: !value});
+    }
 
-            var label = document.createTextNode(i);
-            button.appendChild(label);
-            otherClientDiv.appendChild(button);
+    // TODO: Need to block user from joining when room in EasyRTC server; temporary fixed by blocking join link from RoomsList
+    loggedInListener(roomName, otherPeers) {
+        for(var i in otherPeers){
+            // TODO: Not sure if this is supposed to happen but this fires twice even when there is only one other user in room
+            // console.log(i);
+            var previousCallerId = this.state.callerId;
+            this.setState({callerId: i});
+            if((Object.keys(otherPeers).length === 1) && (previousCallerId !== this.state.callerId)) {
+                console.log("A caller is trying to get in");
+                this.toggleCallerDialog();
+            }
         }
     }
 
-
     performCall(easyrtcid) {
+        this.setState({dialogOpen : false});
         easyrtc.call(
             easyrtcid,
             function(easyrtcid) { console.log("completed call to " + easyrtcid);},
@@ -285,7 +301,17 @@ class AssetMgmt extends Component {
 
         return (
             <div>
-                <div id="otherClients"></div>
+                <Dialog isOpen={this.state.dialogOpen} onClose={this.toggleCallerDialog} title={"Accept?"} iconName={"phone"}>
+                    <div className="pt-dialog-body">
+                        User entered room. Do you want to accept this call?
+                        {/*EasyRTC ID<span id="callerID"><pre>{this.state.callerId}</pre></span>*/}
+                    </div>
+                    <div className="pt-dialog-footer">
+                        <div className="pt-dialog-footer-actions">
+                            <Button className="pt-intent-success" onClick={(e) => this.performCall(this.state.callerId)}>Accept</Button>
+                        </div>
+                    </div>
+                </Dialog>
                 <GRRNavBar/>
                 <div className="flex-container">
                     <div className="list-container">

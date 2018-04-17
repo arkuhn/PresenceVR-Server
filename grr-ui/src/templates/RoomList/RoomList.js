@@ -144,7 +144,7 @@ class RoomList extends Component {
                                                 <p>People here: {room.numberClients}</p>
                                                 <p>Privacy level: PRIVATE</p>
                                                 {/*<p># of available backgrounds: 0</p>*/}
-                                                <Link to={"/rooms/"+room.roomName}><Button className="pt-intent-primary full-width" text="Join" onClick={(e) => this.joinRoom(room.roomName)}/></Link>
+                                                <Link to={"/rooms/"+room.roomName}><Button className="pt-intent-primary full-width" text="Join" disabled={room.numberClients >= 2} onClick={(e) => this.joinRoom(room.roomName)}/></Link>
                                             </Card>
                                         </div>);
                                 })}
