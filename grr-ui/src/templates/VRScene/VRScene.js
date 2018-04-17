@@ -14,7 +14,7 @@ import vrInit from "../../js/aframe/init";
 import styles from './VRScene.css';
 console.log("styles");
 console.log(styles);
- 
+
 class VRScene extends React.Component {
 
     // constructor(props) {
@@ -101,11 +101,11 @@ class VRScene extends React.Component {
     }
 
 
-            // <a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.state.currentBackground}></a-sky>
-            // <img id="city" src={API_URL+"/images/"+this.state.currentBackground}></img>
+    // <a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.state.currentBackground}></a-sky>
+    // <img id="city" src={API_URL+"/images/"+this.state.currentBackground}></img>
     render () {
-    return (
-        <a-scene className={styles.vrScene}>
+        return (
+            <a-scene className={styles.vrScene}>
 
                 <a-assets>
                     <canvas id="c" ref="c" width="320" height="240" style={{visibility: "hidden"}}></canvas>
@@ -114,7 +114,7 @@ class VRScene extends React.Component {
                     <video  id="caller" ref="caller" width="300" height="200"></video>
                 </a-assets>
                 <a-sky id="image-360" radius="10" src={API_URL+"/images/"+this.props.currentBackground}></a-sky>
-                <a-video src="#caller" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
+                <a-video src="#c" width="5" height="2.5" position="-5 -4 -6" rotation="-5 65 0"></a-video>
 
                 <a-entity position="0 -5 0">
                     <a-camera></a-camera>
@@ -131,11 +131,11 @@ class VRScene extends React.Component {
 
 
 
-        </a-scene>
-    );
-  }
+            </a-scene>
+        );
+    }
 }
- 
+
 //ReactDOM.render(<VRScene/>, document.querySelector('#sceneContainer'));
 
 // <a-entity hand-controls="left" grab-assets aabb-collider="objects: .collides">

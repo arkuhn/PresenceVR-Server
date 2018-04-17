@@ -19,7 +19,7 @@ class AssetMgmt extends Component {
         this.refreshSettings = this.refreshSettings.bind(this);
         this.performCall = this.performCall.bind(this);
         this.toggleCallerDialog = this.toggleCallerDialog.bind(this);
-        this.state = {callerId: "", vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: [], dialogOpen: false};
+        this.state = {callerId: "", vrMode: false, video:null, clientVideo:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: [], dialogOpen: false};
 
     }
 
@@ -31,7 +31,7 @@ class AssetMgmt extends Component {
         if(this.state.callerId){
             this.performCall(this.state.callerId);
             let caller_video = document.getElementById("caller");
-            
+
             easyrtc.setVideoObjectSrc(caller_video, easyrtc.getRemoteStream(this.state.callerId));
             // console.log(easyrtc.getRemoteStream(this.state.callerId));
         }
@@ -59,7 +59,7 @@ class AssetMgmt extends Component {
     isConnected() {
         return !!easyrtc.applicationName;
     }
-      selectAsset (assetTitle) {
+    selectAsset (assetTitle) {
 
         var self = this;
         axios.patch(API_URL+'/api/rooms/'+this.props.match.params.roomID, {
@@ -130,6 +130,8 @@ class AssetMgmt extends Component {
             self.setState({callerId:callerEasyrtcid});
             var video = document.getElementById('caller');
             easyrtc.setVideoObjectSrc(video, stream);
+            window.requestAnimationFrame(self.draw.bind(self));
+            self.setState({clientVideo: video});
         });
 
         easyrtc.setOnStreamClosed( function (callerEasyrtcid) {
@@ -159,7 +161,6 @@ class AssetMgmt extends Component {
             function(){        // success callback
                 //var selfVideo = document.getElementById("self");
                 easyrtc.setVideoObjectSrc(video, easyrtc.getLocalStream());
-                window.requestAnimationFrame(self.draw.bind(self));
             }, connectFailure);
     }
 
@@ -221,7 +222,7 @@ class AssetMgmt extends Component {
         let canvas = document.getElementById("c");
         let context = canvas.getContext("2d");
         try {
-            context.drawImage(this.state.video, 0, 0, this.state.width, this.state.height);
+            context.drawImage(this.state.clientVideo, 0, 0, this.state.width, this.state.height);
         } catch (e) {
             // The video may not be ready, yet.
             return null;
@@ -296,11 +297,11 @@ class AssetMgmt extends Component {
         } else {
             vidBackground = <div id="background-preview">
 
-                        <canvas id="c" ref="c" width="320" height="240" style={{visibility: "hidden"}}></canvas>
-                        <canvas id="c2" ref="c2" width="320" height="240"></canvas>
-                        <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
-                        <video  id="caller" ref="caller" width="300" height="200"></video>
-                        </div>
+                <canvas id="c" ref="c" width="320" height="240"></canvas>
+                <canvas id="c2" ref="c2" width="320" height="240"></canvas>
+                <video  id="self" ref="self" width="300" height="200" muted="muted" style={{visibility: "hidden"}} autoPlay></video>
+                <video  id="caller" ref="caller" width="300" height="200" style={{visibility: "hidden"}}></video>
+            </div>
         }
 
         return (
@@ -318,9 +319,9 @@ class AssetMgmt extends Component {
                 </Dialog>
                 <GRRNavBar/>
                 <div className="flex-container">
-                <div className="list-container">
-                    <BackgroundImageList {...this.state} onToggleVRMode={this.toggleVRMode} onSelectedBackground={this.selectBackground} onSelectedAsset={this.selectAsset} onRefreshSettings={this.refreshSettings}></BackgroundImageList>
-                </div>
+                    <div className="list-container">
+                        <BackgroundImageList {...this.state} onToggleVRMode={this.toggleVRMode} onSelectedBackground={this.selectBackground} onSelectedAsset={this.selectAsset} onRefreshSettings={this.refreshSettings}></BackgroundImageList>
+                    </div>
                     <div className="preview-container" >
                         {vidBackground}
                     </div>
