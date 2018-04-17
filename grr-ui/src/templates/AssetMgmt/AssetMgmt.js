@@ -303,7 +303,7 @@ class AssetMgmt extends Component {
             <div>
                 <Dialog isOpen={this.state.dialogOpen} onClose={this.toggleCallerDialog} title={"Accept?"} iconName={"phone"}>
                     <div className="pt-dialog-body">
-                        Do you want to accept this call?
+                        User entered room. Do you want to accept this call?
                         {/*EasyRTC ID<span id="callerID"><pre>{this.state.callerId}</pre></span>*/}
                     </div>
                     <div className="pt-dialog-footer">
