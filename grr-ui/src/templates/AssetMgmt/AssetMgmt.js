@@ -70,7 +70,7 @@ class AssetMgmt extends Component {
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.myinit();
         this.refreshSettings();
     }
