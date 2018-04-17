@@ -6,6 +6,9 @@ import ReactDOM from 'react-dom';
 import grabAsset from "../../js/aframe_components/grab-assets";
 import itemSelector from "../../js/aframe_components/vr-arm-item-selector";
 import previewIcon from "../../js/aframe_components/vr-arm-preview-icon";
+import vrEraser from "../../js/aframe_components/vr-eraser";
+import vrEraserToggle from "../../js/aframe_components/vr-eraser-toggle";
+
 import {API_URL} from "../api.config";
 
 
@@ -33,6 +36,13 @@ class VRScene extends React.Component {
 
     componentDidMount() {
         this.vrInit();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.assetImages.length !== this.props.assetImages.length) {
+            console.log("assetListUpdated");
+            this.run();
+        }
     }
 
     vrInit() {

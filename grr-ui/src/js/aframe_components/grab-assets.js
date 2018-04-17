@@ -35,6 +35,9 @@ AFRAME.registerComponent('grab-assets', {
                         } else if (assetEl.components['obj-model']) {
                             // Object Model Clicked
                             this.updateExistingAsset(assetEl);
+                        } else if (assetEl.components['vr-eraser-toggle']) {
+                            console.log("vr-eraser toggle");
+                            assetEl.emit('click', {el: this.el});
                         }
                     }
                     console.log('colliding');
