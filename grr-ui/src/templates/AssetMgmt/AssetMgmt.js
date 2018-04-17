@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from "react-dom";
 import {Button, Dialog} from '@blueprintjs/core';
 import GRRNavBar from '../GRRNavBar/GRRNavBar';
 import Keyer from '../Keyer/Keyer';
@@ -20,7 +19,6 @@ class AssetMgmt extends Component {
         this.refreshSettings = this.refreshSettings.bind(this);
         this.performCall = this.performCall.bind(this);
         this.toggleCallerDialog = this.toggleCallerDialog.bind(this);
-        this.myRef = React.createRef();
         this.state = {callerId: "", vrMode: false, video:null, width: null, height: null, canvas: null, roomName:'', currentBackground: 'stock360.png', backgroundImages: [], assetImages: [], dialogOpen: false};
 
     }
@@ -170,32 +168,15 @@ class AssetMgmt extends Component {
         this.setState({dialogOpen: !value});
     }
 
-    // loggedInListener(roomName, otherPeers) {
-    //         var otherClientDiv = document.getElementById('otherClients');
-    //         while (otherClientDiv.hasChildNodes()) {
-    //             otherClientDiv.removeChild(otherClientDiv.lastChild);
-    //         }
-    //         for(var i in otherPeers) {
-    //             var button = document.createElement('button');
-    //             button.onclick = function(easyrtcid) {
-    //                 return function() {
-    //                     performCall(easyrtcid);
-    //                 }
-    //             }(i);
-    //
-    //             label = document.createTextNode(i);
-    //             button.appendChild(label);
-    //             otherClientDiv.appendChild(button);
-    //         }
-    // }
-
-    // TODO: need to fix scope (trying to call toggleCallerDialog but it shows up as undefined)
-    // TODO: think there's an issue with scoping since method call is from a listener
-    // TODO:    so keyword 'this' doesn't refer to REACR
+    // TODO: Need to block user from joining when room in EasyRTC server; temporary fixed by blocking join link from RoomsList
     loggedInListener(roomName, otherPeers) {
         for(var i in otherPeers){
+            // TODO: Not sure if this is supposed to happen but this fires twice even when there is only one other user in room
+            console.log(i);
+            var previousCallerId = this.state.callerId;
             this.setState({callerId: i});
-            if(Object.keys(otherPeers).length === 1  ) {
+            if((Object.keys(otherPeers).length === 1) && (previousCallerId !== this.state.callerId)) {
+                console.log("A caller is trying to get in");
                 this.toggleCallerDialog();
             }
         }
@@ -327,7 +308,7 @@ class AssetMgmt extends Component {
                 <Dialog isOpen={this.state.dialogOpen} onClose={this.toggleCallerDialog} title={"Accept?"} iconName={"phone"}>
                     <div className="pt-dialog-body">
                         Do you want to accept this call?
-                        EasyRTC ID:<p id="callerID">{this.state.callerId}</p>
+                        EasyRTC ID<span id="callerID"><pre>{this.state.callerId}</pre></span>
                     </div>
                     <div className="pt-dialog-footer">
                         <div className="pt-dialog-footer-actions">
