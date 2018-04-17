@@ -73,11 +73,6 @@ class AssetMgmt extends Component {
     componentDidMount(){
         this.myinit();
         this.refreshSettings();
-        // window.addEventListener("beforeunload", this.onUnload);
-    }
-
-    onUnload(event) {
-        alert("Wanna try and leave the room: " + this.props.match.package.roomID);
     }
 
     // TODO: Will work for navigating within GRR
@@ -173,7 +168,7 @@ class AssetMgmt extends Component {
     loggedInListener(roomName, otherPeers) {
         for(var i in otherPeers){
             // TODO: Not sure if this is supposed to happen but this fires twice even when there is only one other user in room
-            console.log(i);
+            // console.log(i);
             var previousCallerId = this.state.callerId;
             this.setState({callerId: i});
             if((Object.keys(otherPeers).length === 1) && (previousCallerId !== this.state.callerId)) {
@@ -309,7 +304,7 @@ class AssetMgmt extends Component {
                 <Dialog isOpen={this.state.dialogOpen} onClose={this.toggleCallerDialog} title={"Accept?"} iconName={"phone"}>
                     <div className="pt-dialog-body">
                         Do you want to accept this call?
-                        EasyRTC ID<span id="callerID"><pre>{this.state.callerId}</pre></span>
+                        {/*EasyRTC ID<span id="callerID"><pre>{this.state.callerId}</pre></span>*/}
                     </div>
                     <div className="pt-dialog-footer">
                         <div className="pt-dialog-footer-actions">
