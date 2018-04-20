@@ -24,12 +24,6 @@
         url: '<YOUR_URL_HERE>'
         }
         
-                ex.
-                module.exports = {
-                url: 'mongodb://test:test@ds263138.mlab.com:63138/grr'
-                }
-       
-        
 5. Change the 'api.config.js' (located in GRR/grr-ui/src/templates/api.config.js) file's url variable to your respective domain
 
         export const API_URL = '<YOUR_DOMAIN_HERE>';
