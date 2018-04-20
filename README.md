@@ -8,14 +8,33 @@
 1. Clone the git repository using the following command
 
         git clone https://github.com/danielroach9/GRR.git
-2. Install the respective node packages using the following command
+        
+2. Enter the root directory for the project
+
+        ex. cd GRR
+
+3. Install the respective node packages using the following command
 
         npm install
-3. Change the 'api.config.js' (located in grr-ui/src/templates/api.config.js) file's url variable to your respective domain
+        
+4. Change the 'database.config.js' (located in GRR/grr-server/configs/database.config.js) file's database url variable to your respective database
+
+        
+        module.exports = {
+        url: '<YOUR_URL_HERE>'
+        }
+        
+                ex.
+                module.exports = {
+                url: 'mongodb://test:test@ds263138.mlab.com:63138/grr'
+                }
+       
+        
+5. Change the 'api.config.js' (located in GRR/grr-ui/src/templates/api.config.js) file's url variable to your respective domain
 
         export const API_URL = '<YOUR_DOMAIN_HERE>';
                 ex. export const API_URL = 'http://localhost:8080';
-4. Run the following command to build the UI code
+6. Run the following command to build the UI code
 
         npm run build
        
