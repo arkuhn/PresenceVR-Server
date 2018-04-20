@@ -140,7 +140,7 @@ class RoomList extends Component {
                                     return (
                                         <div className="card-wrapper" key={room.roomName}>
                                             <Card interactive={true} elevation={Card.ELEVATION_TWO}>
-                                                <h4 className="centered"><a href="#">{room.roomName}</a></h4>
+                                                <h4 className="centered"><Link to={"/rooms/"+room.roomName}>{room.roomName}</Link></h4>
                                                 <p>People here: {room.numberClients}</p>
                                                 <p>Privacy level: PRIVATE</p>
                                                 {/*<p># of available backgrounds: 0</p>*/}

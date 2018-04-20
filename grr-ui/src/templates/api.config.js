@@ -1,2 +1,2 @@
-export const API_URL = 'https://gameroomrecruiting.herokuapp.com';
+export const API_URL = 'http://localhost:8080';
 
