@@ -33,6 +33,18 @@
         npm run build
        
 
+## Xirsys Stun/Turn Servers
+
+Here is a way to setup the application to work with the Stun/Turn servers (Ice Serves aka Signaling Servers).
+
+1) Create an account at [https://global.xirsys.net]()
+1) Login - The homescreen should look something like this: ![XirsysHome](/readmeAssets/XirsysHome.png "test")
+1) Create a channel by clicking typing a name and clicking the plus button
+1) Scroll down - The following image should look familiar ![Xirsys Configs](/readmeAssets/XirsysConfigs.png)
+1) Take the previous information and plug it into the config.js file:
+![Application configs.js](/readmeAssets/config.png)
+1) Then in the server.js file, the ice request configs are used to set EasyRTC up with the ice servers:
+![Server.js ice configs](/readmeAssets/geticeconfigs.png)
 
 ## How To Run the server locally
 
@@ -42,5 +54,7 @@
         
 2) Navigate to http://localhost:8080 and you should see your instance of the application running.
 
+## Tips
+EasyRTC and Aframe took a lot of time to learn. We recommend budgeting some time to familiarizing yourself with these frameworks/toolsets.
         
       
