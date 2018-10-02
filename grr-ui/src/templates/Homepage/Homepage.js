@@ -5,10 +5,31 @@ import { Link } from 'react-router-dom';
 import GRRNavBar from "../GRRNavBar/GRRNavBar";
 import vrimage from "../../assets/images/vrimage.png";
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-import { Button, Header, Icon, Grid, Image, Card, Segment, Divider, GridColumn,Tab } from 'semantic-ui-react';
+import { Button, Header, Icon, Grid, Modal, Menu, Label } from 'semantic-ui-react';
 
 
 class Homepage extends Component {
+    
+    appointmentButton () {
+        return (
+            <Modal color='grey' trigger={ <Menu.Item>Select Appointment</Menu.Item> } closeIcon>
+                <Header icon='user outline' content='Appointment information' />
+                <Modal.Content>
+                    <Label>
+                            Date
+                            <Label.Detail>Today</Label.Detail><br/>
+                            Participant
+                            <Label.Detail>Tony</Label.Detail><br/>
+                        </Label>
+                    <Button as={Link} to="/interview" fluid width={4}>Join</Button>
+                    <Button fluid width={4}>Edit</Button>
+                    <Button fluid width={4}>Cancel</Button>
+                </Modal.Content>
+            </Modal>
+        );
+    }
+    
+    
     render() {
         return (
             <div className="Homepage">
@@ -17,7 +38,7 @@ class Homepage extends Component {
                     
                     {/* Header */}
                     <Grid.Row>
-                        <Grid.Column>
+                        <Grid.Column width={4}>
                             <Header as='h1' textAlign='center'>
                                 <Icon name='calendar alternate outline' />
                                 <Header.Content>
@@ -26,15 +47,17 @@ class Homepage extends Component {
                             </Header>
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column width={4} color='blue'>
-                            <Header as='h3' textAlign='center'>Upcoming Interviews</Header>
+                    <Grid.Row style={{height:"100vh"}}>
+                        <Grid.Column width={4} >
+                            <div border-style='solid' border-width='medium' border-color='black'>
+                                <Header as='h3' textAlign='center'>Upcoming Interviews</Header>
+                                {this.appointmentButton()}
+                            </div>
+                            
                         </Grid.Column>
                         <Grid.Column width={12} color='green'>
                             <Header as='h3' textAlign='center'>calendar</Header>
-                            <Tab name=''>
-
-                            </Tab>
+                            {this.appointmentButton()}
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
