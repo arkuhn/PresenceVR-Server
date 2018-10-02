@@ -4,13 +4,14 @@ import './Homepage.css';
 import { Link } from 'react-router-dom';
 import GRRNavBar from "../GRRNavBar/GRRNavBar";
 import vrimage from "../../assets/images/vrimage.png";
+import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 
 
 class Homepage extends Component {
     render() {
         return (
             <div className="Homepage">
-                <GRRNavBar/>
+                <PresenceVRNavBar/>
                 <h1 className="centered" id="header-text">Game Room Recruiting</h1>
                 <h3 className="centered" id="header-text">The future of remote interviewing</h3>
                     <div className="homepage-container">
