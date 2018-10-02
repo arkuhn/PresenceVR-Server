@@ -13,9 +13,8 @@ class LoginPage extends Component {
                     <Grid.Row>
                     <Grid.Column  width={4}>
                     <Header as='h1' textAlign='center'>
-                        <Icon name='discussions' />
                         <Header.Content>
-                        Game Room Recruiting
+                        PresenceVR
                         <Header.Subheader>The future of virtual interviews and recruiting</Header.Subheader>
                         </Header.Content>
                     </Header>
@@ -32,14 +31,14 @@ class LoginPage extends Component {
                             <Icon name='user' /> Log-in to your account
                             </Header>
 
-                            <Button as={Link} to="/home" fluid size='medium' color='red'>
+                            <Button as={Link} to="/home" fluid size='medium' basic color='red'>
                                 <Icon name='google' />
                                 Login with Google
                             </Button>
 
                             <Divider />
 
-                            <Button as={Link} to="/rooms" fluid size='medium' color='blue'>
+                            <Button as={Link} to="/home" fluid size='medium' basic color='blue'>
                                 <Icon name='facebook' />
                                 Login with Facebook
                             </Button>
