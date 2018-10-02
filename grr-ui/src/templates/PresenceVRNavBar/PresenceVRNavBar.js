@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './PresenceVRNavBar.css';
 import { Link } from 'react-router-dom';
-import { Menu, Header, Button, Modal, Dropdown, Label, Segment } from 'semantic-ui-react';
+import { Menu, Header, Button, Modal, Dropdown, Icon, List, Segment } from 'semantic-ui-react';
 
 class PresenceVRNavBar extends Component {
 
@@ -19,10 +19,18 @@ class PresenceVRNavBar extends Component {
             <Modal trigger={ <Menu.Item icon='user' /> } closeIcon>
                 <Header icon='user outline' content='Account information' />
                 <Modal.Content>
-                    <Label>
-                            User
-                            <Label.Detail>test1234@rit.edu</Label.Detail>
-                        </Label>
+                    <List>
+                    <List.Item>
+                    <Icon name='mail' />
+                        <List.Content>
+                            <List.Header>Username</List.Header>
+                            <List.Description>
+                            test1234@rit.edu
+                            </List.Description>
+                        </List.Content>
+                    </List.Item>
+                    </List>
+                <br/>
                     <Button as={Link} to="/" fluid>Log out</Button>
                 </Modal.Content>
             </Modal>

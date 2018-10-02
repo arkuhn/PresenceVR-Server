@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Card, Collapse} from '@blueprintjs/core';
-import GRRNavBar from "../GRRNavBar/GRRNavBar";
+import PresenceVRNavBar from '../PresenceVRNavBar/PresenceVRNavBar'
 import './RoomList.css';
 import axios from 'axios';
 import {API_URL} from "../api.config";
@@ -118,7 +118,7 @@ class RoomList extends Component {
     render() {
         return (
             <div>
-                <GRRNavBar/>
+                <PresenceVRNavBar/>
                 <div className="container-fluid">
                     <h1 className="centered" id="header-text">Room Management</h1>
                     <div className="flex-container">
