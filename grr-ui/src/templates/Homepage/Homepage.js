@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import {Button} from '@blueprintjs/core'
+//import {Button} from '@blueprintjs/core'
 import './Homepage.css';
 import { Link } from 'react-router-dom';
 import GRRNavBar from "../GRRNavBar/GRRNavBar";
 import vrimage from "../../assets/images/vrimage.png";
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
+import { Button, Header, Icon, Grid, Image, Card, Segment, Divider, GridColumn,Tab } from 'semantic-ui-react';
 
 
 class Homepage extends Component {
@@ -12,6 +13,38 @@ class Homepage extends Component {
         return (
             <div className="Homepage">
                 <PresenceVRNavBar/>
+                <Grid centered>
+                    
+                    {/* Header */}
+                    <Grid.Row>
+                        <Grid.Column>
+                            <Header as='h1' textAlign='center'>
+                                <Icon name='calendar alternate outline' />
+                                <Header.Content>
+                                    Interview Schedule
+                                </Header.Content>
+                            </Header>
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
+                        <Grid.Column width={4} color='blue'>
+                            <Header as='h3' textAlign='center'>Upcoming Interviews</Header>
+                        </Grid.Column>
+                        <Grid.Column width={12} color='green'>
+                            <Header as='h3' textAlign='center'>calendar</Header>
+                            <Tab name=''>
+
+                            </Tab>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </div>
+        );
+        /*
+        return (
+            <div className="Homepage">
+                <GRRNavBar/>
+>>>>>>> Updated Homepage
                 <h1 className="centered" id="header-text">Game Room Recruiting</h1>
                 <h3 className="centered" id="header-text">The future of remote interviewing</h3>
                     <div className="homepage-container">
@@ -49,6 +82,7 @@ class Homepage extends Component {
                 
             </div>
         );
+        */
     }
 }
 
