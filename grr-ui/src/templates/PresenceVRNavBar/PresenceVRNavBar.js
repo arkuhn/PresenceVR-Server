@@ -1,0 +1,86 @@
+import React, { Component } from 'react';
+import './PresenceVRNavBar.css';
+import { Link } from 'react-router-dom';
+import { Menu, Header, Button, Modal, Dropdown, Label, Segment } from 'semantic-ui-react';
+
+class PresenceVRNavBar extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = { activeItem: 'PresenceVR' }
+    }
+
+    handleItemClick (e, { name }) {
+        this.setState({ activeItem: name })
+    }
+
+    accountButton () {
+        return (
+            <Modal trigger={ <Menu.Item icon='user' /> } closeIcon>
+                <Header icon='user outline' content='Account information' />
+                <Modal.Content>
+                    <Label>
+                            User
+                            <Label.Detail>test1234@rit.edu</Label.Detail>
+                        </Label>
+                    <Button as={Link} to="/" fluid>Log out</Button>
+                </Modal.Content>
+            </Modal>
+        );
+    }
+
+    helpButton () {
+        return (
+            <Modal trigger={ <Menu.Item icon='help circle'/> } closeIcon>
+                <Header icon='question circle' content='Help' />
+                <Modal.Content>
+                    <p>
+                    Te eum doming eirmod, nominati pertinacia argumentum ad his. Ex eam alia facete scriptorem,
+                    est autem aliquip detraxit at. Usu ocurreret referrentur at, cu epicurei appellantur vix. Cum
+                    ea laoreet recteque electram, eos choro alterum definiebas in. Vim dolorum definiebas an. Mei
+                    ex natum rebum iisque.
+                    </p>
+                </Modal.Content>
+            </Modal>
+        );
+    }
+
+    notificationBell () {
+        return (
+                <Menu.Item>
+                    <Dropdown
+                        inline
+                        icon='bell'
+                        header='Notifications'                        
+                    />
+                </Menu.Item>                
+
+        );
+    }
+
+    render() {
+
+        const { activeItem } = this.state
+
+        return (
+            <div className="PresenceVRNavBar">
+                <Menu size='huge' pointing secondary >
+                        
+                    <Menu.Item as={Link} to="/home" name='PresenceVR' active={activeItem === 'home'} onClick={this.handleItemClick} position={'left'} />
+                    
+                    <Menu.Item as={Link} to="uploads" name='uploads' active={activeItem === 'uploads'} onClick={this.handleItemClick} icon='cloud upload' />
+
+                    {this.notificationBell()}
+
+                    {this.helpButton()}
+                        
+                    {this.accountButton()}
+                    
+                    
+                </Menu> 
+            </div>
+        );
+    }
+}
+
+export default PresenceVRNavBar;
