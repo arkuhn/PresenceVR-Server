@@ -2,20 +2,11 @@ import React, { Component } from 'react';
 import './InterviewPage.css';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-import { Grid, Header, Divider } from 'semantic-ui-react';
+import Environments from "./environments"
+import Assets from "./assets"
+import { Grid, Header, Divider, List, Icon, Button } from 'semantic-ui-react';
 
 class InterviewPage extends Component {
-    environments() {
-        return (
-            <Header as='h3'>Environments</Header>
-        );
-    }
-
-    assets() {
-        return (
-            <Header as='h3'>Assets</Header>
-        );
-    }
 
     participants() {
         return (
@@ -70,12 +61,12 @@ class InterviewPage extends Component {
                     <Grid.Column width={4}>
                         {/* Environments */}
                         <Grid.Row>
-                            {this.environments()}
+                            <Environments />
                         </Grid.Row>
                         <Divider/>
                         {/* Assets */}
                         <Grid.Row>
-                            {this.assets()}
+                            <Assets />
                         </Grid.Row>
                     </Grid.Column>
                 </Grid>
