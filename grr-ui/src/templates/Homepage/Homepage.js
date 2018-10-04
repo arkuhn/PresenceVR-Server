@@ -13,7 +13,7 @@ class Homepage extends Component {
     
     appointmentButton () {
         return (
-            <Modal color='grey' trigger={ <Menus.Item>Select Appointment</Menu.Item> } closeIcon>
+            <Modal color='grey' trigger={ <Menus.Item>Select Appointment</Menus.Item> } closeIcon>
                 <Header icon='user outline' content='Appointment information' />
                 <Modal.Content>
                     <List>
