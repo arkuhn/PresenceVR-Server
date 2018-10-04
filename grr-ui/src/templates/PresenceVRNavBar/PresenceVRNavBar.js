@@ -66,12 +66,6 @@ class PresenceVRNavBar extends Component {
         );
     }
 
-    homeButton () {
-        return (
-            <Menu.Item as={Link} to="/home" onClick={this.handleItemClick} icon='home' />
-        );
-    }
-
     render() {
 
         const { activeItem } = this.state
@@ -79,10 +73,8 @@ class PresenceVRNavBar extends Component {
         return (
             <div className="PresenceVRNavBar">
                 <Menu size='huge' pointing secondary >
-
-                    {this.homeButton()}
                         
-                    <Menu.Item as={Link} to="/home" name='PresenceVR' active={activeItem === 'home'} onClick={this.handleItemClick} position={'left'} />
+                    <Menu.Item as={Link} to="/home" name='PresenceVR' active={activeItem === 'home'} onClick={this.handleItemClick} icon='home' position={'left'} />
                     
                     <Menu.Item as={Link} to="uploads" name='uploads' active={activeItem === 'uploads'} onClick={this.handleItemClick} icon='cloud upload' />
 
