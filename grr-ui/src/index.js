@@ -3,6 +3,7 @@ import RoomList from "./templates/RoomList/RoomList";
 import Homepage from "./templates/Homepage/Homepage";
 import LoginPage from "./templates/LoginPage/LoginPage"
 import InterviewPage from "./templates/InterviewPage/InterviewPage"
+import UploadPage from "./templates/UploadPage/Upload";
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 var ReactDOM = require('react-dom');
@@ -19,6 +20,7 @@ ReactDOM.render((
 			<Route exact path='/home' component = {Homepage} />
 			<Route exact path='/rooms' component = {RoomList} />
 			<Route exact path='/interview' component = {InterviewPage} />
+			<Route exact path='/uploads' component = {UploadPage} />
 			<Route path='/rooms/:roomID' component = {AssetMgmt} />
 		</Switch>
 	</BrowserRouter>
