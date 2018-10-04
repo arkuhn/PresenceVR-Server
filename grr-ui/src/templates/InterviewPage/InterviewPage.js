@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import Environments from "./environments"
 import Assets from "./assets"
+import Participants from "./participants"
 import { Grid, Header, Divider, List, Icon, Button } from 'semantic-ui-react';
 
 class InterviewPage extends Component {
@@ -37,7 +38,7 @@ class InterviewPage extends Component {
                     <Grid.Column width={4}>
                         {/*Participants*/}
                         <Grid.Row>
-                            {this.participants()}
+                            <Participants />
                         </Grid.Row>
                     </Grid.Column>
 
