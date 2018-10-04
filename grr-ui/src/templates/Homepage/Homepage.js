@@ -2,13 +2,8 @@ import React, { Component } from 'react';
 import './Homepage.css';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-<<<<<<< HEAD
 import InterviewList from "./interviewList"
-import { Button, Header, Icon, Grid, Modal, Menu, List} from 'semantic-ui-react';
-=======
 import { Button, Header, Icon, Grid, Modal, Menu, List, Card, Popup} from 'semantic-ui-react';
->>>>>>> e2a703de4085fd3ba7070c71ee22c549e09cc65f
-
 
 class Homepage extends Component {
     
@@ -278,27 +273,7 @@ class Homepage extends Component {
                     </Grid.Row>
                     <Grid.Row style={{ height: "100vh" }}>
                         <Grid.Column width={4} divided={true}>
-<<<<<<< HEAD
                             <InterviewList />
-=======
-                            <Header as='h3' textAlign='center'>Upcoming Interviews</Header>
-                            <Card>
-                                <Card.Content>
-                                    <Card.Header>Interview with Tony TooCool</Card.Header>
-                                    <Card.Meta>Today 2:00-3:00</Card.Meta>
-                                    <Card.Description>Position: Coffee Guy</Card.Description>
-                                    {this.appointmentButton()}
-                                </Card.Content>
-                            </Card>
-                            <Card>
-                                <Card.Content>
-                                    <Card.Header>Interview with Fran TheMan</Card.Header>
-                                    <Card.Meta>Today 3:30-4:30</Card.Meta>
-                                    <Card.Description>Position: Financial Assistant</Card.Description>
-                                    {this.appointmentButton()}
-                                </Card.Content>
-                            </Card>
->>>>>>> e2a703de4085fd3ba7070c71ee22c549e09cc65f
                         </Grid.Column>
                         <Grid.Column width={12} divided={true}>
                             <Header as='h3' textAlign='center'>July</Header>
