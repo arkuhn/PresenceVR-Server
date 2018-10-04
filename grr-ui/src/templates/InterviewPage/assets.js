@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-import { Header, Modal, List, Icon, Button } from 'semantic-ui-react';
+import { Header, Modal, List, Icon, Button, Divider } from 'semantic-ui-react';
 
 function Asset(props) {
     return (
     <List.Item as='a'>
-        <Icon name='chevron right' />
+        <Icon name={props.icon} />
         <List.Content>
             <List.Header>{props.name}</List.Header>
             <List.Description>
@@ -19,45 +19,60 @@ function Asset(props) {
 
 
 class Assets extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            modalOpen: false
+        }
+        this.assets = []
+
+        this.handleModelClose = this.handleModelClose.bind(this)
+        this.handleModelOpen = this.handleModelOpen.bind(this)
+        this.loadAssetsModal = this.loadAssetsModal.bind(this);
+        this.generateAssets = this.generateAssets.bind(this)
+    }
+    handleModelClose() { 
+        this.setState({ modalOpen: false })
+    }
+
+    handleModelOpen() {
+        this.setState({ modalOpen: true})
+    }
+
     loadAssetsModal() {
         return (
-            <Modal trigger={ <Button fluid content='Load more'/> } closeIcon>
+            <Modal trigger={ <Button fluid onClick={this.handleModelOpen} content='Load more'/> } open={this.state.modalOpen} onClose={this.handleClose} closeIcon>
                 <Header icon='boxes' content='Select an asset to load' />
                 <Modal.Content>
-                    <List>
-                    <List.Item>
-                    <Icon name='mail' />
-                        <List.Content>
-                            <List.Header>Username</List.Header>
-                            <List.Description>
-                            test1234@rit.edu
-                            </List.Description>
-                        </List.Content>
-                    </List.Item>
+                    <List horizontal selection>
+                    <br/>
+                        {this.assets.map((asset)=> {
+                            return <Asset name={asset.name} date={asset.date} icon='chevron right'/>
+                        })}
                     </List>
-                <br/>
-                    <Button as={Link} to="/" fluid>Log out</Button>
+                    <Divider />
+                    <Button onClick={this.handleModelClose} fluid>Load</Button>
                 </Modal.Content>
             </Modal>
         )    
     }
     generateAssets() {
         const numOfAssets = Math.floor(Math.random() * 15) + 1
-        const assets = []
         for (let i = 0; i < numOfAssets; i++) { 
             const asset = ({
                 name: `Asset ${i}`,
                 date: `8/${i}/18`
             })
-            assets.push(asset)
+            this.assets.push(asset)
         }
-        return assets.map((asset) => {
-            return <Asset name={asset.name} date={asset.date}/>
+        return this.assets.map((asset) => {
+            return <Asset name={asset.name} date={asset.date} icon='boxes'/>
         })
-
     }
 
     render() {
+        this.assets= [] // Clear assets everytime this is re-rendered
+
         const css = ` 
         .AssetsList {
             height:250px;
