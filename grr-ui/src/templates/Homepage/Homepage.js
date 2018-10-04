@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Homepage.css';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
+import InterviewList from "./interviewList"
 import { Button, Header, Icon, Grid, Modal, Menu, List} from 'semantic-ui-react';
 
 
@@ -250,8 +251,7 @@ class Homepage extends Component {
                     </Grid.Row>
                     <Grid.Row style={{height:"100vh"}}>
                         <Grid.Column width={4} divided={true}>
-                            <Header as='h3' textAlign='center'>Upcoming Interviews</Header>
-                            {this.appointmentButton()}     
+                            <InterviewList />
                         </Grid.Column>
                         <Grid.Column width={12} divided={true}>
                             <Header as='h3' textAlign='center'>July</Header>
