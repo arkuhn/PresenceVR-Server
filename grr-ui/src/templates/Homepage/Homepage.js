@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Homepage.css';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-import { Button, Header, Icon, Grid, Modal, Menu, List} from 'semantic-ui-react';
+import { Button, Header, Icon, Grid, Modal, Menu, List, Card, Popup} from 'semantic-ui-react';
 
 
 class Homepage extends Component {
@@ -91,7 +91,7 @@ class Homepage extends Component {
                     </Grid.Column>
                     <Grid.Column width={2}>
                         <Header as='h3' textAlign='left'>13</Header>
-                        <br />
+                        {this.appointmentPopup()}
                     </Grid.Column>
                     <Grid.Column width={2}>
                         <Header as='h3' textAlign='left'>14</Header>
@@ -198,7 +198,30 @@ class Homepage extends Component {
             </Grid>
         );
     }
-    
+
+    appointmentPopup() {
+        return (
+            <Popup className='ui popup bottom left transition visible' trigger={<Menu.Item>View Appointments</Menu.Item>}>
+                <Card>
+                    <Card.Content>
+                        <Card.Header>Interview with Tony TooCool</Card.Header>
+                        <Card.Meta>Today 2:00-3:00</Card.Meta>
+                        <Card.Description>Position: Coffee Guy</Card.Description>
+                        {this.appointmentButton()}
+                    </Card.Content>
+                </Card>
+                <Card>
+                    <Card.Content>
+                        <Card.Header>Interview with Fran TheMan</Card.Header>
+                        <Card.Meta>Today 3:30-4:30</Card.Meta>
+                        <Card.Description>Position: Financial Assistant</Card.Description>
+                        {this.appointmentButton()}
+                    </Card.Content>
+                </Card>
+            </Popup>
+        );
+    }
+
     appointmentButton() {
         return (
             <Modal color='grey' trigger={<Menu.Item>Select Appointment</Menu.Item>} closeIcon>
@@ -207,17 +230,17 @@ class Homepage extends Component {
                     <List>
                         <List.Item>
                             <List.Content>
-                                <List.Header>Username</List.Header>
+                                <List.Header>Participant</List.Header>
                                 <List.Description>
-                                    test1234@rit.edu
+                                    Tony TooCool
                                 </List.Description>
-                                <List.Header>Username</List.Header>
+                                <List.Header>Time</List.Header>
                                 <List.Description>
-                                    test1234@rit.edu
+                                    2:00-3:00
                                 </List.Description>
-                                <List.Header>Username</List.Header>
+                                <List.Header>Position</List.Header>
                                 <List.Description>
-                                    test1234@rit.edu
+                                    Coffee Guy
                                 </List.Description>
                             </List.Content>
                         </List.Item>
@@ -248,10 +271,25 @@ class Homepage extends Component {
                             </Header>
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row style={{height:"100vh"}}>
+                    <Grid.Row style={{ height: "100vh" }}>
                         <Grid.Column width={4} divided={true}>
                             <Header as='h3' textAlign='center'>Upcoming Interviews</Header>
-                            {this.appointmentButton()}     
+                            <Card>
+                                <Card.Content>
+                                    <Card.Header>Interview with Tony TooCool</Card.Header>
+                                    <Card.Meta>Today 2:00-3:00</Card.Meta>
+                                    <Card.Description>Position: Coffee Guy</Card.Description>
+                                    {this.appointmentButton()}
+                                </Card.Content>
+                            </Card>
+                            <Card>
+                                <Card.Content>
+                                    <Card.Header>Interview with Fran TheMan</Card.Header>
+                                    <Card.Meta>Today 3:30-4:30</Card.Meta>
+                                    <Card.Description>Position: Financial Assistant</Card.Description>
+                                    {this.appointmentButton()}
+                                </Card.Content>
+                            </Card>
                         </Grid.Column>
                         <Grid.Column width={12} divided={true}>
                             <Header as='h3' textAlign='center'>July</Header>
