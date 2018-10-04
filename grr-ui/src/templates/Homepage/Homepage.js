@@ -28,7 +28,7 @@ class Homepage extends Component {
                         <Header as='h3' textAlign='center'>Thursday</Header>
                     </Grid.Column>
                     <Grid.Column width={2}>
-                        <Header as='h3' textAlign='center'>Firday</Header>
+                        <Header as='h3' textAlign='center'>Friday</Header>
                     </Grid.Column>
                     <Grid.Column width={2}>
                         <Header as='h3' textAlign='center'>Saturday</Header>
