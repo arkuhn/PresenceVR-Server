@@ -3,6 +3,7 @@ import './Homepage.css';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import InterviewList from "./interviewList"
+import CreateInterview from "./createInterview"
 import { Button, Header, Icon, Grid, Modal, Menu, List, Card, Popup} from 'semantic-ui-react';
 
 class Homepage extends Component {
@@ -271,7 +272,7 @@ class Homepage extends Component {
                             </Header>
                         </Grid.Column>
                     </Grid.Row>
-                    <Grid.Row style={{ height: "100vh" }}>
+                    <Grid.Row>
                         <Grid.Column width={4} divided={true}>
                             <InterviewList />
                         </Grid.Column>
@@ -281,6 +282,7 @@ class Homepage extends Component {
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
+                <CreateInterview />
             </div>
         );
     }

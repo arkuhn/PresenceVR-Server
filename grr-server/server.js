@@ -67,6 +67,7 @@ app.use(express.static(__dirname + "/../grr-ui/build/", {dotfiles:'allow'}));
 app.use('/images', express.static(__dirname + "/../grr-server/uploads/"));
 
 require('./app/routes/room.routes')(app);
+require('./app/routes/interview.routes')(app);
 
 app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, '/../grr-ui/build/index.html'), function(err) {
