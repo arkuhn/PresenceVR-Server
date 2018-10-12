@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+var db = require('../../database')
+var mongoose = require('mongoose')
 
-var InterviewSchema = mongoose.Schema({
+var InterviewSchema = new mongoose.Schema({
     host: String,
     subject: String,
     occursOnDate: String,
@@ -13,4 +14,4 @@ var InterviewSchema = mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Interview', InterviewSchema);
+module.exports = db.model('Interview', InterviewSchema, 'interviews');

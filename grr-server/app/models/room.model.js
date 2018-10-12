@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+var db = require('../../database')
+var mongoose = require('mongoose')
 
-var RoomSchema = mongoose.Schema({
+var RoomSchema = new mongoose.Schema({
     name: String,
     vrMode: Boolean,
     currentBackground: String,
@@ -11,4 +12,4 @@ var RoomSchema = mongoose.Schema({
     timestamps: true
 });
 
-module.exports = mongoose.model('Room', RoomSchema);
+module.exports = db.model('Room', RoomSchema, 'rooms');

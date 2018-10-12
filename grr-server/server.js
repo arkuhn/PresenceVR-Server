@@ -16,21 +16,6 @@ var cors = require('cors');
 var roomModel = require("./app/models/room.model");
 var path = require("path");
 
-//database configs
-var dbConfig = require('./configs/database.config.js');
-var mongoose = require('mongoose');
-
-//database setup
-mongoose.connect(dbConfig.url, {});
-
-mongoose.connection.on('error', function() {
-    console.log('Could not connect to the database. Exiting now...');
-    process.exit();
-});
-
-mongoose.connection.once('open', function() {
-    console.log("Successfully connected to the database");
-});
 
 const HTTP_PORT = process.env.PORT || 8080;
 const HTTPS_PORT = process.env.PORT || 8000;

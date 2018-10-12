@@ -1,4 +1,4 @@
-var Interview = require('../models/room.model.js');
+var Interview = require('../models/interview.model.js');
 
 
 exports.create = function(req, res) {
