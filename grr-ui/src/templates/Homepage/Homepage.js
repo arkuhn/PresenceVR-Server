@@ -4,9 +4,15 @@ import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import InterviewList from "./interviewList"
 import CreateInterview from "./createInterview"
+import ConsumeInterview from "./consumeInterview"
 import { Button, Header, Icon, Grid, Modal, Menu, List, Card, Popup} from 'semantic-ui-react';
 
 class Homepage extends Component {
+    
+    constructor(props){
+        super(props);
+        this.consumeInterview = new ConsumeInterview();
+    }
     
     calendar() {
         return (
@@ -273,12 +279,16 @@ class Homepage extends Component {
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <Grid.Column width={4} divided={true}>
+                        <Grid.Column width={4}>
                             <InterviewList />
                         </Grid.Column>
-                        <Grid.Column width={12} divided={true}>
+                        <Grid.Column width={12}>
                             <Header as='h3' textAlign='center'>July</Header>
                             {this.calendar()}
+                            {this.consumeInterview.getInterview(0)}
+                            {this.consumeInterview.getAllInterviews()}
+                            {this.consumeInterview.updateInterview(0)}
+                            {this.consumeInterview.cancelInterview(0)}
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
