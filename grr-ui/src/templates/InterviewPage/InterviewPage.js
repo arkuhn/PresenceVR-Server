@@ -27,6 +27,22 @@ class InterviewPage extends Component {
         );
     }
 
+    configuration() {
+        return (
+                <div>
+                <Header as='h3'>
+                    <Icon name='settings' />
+                    Configuration
+                </Header>
+                <Button.Group>
+                <Button>Edit Interview</Button>
+                <Button.Or />
+                <Button negative>Exit Interview</Button>
+            </Button.Group>
+            </div>
+        );
+    }
+
     render() {
         return (
             <div className="InterviewPage">
@@ -34,11 +50,29 @@ class InterviewPage extends Component {
                 <br/>
                 <Grid centered divided>
 
+                    {/* Header */}
+                    <Grid.Row>
+                        <Grid.Column  width={4}>
+                        <Header as='h1' textAlign='center'>
+                            <Header.Content>
+                            Interview Name
+                            <Header.Subheader>These are the interview details.</Header.Subheader>
+                            </Header.Content>
+                        </Header>
+                        </Grid.Column>
+                    </Grid.Row>
+                    
+
                     {/* Left column*/}
                     <Grid.Column width={4}>
                         {/*Participants*/}
                         <Grid.Row>
                             <Participants />
+                        </Grid.Row>
+
+                        <Divider />
+                        <Grid.Row>
+                            {this.configuration()}
                         </Grid.Row>
                     </Grid.Column>
 
