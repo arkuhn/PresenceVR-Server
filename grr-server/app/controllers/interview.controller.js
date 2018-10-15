@@ -27,3 +27,22 @@ exports.create = function(req, res) {
         }
     });
 };
+
+exports.delete = function(req, res) {
+    // Delete a room with the specified roomId in the request
+    Interview.findOneAndRemove({'name': req.params.interviewId}, function(err, room) {
+        if(err) {
+            console.log(err);
+            if(err.kind === 'ObjectId') {
+                return res.status(404).send({message: "Interview not found with id " + req.params.interviewId});
+            }
+            return res.status(500).send({message: "Could not delete interview with id " + req.params.interviewId});
+        }
+
+        if(!room) {
+            return res.status(404).send({message: "Interview not found with id " + req.params.interviewId});
+        }
+
+        res.send({message: "Interview deleted successfully!"});
+    });
+};
