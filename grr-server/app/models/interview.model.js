@@ -3,7 +3,7 @@ var mongoose = require('mongoose')
 
 var InterviewSchema = new mongoose.Schema({
     host: String,
-    subject: String,
+    details: String,
     occursOnDate: String,
     occursAtTime: String,
     scheduledOnDate: String,

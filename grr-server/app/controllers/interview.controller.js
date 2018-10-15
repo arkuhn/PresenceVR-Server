@@ -7,7 +7,7 @@ exports.create = function(req, res) {
 
     var interview = new Interview({
         host: req.body.host,
-        subject: req.body.subject,
+        details: req.body.subject,
         occursOnDate: req.body.occursOnDate,
         occursAtTime: req.body.occursAtTime,
         scheduledOnDate: new Date().toLocaleDateString("en-US"),
@@ -29,20 +29,17 @@ exports.create = function(req, res) {
 };
 
 exports.delete = function(req, res) {
-    // Delete a room with the specified roomId in the request
-    Interview.findOneAndRemove({'name': req.params.interviewId}, function(err, room) {
-        if(err) {
-            console.log(err);
-            if(err.kind === 'ObjectId') {
-                return res.status(404).send({message: "Interview not found with id " + req.params.interviewId});
-            }
-            return res.status(500).send({message: "Could not delete interview with id " + req.params.interviewId});
-        }
+    res.send({message: "Interview deleted successfully!"});
+};
 
-        if(!room) {
-            return res.status(404).send({message: "Interview not found with id " + req.params.interviewId});
-        }
+exports.update = function(req, res) {
+    res.send({message: "Interview updated successfully!"});
+};
 
-        res.send({message: "Interview deleted successfully!"});
-    });
+exports.findOne = function(req, res) {
+    res.send({message: "Interview found successfully!"});
+};
+
+exports.findAll = function(req, res) {
+    res.send({message: "All interviews found successfully!"});
 };
