@@ -6,12 +6,12 @@ exports.create = function(req, res) {
     console.log(req.body);
 
     var interview = new Interview({
-        host: req.body.host,
-        details: req.body.subject,
-        occursOnDate: req.body.occursOnDate,
-        occursAtTime: req.body.occursAtTime,
+        host: req.body.data.host,
+        details: req.body.data.details,
+        occursOnDate: req.body.data.occursOnDate,
+        occursAtTime: req.body.data.occursAtTime,
         scheduledOnDate: new Date().toLocaleDateString("en-US"),
-        participants: req.body.participants,
+        participants: req.body.data.participants,
         loadedAssets: ['test.asset'],
         loadedEnvironments: ['test.env']
         
