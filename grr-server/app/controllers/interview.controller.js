@@ -37,9 +37,35 @@ exports.update = function(req, res) {
 };
 
 exports.findOne = function(req, res) {
-    res.send({message: "Interview found successfully!"});
+    res.send({message: "Interview successfully found!"});
+    /*Interview.findOne({'name': req.params.roomName}, function(err, interview) {
+        if(err) {
+            console.log(err);
+            if(err.kind === 'ObjectId') {
+                return res.status(404).send({message: "Interview not found with id " + req.params.roomId});
+            }
+            return res.status(500).send({message: "Error retrieving interview with id " + req.params.roomId});
+        }
+
+        if(!interview) {
+            return res.status(404).send({message: "Room not found with id " + req.params.roomId});
+        }
+
+        res.send(interview);
+    });*/
 };
 
 exports.findAll = function(req, res) {
-    res.send({message: "All interviews found successfully!"});
+    Interview.find({'host': req.params.host}, function(err, interviews){
+        if(err){
+            console.log(err)
+            return res.status(500).send({message: "Some error occurred while retrieving interviews."});
+        }
+        else if(!interviews) {
+            return res.status(404)
+        }
+        else {
+            res.send(interviews);
+        }
+    });
 };
