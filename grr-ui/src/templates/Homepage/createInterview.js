@@ -2,50 +2,82 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Button, Header, Input, Grid, Modal, List, Image} from 'semantic-ui-react';
-import axios from 'axios';
-import {API_URL} from "../api.config";
+import ConsumeInterview from './consumeInterview'
 
-const createInterviewRequest = () => {
-    //TODO take values from forum inputs
-    axios.post(API_URL + '/api/interviews/', {
-        host: 'jaaw1001@rit.edu',
-        subject: 'tests',
-        occursOnDate: '12/12/1221',
-        occursAtTime: '8:31:22',
-        participants: 'noone@email.com'
-    }).then((result) => {
-        console.log('got a result')
-        console.log(result)
-    });
-}
+class CreateInterview extends React.Component {
+    constructor(props) {
+        super(props);
+        this.consumeInterview = new ConsumeInterview()
+        this.state = {dateValue: props.date,
+                      timeValue: '',
+                      participantsValue: '',
+                      subjectValue: ''};
+    
+        this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleTimeChange = this.handleTimeChange.bind(this);
+        this.handleParticipantsChange = this.handleParticipantsChange.bind(this);
+        this.handleSubjectChange = this.handleSubjectChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
+    handleDateChange(event) {
+        this.setState({dateValue: event.target.value})
+    }
 
-const CreateInterview = () => {
-    return (
-        <Modal size='mini' trigger={ 
-            <Button fluid attached='bottom'>Create an interview</Button>
-         }>
-        <Header icon='alternate calendar outline' content='Interview Details' />
-        <Modal.Content>
-                    <List>
+    handleTimeChange(event) {
+        this.setState({timeValue: event.target.value})
+    }
+
+    handleParticipantsChange(event) {
+        this.setState({participantsValue: event.target.value})
+    }
+
+    handleSubjectChange(event) {
+        this.setState({subjectValue: event.target.value})
+    }
+  
+    handleSubmit(event) {
+      this.consumeInterview.createInterview({
+        id: '1',
+        host: 'currentuser@email.com',
+        subject: this.state.subjectValue,
+        occursOnDate: this.state.dateValue,
+        occursAtTime: this.state.timeValue,
+        participants: this.state.participantsValue
+      }
+        )
+      event.preventDefault();
+    }
+
+    render() {
+        return (
+            <Modal size='mini' trigger={ 
+                <button class='ui circular icon button' role='button'>
+                    <i aria-hidden='true' class='add icon' />
+                </button>
+            }>
+            <Header icon='alternate calendar outline' content='Interview Details' />
+            <Modal.Content>
+                        <List>
                         <List.Item>
-                            <Input fluid label='Date' placeholder='MM/DD/YYYY' />
+                            <Input fluid label='Date' placeholder={this.props.date} onChange={this.handleDateChange}/>
                         </List.Item>
                         <List.Item>
-                            <Input fluid label='Time' placeholder='HH:MM:SS'/>
+                            <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange}/>
                         </List.Item>
                         <List.Item>
-                            <Input fluid label='Participants' placeholder='participant1@email.co' />
+                            <Input fluid label='Participants' placeholder={'No one, I guess'} onChange={this.handleParticipantsChange}/>
                         </List.Item>
                         <List.Item>
-                            <Input fluid label='Subject' placeholder='Art interview' />
+                            <Input fluid label='Subject' placeholder='Art interview' onChange={this.handleSubjectChange}/>
                         </List.Item>
-                    </List>
-                    <Button primary onClick={createInterviewRequest}>Create</Button>
-                    <Button secondary>Cancel</Button>
-                </Modal.Content>
-    </Modal>
-    )
+                        </List>
+                        <Button primary onClick={this.handleSubmit}>Create</Button>
+                        <Button secondary>Cancel</Button>
+                    </Modal.Content>
+        </Modal>
+        )
+        }
 }
 
 export default CreateInterview

@@ -269,6 +269,7 @@ class Homepage extends Component {
                     
                     {/* Header */}
                     <Grid.Row>
+                        <Grid.Column width={6}></Grid.Column>
                         <Grid.Column width={4}>
                             <Header as='h1' textAlign='center'>
                                 <Icon name='calendar alternate outline' />
@@ -277,6 +278,7 @@ class Homepage extends Component {
                                 </Header.Content>
                             </Header>
                         </Grid.Column>
+                        <Grid.Column width={6} textAlign='right'><CreateInterview /></Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column width={4}>
@@ -285,21 +287,9 @@ class Homepage extends Component {
                         <Grid.Column width={12}>
                             <Header as='h3' textAlign='center'>July</Header>
                             {this.calendar()}
-                            {this.consumeInterview.getInterview(0)}
-                            {this.consumeInterview.createInterview({
-                                host: 'jaaw1001@rit.edu',
-                                subject: 'tests',
-                                occursOnDate: '12/12/1221',
-                                occursAtTime: '8:31:22',
-                                participants: 'noone@email.com'
-                            })}
-                            {this.consumeInterview.getAllInterviews()}
-                            {this.consumeInterview.updateInterview(0)}
-                            {this.consumeInterview.cancelInterview(0)}
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
-                <CreateInterview />
             </div>
         );
     }

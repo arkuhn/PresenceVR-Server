@@ -1,8 +1,8 @@
 const myIceConfigs = {
-  ident: "lance13c",
+  ident: "DtheSecond",
   domain: "https://global.xirsys.net",
   application: "MyFirstApp",
-  secret: "6a6903b0-a7b5-11e7-ac9b-1bba796619b2",
+  secret: "9e26fdd4-c74d-11e8-9db6-b48c6ca74e35",
   secure: 1,
   application: "default",
   room: "default",
@@ -12,7 +12,7 @@ const myIceConfigs = {
     method: "PUT",
     url: 'https://global.xirsys.net/_turn/MyFirstApp',
     headers: {
-      "Authorization": "Basic " + new Buffer("lance13c:6a6903b0-a7b5-11e7-ac9b-1bba796619b2").toString("base64")
+      "Authorization": "Basic " + new Buffer("DtheSecond:9e26fdd4-c74d-11e8-9db6-b48c6ca74e35").toString("base64")
     }
   },
   ice: {
@@ -20,7 +20,7 @@ const myIceConfigs = {
     path: "/_turn/MyFirstApp",
     method: "PUT",
     headers: {
-        "Authorization": "Basic " + new Buffer("lance13c:6a6903b0-a7b5-11e7-ac9b-1bba796619b2").toString("base64")
+        "Authorization": "Basic " + new Buffer("DtheSecond:9e26fdd4-c74d-11e8-9db6-b48c6ca74e35").toString("base64")
     }
   },
   https: {
@@ -28,7 +28,7 @@ const myIceConfigs = {
     key: '/etc/letsencrypt/live/daad.ciciliostudio.com/privkey.pem'    
   },
   headers: {
-      "Authorization": "Basic " + new Buffer("lance13c:6a6903b0-a7b5-11e7-ac9b-1bba796619b2").toString("base64")
+      "Authorization": "Basic " + new Buffer("DtheSecond:9e26fdd4-c74d-11e8-9db6-b48c6ca74e35").toString("base64")
   }
 }
 
