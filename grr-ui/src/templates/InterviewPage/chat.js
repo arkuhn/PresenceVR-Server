@@ -3,42 +3,34 @@ import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Header, Modal, List, Icon, Button, Divider } from 'semantic-ui-react';
 
+
 function ChatMessage(props) {
-    return <p>Testing</p>;
+    return (
+        <p>
+            <span className="ChatUsername">
+                {props.user + ": "}
+            </span>
+            <span className="ChatMessage">
+                {props.message}
+            </span>
+            <span className="ChatTimestamp">
+                {props.timestamp.toLocaleTimeString()}
+            </span>
+        </p>
+        );
 }
 
 class ChatBox extends Component {
-    render() {
-        const css = ` 
-        .Chat {
-            overflow-wrap: break-word;
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-        .ChatBox {
-            max-width: 100%;
-            height: 200px;
-            borderWidth: 5px;
-            borderColor: black;
-            border: 5px;
-            padding: 10px;
-            margin: 10px;
-            color: blue;
-        }
-        `
+    constructor(props) {
+        super(props);
+    }
 
-        return (
-            <div>
-                <Header as='h3'>
-                    <Icon name='chat' />
-                    Chat
-                </Header>
-                <div className="ChatBox">
-                Test This Out
-                </div>
-                <style>{css}</style>
-            </div>
-        );
+    render() {
+        const messages = this.props.messages;
+
+        return messages.map((message) => {
+            return <ChatMessage user={message.user} message={message.message} timestamp={message.timestamp} />
+        });
     }
 }
 
@@ -59,11 +51,34 @@ class ChatPane extends Component {
         this.state = {messages: new Array()}
     }
 
+    componentDidMount() {
+        const message1 = {
+            user: 'Bob Johnson',
+            message: 'Welcome to your interview! We are looking for someone with a strong initiative to do what they are told. Is that you?',
+            timestamp: new Date(),
+        }
+        const message2 = {
+            user: 'Alice Smith',
+            message: 'I am if you say I am!',
+            timestamp: new Date(),
+        }
+        this.setState(state => ({
+            messages: [message1, message2]
+        }));
+    }
+
     render() {
+        const css = ``;
+
         return(
             <div>
-                <ChatBox messages={this.state.message} />
+                <Header as='h3'>
+                    <Icon name='chat' />
+                    Chat
+                </Header>
+                <ChatBox messages={this.state.messages} />
                 <ChatBar />
+                <style>{css}</style>
             </div>
         )
     }
