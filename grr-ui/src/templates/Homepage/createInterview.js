@@ -37,7 +37,15 @@ class CreateInterview extends React.Component {
     }
   
     handleSubmit(event) {
-      this.consumeInterview.updateInterview(0)
+      this.consumeInterview.createInterview({
+        id: '1',
+        host: 'currentuser@email.com',
+        subject: this.state.subjectValue,
+        occursOnDate: this.state.dateValue,
+        occursAtTime: this.state.timeValue,
+        participants: this.state.participantsValue
+      }
+        )
       event.preventDefault();
     }
 
@@ -51,18 +59,18 @@ class CreateInterview extends React.Component {
             <Header icon='alternate calendar outline' content='Interview Details' />
             <Modal.Content>
                         <List>
-                            <List.Item>
-                                <Input fluid label='Date' placeholder='MM/DD/YYYY' />
-                            </List.Item>
-                            <List.Item>
-                                <Input fluid label='Time' placeholder='HH:MM:SS'/>
-                            </List.Item>
-                            <List.Item>
-                                <Input fluid label='Participants' placeholder='participant1@email.co' />
-                            </List.Item>
-                            <List.Item>
-                                <Input fluid label='Subject' placeholder='Art interview' />
-                            </List.Item>
+                        <List.Item>
+                            <Input fluid label='Date' placeholder={this.props.date} onChange={this.handleDateChange}/>
+                        </List.Item>
+                        <List.Item>
+                            <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange}/>
+                        </List.Item>
+                        <List.Item>
+                            <Input fluid label='Participants' placeholder={'No one, I guess'} onChange={this.handleParticipantsChange}/>
+                        </List.Item>
+                        <List.Item>
+                            <Input fluid label='Subject' placeholder='Art interview' onChange={this.handleSubjectChange}/>
+                        </List.Item>
                         </List>
                         <Button primary onClick={this.handleSubmit}>Create</Button>
                         <Button secondary>Cancel</Button>

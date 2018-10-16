@@ -278,7 +278,7 @@ class Homepage extends Component {
                                 </Header.Content>
                             </Header>
                         </Grid.Column>
-                        <Grid.Column width={6}><CreateInterview /></Grid.Column>
+                        <Grid.Column width={6} textAlign='right'><CreateInterview /></Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column width={4}>

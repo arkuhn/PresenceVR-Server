@@ -8,6 +8,7 @@ class NameForm extends React.Component {
     constructor(props) {
       super(props);
       this.consumeInterview = new ConsumeInterview()
+      this.interviewList = new InterviewList()
       this.state = {dateValue: props.date,
                     timeValue: '',
                     participantsValue: '',
@@ -48,7 +49,7 @@ class NameForm extends React.Component {
   
     render() {
       return (
-        <form onSubmit={this.handleSubmit}>
+        <form>
             <List>
                 <List.Item>
                     <Input fluid label='Date' placeholder={this.props.date} onChange={this.handleDateChange}/>
@@ -122,6 +123,7 @@ class InterviewList extends Component {
   
         this.interviews = []
         this.generateInterviews = this.generateInterviews.bind(this)
+        this.consumeInterview = new ConsumeInterview()
     }
 
     generateInterviews() {
