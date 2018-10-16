@@ -6,12 +6,10 @@ class ConsumeInterview {
     
     //individual interview call. not sure if we need
     getInterview(id){
-        axios.get(API_URL + '/api/interviews', {
-            id: id
-        }).then((response) => {
+        axios.get(API_URL + `/api/interviews/${id}`).then((response) => {
             console.log('got a result');
             console.log(response);
-            //return response.data;
+            return response;
         }).catch((error) => {
             console.log(error);
         });
@@ -19,12 +17,10 @@ class ConsumeInterview {
 
     //Takes in an interview object
     createInterview(data){
-        axios.post(API_URL + '/api/interviews', {
-            interview: data
-        }).then((result) => {
+        axios.post(API_URL + '/api/interviews', { data }).then((response) => {
             console.log('got a result');
-            console.log(result);
-            //return response.data;
+            console.log(response);
+            return response;
         }).catch((error) => {
             console.log(error);
         });
@@ -37,7 +33,7 @@ class ConsumeInterview {
         }).then((response) => {
             console.log('got a result');
             console.log(response);
-            //return response.data;
+            return response;
         }).catch((error) => {
             console.log(error);
         });
@@ -45,12 +41,10 @@ class ConsumeInterview {
 
     //takes in updated interview object
     updateInterview(id){
-        axios.put(API_URL + '/api/interviews', {
-            id: id
-        }).then((response) => {
+        axios.put(API_URL + `/api/interviews/${id}`).then((response) => {
             console.log('got a result');
             console.log(response);
-            //return response.data;
+            return response;
         }).catch((error) => {
             console.log(error);
         });
@@ -58,12 +52,10 @@ class ConsumeInterview {
 
     //will work same as interview object
     cancelInterview(id){
-        axios.delete(API_URL + '/api/interviews', {
-            id: id
-        }).then((response) => {
+        axios.delete(API_URL + `/api/interviews/${id}`).then((response) => {
             console.log('got a result');
             console.log(response);
-            //return response.data;
+            return response;
         }).catch((error) => {
             console.log(error);
         });
