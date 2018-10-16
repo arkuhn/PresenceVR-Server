@@ -74,7 +74,7 @@ class PresenceVRNavBar extends Component {
             <div className="PresenceVRNavBar">
                 <Menu size='huge' pointing secondary >
                         
-                    <Menu.Item as={Link} to="/home" name='PresenceVR' active={activeItem === 'home'} onClick={this.handleItemClick} position={'left'} />
+                    <Menu.Item as={Link} to="/home" name='PresenceVR' active={activeItem === 'home'} onClick={this.handleItemClick} icon='home' position={'left'} />
                     
                     <Menu.Item as={Link} to="/uploads" name='uploads' active={activeItem === 'uploads'} onClick={this.handleItemClick} icon='cloud upload' />
 
