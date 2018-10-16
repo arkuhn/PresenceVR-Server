@@ -1,86 +1,82 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-import { Button, Header, Card, Grid, Modal, List, Input, Image} from 'semantic-ui-react';
+import { Button, Header, Card, Grid, Modal, List, Input, Image } from 'semantic-ui-react';
 import ConsumeInterview from './consumeInterview'
 
 class NameForm extends React.Component {
     constructor(props) {
-      super(props);
-      this.consumeInterview = new ConsumeInterview()
-      this.interviewList = new InterviewList()
-      this.state = {dateValue: props.date,
-                    timeValue: '',
-                    participantsValue: '',
-                    subjectValue: ''};
-  
-      this.handleDateChange = this.handleDateChange.bind(this);
-      this.handleTimeChange = this.handleTimeChange.bind(this);
-      this.handleParticipantsChange = this.handleParticipantsChange.bind(this);
-      this.handleSubjectChange = this.handleSubjectChange.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
-      this.handleDelete = this.handleDelete.bind(this);
+        super(props);
+        this.interviewList = new InterviewList();
+        this.consumeInterview = new ConsumeInterview();
+        this.state = {
+            dateValue: props.date,
+            timeValue: '',
+            participantsValue: '',
+            subjectValue: ''
+        };
+
+        this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleTimeChange = this.handleTimeChange.bind(this);
+        this.handleParticipantsChange = this.handleParticipantsChange.bind(this);
+        this.handleSubjectChange = this.handleSubjectChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     handleDateChange(event) {
-        this.setState({dateValue: event.target.value})
+        this.setState({ dateValue: event.target.value })
     }
 
     handleTimeChange(event) {
-        this.setState({timeValue: event.target.value})
+        this.setState({ timeValue: event.target.value })
     }
 
     handleParticipantsChange(event) {
-        this.setState({participantsValue: event.target.value})
+        this.setState({ participantsValue: event.target.value })
     }
 
     handleSubjectChange(event) {
-        this.setState({subjectValue: event.target.value})
+        this.setState({ subjectValue: event.target.value })
     }
-  
+
     handleSubmit(event) {
-      this.consumeInterview.updateInterview({
-          host: 'currentuser@email.com',
-          details: 'edited subject',
-          occursOnDate: 'edited date',
-          occursAtTime: '01:00:00',
-          particpants: 'no one, I guess'
-      })
-      event.preventDefault();
+        this.consumeInterview.updateInterview(0)
+        event.preventDefault();
     }
 
     handleDelete(event) {
         this.consumeInterview.cancelInterview(0);
     }
-  
+
     render() {
-      return (
-        <form>
-            <List>
-                <List.Item>
-                    <Input fluid label='Date' placeholder={this.props.date} onChange={this.handleDateChange}/>
-                </List.Item>
-                <List.Item>
-                    <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange}/>
-                </List.Item>
-                <List.Item>
-                    <Input fluid label='Participants' placeholder={'No one, I guess'} onChange={this.handleParticipantsChange}/>
-                </List.Item>
-                <List.Item>
-                    <Input fluid label='Subject' placeholder='edited subject' onChange={this.handleSubjectChange}/>
-                </List.Item>
-            </List>
-            <Button primary type='submit' onClick={this.handleSubmit}>Edit</Button>
-            <Button secondary onClick={this.handleDelete}>Cancel Interview</Button>
-        </form>
-      );
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <List>
+                    <List.Item>
+                        <Input fluid label='Date' placeholder={this.props.date} onChange={this.handleDateChange} />
+                    </List.Item>
+                    <List.Item>
+                        <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange} />
+                    </List.Item>
+                    <List.Item>
+                        <Input fluid label='Participants' placeholder={'No one, I guess'} onChange={this.handleParticipantsChange} />
+                    </List.Item>
+                    <List.Item>
+                        <Input fluid label='Subject' placeholder='Art interview' onChange={this.handleSubjectChange} />
+                    </List.Item>
+                </List>
+                <Button primary type='submit' onClick={this.handleSubmit}>Edit</Button>
+                <Button secondary onClick={this.handleDelete}>Cancel Interview</Button>
+            </form>
+        );
     }
-  }
+}
 
 function EditForm(props) {
     return (
         <Modal trigger={<Button >Edit</Button>
-        }  size='mini' closeIcon>
+        } size='mini' closeIcon>
             <Modal.Content>
                 <NameForm participants={props.participants} date={props.date} />
             </Modal.Content>
@@ -90,63 +86,72 @@ function EditForm(props) {
 
 function Interview(props) {
     return (
-        <Modal trigger={ 
+        <Modal trigger={
             <Card as='a'>
-            <Card.Content>
-                <Image floated='right' size='mini' src={props.image} />
-                <Card.Header>{props.participant}</Card.Header>
-                <Card.Meta>Art student</Card.Meta>
-                <Card.Description>
-                Scheduled on <strong> {props.date} </strong>
-                </Card.Description>
-            </Card.Content>
+                <Card.Content>
+                    <Image floated='right' size='mini' src={props.image} />
+                    <Card.Header>{props.participant}</Card.Header>
+                    <Card.Meta>{props.meta}</Card.Meta>
+                    <Card.Description>
+                        Scheduled on <strong> {props.date} </strong><strong> {props.time} </strong> 
+                    </Card.Description>
+                </Card.Content>
             </Card>
 
-         } closeIcon >
-        <Header icon='alternate calendar outline' content='Interview Details' />
-        <Modal.Content>
-                    <List>
-                        <List.Item>
-                            <List.Content>
-                                <List.Header>Interview with {props.participant} </List.Header>
-                                <List.Description>
-                                    Scheduled for {props.date}
-                                </List.Description>
-                            </List.Content>
-                        </List.Item>
-                    </List>
-                    <Button as={Link} to="/interview">Join</Button>
-                    <EditForm participants={props.participants} date={props.date} />
-                    <Button>Close</Button>
-                </Modal.Content>
-    </Modal>
+        } closeIcon >
+            <Header icon='alternate calendar outline' content='Interview Details' />
+            <Modal.Content>
+                <List>
+                    <List.Item>
+                        <List.Content>
+                            <List.Header>Interview with {props.participant} </List.Header>
+                            <List.Description>
+                                Scheduled on <strong> {props.date} </strong><strong> {props.time} </strong>
+                            </List.Description>
+                        </List.Content>
+                    </List.Item>
+                </List>
+                <Button as={Link} to="/interview">Join</Button>
+                <EditForm participants={props.participants} date={props.date} />
+                <Button>Close</Button>
+            </Modal.Content>
+        </Modal>
     )
 }
 
 class InterviewList extends Component {
     constructor(props) {
-        super(props)
-  
-        this.interviews = []
-        this.generateInterviews = this.generateInterviews.bind(this)
-        this.consumeInterview = new ConsumeInterview()
+        super(props);
+        this.consumeInterview = new ConsumeInterview();
+        this.interviews = [];
+        this.interviewList = [];
+        this.updateList = this.updateList.bind(this);
+        this.populateList = this.populateList.bind(this);
     }
 
-    generateInterviews() {
-        const numOfInterviews = Math.floor(Math.random() * 8) + 1
-        const faces = ['https://react.semantic-ui.com/images/avatar/large/steve.jpg', 'https://react.semantic-ui.com/images/avatar/large/molly.png',
-    'https://react.semantic-ui.com/images/avatar/large/jenny.jpg']
+    updateList() {
+        this.interviews = this.consumeInterview.getAllInterviews().then((interviews) => {
+            this.interviews = interviews;
+        });
+        this.populateList();
+    }
 
-    for (let i = 0; i < numOfInterviews; i++) { 
+    populateList() {
+        const faces = ['https://react.semantic-ui.com/images/avatar/large/steve.jpg', 'https://react.semantic-ui.com/images/avatar/large/molly.png',
+            'https://react.semantic-ui.com/images/avatar/large/jenny.jpg'];
+        for (let i = 0; i < this.interviews.length; i++) {
             const interview = ({
-                participant: `jaw${i * 1000}@rit.edu`,
-                date: `8/${i}/18`,
-                person: Math.floor(Math.random() * 3)
+                
+                participant: this.interviews[i].participants,
+                meta: this.interviews[i].subject,
+                date: this.inteviews[i].occursOnDate,
+                person: this.interview[i].host,
+                time: this.interview[i].occursAtTime
             })
-            this.interviews.push(interview)
+            this.interviewList.push(interview)
         }
-        return this.interviews.map((interview) => {
-            return <Interview participant={interview.participant} date={interview.date} image={faces[interview.person]} icon='calendar alternate outline'/>
+        return this.interviewList.map((interview) => {
+            return <Interview participant={interview.participant} date={interview.date} image={faces[interview.person]} icon='calendar alternate outline' />
         })
     }
 
@@ -155,13 +160,9 @@ class InterviewList extends Component {
             <div>
                 <br />
                 <Header as='h3' textAlign='center'>Upcoming Interviews</Header>
-
-                <br />
-                <Header as='h3' textAlign='center'>Scheduled Interviews</Header>
-                <Card.Group>
-                {this.generateInterviews()}  
-                </Card.Group>
+                {this.updateList()}
             </div>
+
         )
     }
 }

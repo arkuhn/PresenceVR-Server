@@ -27,13 +27,13 @@ class ConsumeInterview {
     }
 
     //returns all interviews for user. takes in host
-    getAllInterviews(id){
+    getAllInterviews(id, interviewList){
         axios.get(API_URL + '/api/interviews', {
             id: id
         }).then((response) => {
             console.log('got a result');
             console.log(response);
-            return response;
+            interviewList = response.data;
         }).catch((error) => {
             console.log(error);
         });
