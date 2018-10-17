@@ -48,6 +48,7 @@ class CreateInterview extends React.Component {
             participants: this.state.participantsValue
       })
       this.setState({ modalOpen: false })
+      window.location.reload();
       event.preventDefault();
     }
 
