@@ -8,7 +8,7 @@ class CreateInterview extends React.Component {
     constructor(props) {
         super(props);
         this.consumeInterview = new ConsumeInterview()
-        this.state = {dateValue: props.date,
+        this.state = {dateValue: '',
                       timeValue: '',
                       participantsValue: '',
                       subjectValue: ''};
@@ -38,14 +38,12 @@ class CreateInterview extends React.Component {
   
     handleSubmit(event) {
       this.consumeInterview.createInterview({
-        id: '1',
         host: 'currentuser@email.com',
-        subject: this.state.subjectValue,
+        details: this.state.subjectValue,
         occursOnDate: this.state.dateValue,
         occursAtTime: this.state.timeValue,
         participants: this.state.participantsValue
-      }
-        )
+      })
       event.preventDefault();
     }
 
@@ -60,7 +58,7 @@ class CreateInterview extends React.Component {
             <Modal.Content>
                         <List>
                         <List.Item>
-                            <Input fluid label='Date' placeholder={this.props.date} onChange={this.handleDateChange}/>
+                            <Input fluid label='Date' placeholder='MM/DD/YY' onChange={this.handleDateChange}/>
                         </List.Item>
                         <List.Item>
                             <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange}/>

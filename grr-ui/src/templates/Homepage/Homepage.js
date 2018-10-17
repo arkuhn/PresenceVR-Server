@@ -281,13 +281,7 @@ class Homepage extends Component {
                         <Grid.Column width={6} textAlign='right'><CreateInterview /></Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <Grid.Column width={4}>
                             <InterviewList />
-                        </Grid.Column>
-                        <Grid.Column width={12}>
-                            <Header as='h3' textAlign='center'>July</Header>
-                            {this.calendar()}
-                        </Grid.Column>
                     </Grid.Row>
                 </Grid>
             </div>

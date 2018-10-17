@@ -39,7 +39,13 @@ class NameForm extends React.Component {
     }
   
     handleSubmit(event) {
-      this.consumeInterview.updateInterview(0)
+      this.consumeInterview.updateInterview({
+          host: 'currentuser@email.com',
+          details: 'edited subject',
+          occursOnDate: 'edited date',
+          occursAtTime: '01:00:00',
+          particpants: 'no one, I guess'
+      })
       event.preventDefault();
     }
 
@@ -61,7 +67,7 @@ class NameForm extends React.Component {
                     <Input fluid label='Participants' placeholder={'No one, I guess'} onChange={this.handleParticipantsChange}/>
                 </List.Item>
                 <List.Item>
-                    <Input fluid label='Subject' placeholder='Art interview' onChange={this.handleSubjectChange}/>
+                    <Input fluid label='Subject' placeholder='edited subject' onChange={this.handleSubjectChange}/>
                 </List.Item>
             </List>
             <Button primary type='submit' onClick={this.handleSubmit}>Edit</Button>
@@ -147,10 +153,15 @@ class InterviewList extends Component {
     render() {
         return (
             <div>
+                <br />
                 <Header as='h3' textAlign='center'>Upcoming Interviews</Header>
+
+                <br />
+                <Header as='h3' textAlign='center'>Scheduled Interviews</Header>
+                <Card.Group>
                 {this.generateInterviews()}  
+                </Card.Group>
             </div>
-            
         )
     }
 }
