@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Button, Header, Card, Grid, Modal, List, Input, Image } from 'semantic-ui-react';
 import ConsumeInterview from './consumeInterview';
+import CreateInterview from './createInterview';
 import _ from 'lodash';
 
 class NameForm extends React.Component {
@@ -86,17 +87,18 @@ function EditForm(props) {
 }
 
 function Interview(props) {
+    console.log(props)
     return (
         <Modal trigger={
-            <Card as='a'>
-                <Card.Content>
-                    <Image floated='right' size='mini' src={props.image} />
-                    <Card.Header>{props.participant}</Card.Header>
-                    <Card.Meta>{props.meta}</Card.Meta>
-                    <Card.Description>
-                        Scheduled on <strong> {props.date} </strong><strong> {props.time} </strong> 
-                    </Card.Description>
-                </Card.Content>
+            <Card fluid as='a'>
+            <Card.Content>
+                <Image floated='right' size='mini' src={props.image} />
+                <Card.Header>{props.participant}</Card.Header>
+                <Card.Meta>{props.details}</Card.Meta>
+                <Card.Description>
+                Scheduled on <strong> {props.date} : {props.time} </strong>
+                </Card.Description>
+            </Card.Content>
             </Card>
 
         } closeIcon >
@@ -107,7 +109,7 @@ function Interview(props) {
                         <List.Content>
                             <List.Header>Interview with {props.participant} </List.Header>
                             <List.Description>
-                                Scheduled on <strong> {props.date} </strong><strong> {props.time} </strong>
+                                Scheduled on <strong> {props.date} </strong> at <strong> {props.time} </strong>
                             </List.Description>
                         </List.Content>
                     </List.Item>
@@ -124,49 +126,67 @@ class InterviewList extends Component {
     constructor(props) {
         super(props);
         this.consumeInterview = new ConsumeInterview();
-        this.interviews = [];
-        this.interviewList = [];
+        this.state = {
+            interviews: []
+        }
         this.updateList = this.updateList.bind(this);
         this.populateList = this.populateList.bind(this);
     }
 
     updateList() {
-        this.interviews = this.consumeInterview.getAllInterviews().then((interviews) => {
-            this.interviews = interviews.data;
-            this.populateList();
+        this.consumeInterview.getAllInterviews().then((interviews) => {
+            this.setState({interviews: interviews.data});
         });
     }
 
+    componentDidMount() {
+        this.updateList()
+    }
+
     populateList() {
+        if (this.state.interviews.length === 0) {
+            return (
+            <List.Item>
+            <List.Content>
+                <List.Header>No interviews to show!</List.Header>
+            </List.Content>
+            </List.Item>)
+        }
+        
         const faces = ['https://react.semantic-ui.com/images/avatar/large/steve.jpg', 'https://react.semantic-ui.com/images/avatar/large/molly.png',
             'https://react.semantic-ui.com/images/avatar/large/jenny.jpg'];
-        for (let i = 0; i < this.interviews.length; i++) {
-            var participant = this.interviews[i].participants;
-            var meta = this.interviews[i].subject;
-            var date = this.interviews[i].occursOnDate;
-            var person = this.interviews[i].host;
-            var time = this.interviews[i].occursAtTime;
-            this.interviewList.push({
-                participant,
-                meta,
-                date,
-                person,
-                time
-            })
-        }
-        return this.interviewList.map((interview) => {
-            return <Interview participant={interview.participant} date={interview.date} image={faces[interview.person]} icon='calendar alternate outline' />
+
+        return this.state.interviews.map((interview) => {
+            return  (
+                <List.Item>
+                <List.Content>
+                <Interview participant={interview.participants.join()} 
+                                details={interview.details}
+                                date={interview.occursOnDate} 
+                                time={interview.occursAtTime}
+                                image={faces[0]} 
+                                icon='calendar alternate outline' />
+                </List.Content>
+                </List.Item> 
+            )
         })
     }
 
     render() {
         return (
             <div>
-                <br />
-                <Header as='h3' textAlign='center'>Upcoming Interviews</Header>
-                {this.updateList()}
+                <Grid.Row>
+                    <Header as='h3'>
+                        Scheduled Interviews
+                        <CreateInterview/>
+                    </Header>
+                </Grid.Row>
+                <Grid.Row>
+                    <List horizontal>
+                        {this.populateList()}
+                    </List>
+                </Grid.Row>
             </div>
-
         )
     }
 }

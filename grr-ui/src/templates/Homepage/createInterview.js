@@ -8,15 +8,15 @@ class CreateInterview extends React.Component {
     constructor(props) {
         super(props);
         this.consumeInterview = new ConsumeInterview()
-        this.state = {dateValue: '',
+        this.state = {dateValue: props.date,
                       timeValue: '',
                       participantsValue: '',
-                      subjectValue: ''};
+                      detailsValue: ''};
     
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleTimeChange = this.handleTimeChange.bind(this);
         this.handleParticipantsChange = this.handleParticipantsChange.bind(this);
-        this.handleSubjectChange = this.handleSubjectChange.bind(this);
+        this.handleDetailsChange = this.handleDetailsChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -32,14 +32,14 @@ class CreateInterview extends React.Component {
         this.setState({participantsValue: event.target.value})
     }
 
-    handleSubjectChange(event) {
-        this.setState({subjectValue: event.target.value})
+    handleDetailsChange(event) {
+        this.setState({detailsValue: event.target.value})
     }
   
     handleSubmit(event) {
       this.consumeInterview.createInterview({
         host: 'currentuser@email.com',
-        details: this.state.subjectValue,
+        details: this.state.detailsValue,
         occursOnDate: this.state.dateValue,
         occursAtTime: this.state.timeValue,
         participants: this.state.participantsValue
@@ -50,7 +50,7 @@ class CreateInterview extends React.Component {
     render() {
         return (
             <Modal size='mini' trigger={ 
-                <button class='ui circular icon button' role='button'>
+                <button class='ui massive circular icon button' attached='right' size='small' role='button'>
                     <i aria-hidden='true' class='add icon' />
                 </button>
             }>
@@ -58,16 +58,16 @@ class CreateInterview extends React.Component {
             <Modal.Content>
                         <List>
                         <List.Item>
-                            <Input fluid label='Date' placeholder='MM/DD/YY' onChange={this.handleDateChange}/>
+                            <Input fluid label='Date' placeholder={this.props.date} onChange={this.handleDateChange}/>
                         </List.Item>
                         <List.Item>
                             <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange}/>
                         </List.Item>
                         <List.Item>
-                            <Input fluid label='Participants' placeholder={'No one, I guess'} onChange={this.handleParticipantsChange}/>
+                            <Input fluid label='Participants' placeholder={'participant@email.com'} onChange={this.handleParticipantsChange}/>
                         </List.Item>
                         <List.Item>
-                            <Input fluid label='Subject' placeholder='Art interview' onChange={this.handleSubjectChange}/>
+                            <Input fluid label='Details' placeholder='THese are interview details.' onChange={this.handleDetailsChange}/>
                         </List.Item>
                         </List>
                         <Button primary onClick={this.handleSubmit}>Create</Button>
