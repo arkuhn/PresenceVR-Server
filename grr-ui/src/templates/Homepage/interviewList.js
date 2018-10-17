@@ -90,8 +90,8 @@ function Interview(props) {
     console.log(props)
     return (
         <Modal trigger={
-            <Card fluid as='a'>
-            <Card.Content>
+            <Card centered  as='a'>
+            <Card.Content textAlign='left'>
                 <Image floated='right' size='mini' src={props.image} />
                 <Card.Header>{props.participant}</Card.Header>
                 <Card.Meta>{props.details}</Card.Meta>
@@ -100,7 +100,7 @@ function Interview(props) {
                 </Card.Description>
             </Card.Content>
             </Card>
-
+            
         } closeIcon >
             <Header icon='alternate calendar outline' content='Interview Details' />
             <Modal.Content>

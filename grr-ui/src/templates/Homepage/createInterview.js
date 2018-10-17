@@ -48,7 +48,6 @@ class CreateInterview extends React.Component {
             participants: this.state.participantsValue
       })
       this.setState({ modalOpen: false })
-      this.forceUpdate();
       event.preventDefault();
     }
 
