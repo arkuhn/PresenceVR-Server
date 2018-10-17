@@ -65,7 +65,7 @@ exports.findAll = function(req, res) {
             return res.status(404)
         }
         else {
-            res.send(interviews);
+            return res.send(interviews);
         }
     });
 };
