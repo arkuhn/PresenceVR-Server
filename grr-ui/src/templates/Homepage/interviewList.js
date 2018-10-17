@@ -77,7 +77,7 @@ class NameForm extends React.Component {
 
 function EditForm(props) {
     return (
-        <Modal trigger={<Button >Edit</Button>
+        <Modal trigger={<Button basic color='grey' >Edit</Button>
         } size='mini' closeIcon>
             <Modal.Content>
                 <NameForm participants={props.participants} date={props.date} />
