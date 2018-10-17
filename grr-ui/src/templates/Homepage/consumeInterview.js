@@ -6,7 +6,7 @@ class ConsumeInterview {
     
     //individual interview call. not sure if we need
     getInterview(id){
-        axios.get(API_URL + `/api/interviews/${id}`).then((response) => {
+        return axios.get(API_URL + `/api/interviews/${id}`).then((response) => {
             console.log('got a result');
             console.log(response);
             return response;
@@ -17,7 +17,7 @@ class ConsumeInterview {
 
     //Takes in an interview object
     createInterview(data){
-        axios.post(API_URL + '/api/interviews', { data }).then((response) => {
+        return axios.post(API_URL + '/api/interviews', { data }).then((response) => {
             console.log('got a result');
             console.log(response);
             return response;
@@ -27,13 +27,12 @@ class ConsumeInterview {
     }
 
     //returns all interviews for user. takes in host
-    getAllInterviews(id, interviewList){
-        axios.get(API_URL + '/api/interviews', {
-            id: id
-        }).then((response) => {
+    getAllInterviews(id){
+        return axios.get(API_URL + `/api/interviews/currentuser%40email.com`
+        ).then((response) => {
             console.log('got a result');
             console.log(response);
-            interviewList = response.data;
+            return response;
         }).catch((error) => {
             console.log(error);
         });
@@ -41,7 +40,7 @@ class ConsumeInterview {
 
     //takes in updated interview object
     updateInterview(id){
-        axios.put(API_URL + `/api/interviews/${id}`).then((response) => {
+        return axios.put(API_URL + `/api/interviews/${id}`).then((response) => {
             console.log('got a result');
             console.log(response);
             return response;
@@ -52,7 +51,7 @@ class ConsumeInterview {
 
     //will work same as interview object
     cancelInterview(id){
-        axios.delete(API_URL + `/api/interviews/${id}`).then((response) => {
+        return axios.delete(API_URL + `/api/interviews/${id}`).then((response) => {
             console.log('got a result');
             console.log(response);
             return response;

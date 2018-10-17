@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Button, Header, Card, Grid, Modal, List, Input, Image } from 'semantic-ui-react';
-import ConsumeInterview from './consumeInterview'
+import ConsumeInterview from './consumeInterview';
+import _ from 'lodash';
 
 class NameForm extends React.Component {
     constructor(props) {
@@ -131,24 +132,27 @@ class InterviewList extends Component {
 
     updateList() {
         this.interviews = this.consumeInterview.getAllInterviews().then((interviews) => {
-            this.interviews = interviews;
+            this.interviews = interviews.data;
+            this.populateList();
         });
-        this.populateList();
     }
 
     populateList() {
         const faces = ['https://react.semantic-ui.com/images/avatar/large/steve.jpg', 'https://react.semantic-ui.com/images/avatar/large/molly.png',
             'https://react.semantic-ui.com/images/avatar/large/jenny.jpg'];
         for (let i = 0; i < this.interviews.length; i++) {
-            const interview = ({
-                
-                participant: this.interviews[i].participants,
-                meta: this.interviews[i].subject,
-                date: this.inteviews[i].occursOnDate,
-                person: this.interview[i].host,
-                time: this.interview[i].occursAtTime
+            var participant = this.interviews[i].participants;
+            var meta = this.interviews[i].subject;
+            var date = this.interviews[i].occursOnDate;
+            var person = this.interviews[i].host;
+            var time = this.interviews[i].occursAtTime;
+            this.interviewList.push({
+                participant,
+                meta,
+                date,
+                person,
+                time
             })
-            this.interviewList.push(interview)
         }
         return this.interviewList.map((interview) => {
             return <Interview participant={interview.participant} date={interview.date} image={faces[interview.person]} icon='calendar alternate outline' />
