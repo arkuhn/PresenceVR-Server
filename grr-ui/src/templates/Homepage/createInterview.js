@@ -63,32 +63,30 @@ class CreateInterview extends React.Component {
     render() {
         return (
             <Modal size='small' open={this.state.modalOpen} onClose={this.handleCancel} trigger={ 
-                <button class='ui medium circular icon button' onClick={this.handleOpen} floated='right' size='small' role='button'>
-                    <i aria-hidden='true' class='add icon' />
-                </button>
+                <Button circular icon='add' onClick={this.handleOpen} floated='right' size='small' />     
             }>
             <Header icon='alternate calendar outline' content='Create an Interview' />
             <Modal.Content>
-                        <List>
-                        <List.Item>
-                            <Input fluid label='Date' placeholder='MM/DD/YYYY' onChange={this.handleDateChange}/>
-                        </List.Item>
-                        <List.Item>
-                            <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange}/>
-                        </List.Item>
-                        <List.Item>
-                            <Input fluid label='Participants' placeholder={'participant@email.com'} onChange={this.handleParticipantsChange}/>
-                        </List.Item>
-                        <List.Item>
-                            <Input fluid label='Details' placeholder='These are interview details.' onChange={this.handleDetailsChange}/>
-                        </List.Item>
-                        </List>
-                        <Button primary onClick={this.handleSubmit}>Create</Button>
-                        <Button secondary onClick={this.handleCancel}>Cancel</Button>
-                    </Modal.Content>
-        </Modal>
+                <List>
+                <List.Item>
+                    <Input fluid label='Date' placeholder='MM/DD/YYYY' onChange={this.handleDateChange}/>
+                </List.Item>
+                <List.Item>
+                    <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange}/>
+                </List.Item>
+                <List.Item>
+                    <Input fluid label='Participants' placeholder='participant@email.com' onChange={this.handleParticipantsChange}/>
+                </List.Item>
+                <List.Item>
+                    <Input fluid label='Details' placeholder='These are interview details.' onChange={this.handleDetailsChange}/>
+                </List.Item>
+                </List>
+                <Button primary onClick={this.handleSubmit}>Create</Button>
+                <Button secondary onClick={this.handleCancel}>Go back</Button>
+            </Modal.Content>
+            </Modal>
         )
-        }
+    }
 }
 
 export default CreateInterview

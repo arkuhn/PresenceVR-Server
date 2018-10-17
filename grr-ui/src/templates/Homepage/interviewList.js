@@ -3,88 +3,10 @@ import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Button, Header, Card, Grid, Modal, List, Input, Image, Divider } from 'semantic-ui-react';
 import ConsumeInterview from './consumeInterview';
-import CreateInterview from './createInterview';
+import EditInterview from './editInterview';
 import _ from 'lodash';
 
-class NameForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.interviewList = new InterviewList();
-        this.consumeInterview = new ConsumeInterview();
-        this.state = {
-            dateValue: props.date,
-            timeValue: '',
-            participantsValue: '',
-            subjectValue: ''
-        };
 
-        this.handleDateChange = this.handleDateChange.bind(this);
-        this.handleTimeChange = this.handleTimeChange.bind(this);
-        this.handleParticipantsChange = this.handleParticipantsChange.bind(this);
-        this.handleSubjectChange = this.handleSubjectChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-    }
-
-    handleDateChange(event) {
-        this.setState({ dateValue: event.target.value })
-    }
-
-    handleTimeChange(event) {
-        this.setState({ timeValue: event.target.value })
-    }
-
-    handleParticipantsChange(event) {
-        this.setState({ participantsValue: event.target.value })
-    }
-
-    handleSubjectChange(event) {
-        this.setState({ subjectValue: event.target.value })
-    }
-
-    handleSubmit(event) {
-        this.consumeInterview.updateInterview(0)
-        event.preventDefault();
-    }
-
-    handleDelete(event) {
-        this.consumeInterview.cancelInterview(0);
-    }
-
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <List>
-                    <List.Item>
-                        <Input fluid label='Date' placeholder={this.props.date} onChange={this.handleDateChange} />
-                    </List.Item>
-                    <List.Item>
-                        <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange} />
-                    </List.Item>
-                    <List.Item>
-                        <Input fluid label='Participants' placeholder={'No one, I guess'} onChange={this.handleParticipantsChange} />
-                    </List.Item>
-                    <List.Item>
-                        <Input fluid label='Subject' placeholder='Art interview' onChange={this.handleSubjectChange} />
-                    </List.Item>
-                </List>
-                <Button primary type='submit' onClick={this.handleSubmit}>Edit</Button>
-                <Button secondary onClick={this.handleDelete}>Cancel Interview</Button>
-            </form>
-        );
-    }
-}
-
-function EditForm(props) {
-    return (
-        <Modal trigger={<Button basic color='grey' >Edit</Button>
-        } size='mini' closeIcon>
-            <Modal.Content>
-                <NameForm participants={props.participants} date={props.date} />
-            </Modal.Content>
-        </Modal>
-    )
-}
 
 function Interview(props) {
     console.log(props)
@@ -103,7 +25,7 @@ function Interview(props) {
                     <Button as={Link} to="/interview" basic color='green'>
                         Join
                     </Button>
-                    <EditForm participants={props.participants} date={props.date} />
+                    <EditInterview participants={props.participant} date={props.date} time={props.time} details={props.details}/>
                     <Button basic color='red'>
                         Cancel
                     </Button>
