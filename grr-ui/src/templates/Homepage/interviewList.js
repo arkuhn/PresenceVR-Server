@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-import { Button, Header, Card, Grid, Modal, List, Input, Image } from 'semantic-ui-react';
+import { Button, Header, Card, Grid, Modal, List, Input, Image, Divider } from 'semantic-ui-react';
 import ConsumeInterview from './consumeInterview';
 import CreateInterview from './createInterview';
 import _ from 'lodash';
@@ -89,8 +89,7 @@ function EditForm(props) {
 function Interview(props) {
     console.log(props)
     return (
-        <Modal trigger={
-            <Card centered  as='a'>
+            <Card centered>
             <Card.Content textAlign='left'>
                 <Image floated='right' size='mini' src={props.image} />
                 <Card.Header>{props.participant}</Card.Header>
@@ -98,27 +97,20 @@ function Interview(props) {
                 <Card.Description>
                 Scheduled on <strong> {props.date} : {props.time} </strong>
                 </Card.Description>
+                <Divider />
+                <Card.Content extra>
+                    <div className='ui three buttons'>
+                    <Button as={Link} to="/interview" basic color='green'>
+                        Join
+                    </Button>
+                    <EditForm participants={props.participants} date={props.date} />
+                    <Button basic color='red'>
+                        Cancel
+                    </Button>
+                    </div>
+                </Card.Content>
             </Card.Content>
             </Card>
-            
-        } closeIcon >
-            <Header icon='alternate calendar outline' content='Interview Details' />
-            <Modal.Content>
-                <List>
-                    <List.Item>
-                        <List.Content>
-                            <List.Header>Interview with {props.participant} </List.Header>
-                            <List.Description>
-                                Scheduled on <strong> {props.date} </strong> at <strong> {props.time} </strong>
-                            </List.Description>
-                        </List.Content>
-                    </List.Item>
-                </List>
-                <Button as={Link} to="/interview">Join</Button>
-                <EditForm participants={props.participants} date={props.date} />
-                <Button>Close</Button>
-            </Modal.Content>
-        </Modal>
     )
 }
 
@@ -157,17 +149,13 @@ class InterviewList extends Component {
             'https://react.semantic-ui.com/images/avatar/large/jenny.jpg'];
 
         return this.state.interviews.map((interview) => {
-            return  (
-                <List.Item>
-                <List.Content>
+            return  (  
                 <Interview participant={interview.participants.join()} 
                                 details={interview.details}
                                 date={interview.occursOnDate} 
                                 time={interview.occursAtTime}
                                 image={faces[Math.floor(Math.random() * 2) + 1]} 
                                 icon='calendar alternate outline' />
-                </List.Content>
-                </List.Item> 
             )
         })
     }
@@ -176,9 +164,9 @@ class InterviewList extends Component {
         return (
             <div>
                 <Grid.Row>
-                    <List horizontal>
+                    <Card.Group>
                         {this.populateList()}
-                    </List>
+                    </Card.Group>
                 </Grid.Row>
             </div>
         )
