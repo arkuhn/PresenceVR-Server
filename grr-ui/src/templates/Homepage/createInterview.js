@@ -11,13 +11,16 @@ class CreateInterview extends React.Component {
         this.state = {dateValue: props.date,
                       timeValue: '',
                       participantsValue: '',
-                      detailsValue: ''};
+                      detailsValue: '',
+                      modalOpen: false};
     
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleTimeChange = this.handleTimeChange.bind(this);
         this.handleParticipantsChange = this.handleParticipantsChange.bind(this);
         this.handleDetailsChange = this.handleDetailsChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
+        this.handleOpen = this.handleOpen.bind(this);
     }
 
     handleDateChange(event) {
@@ -37,20 +40,30 @@ class CreateInterview extends React.Component {
     }
   
     handleSubmit(event) {
-      this.consumeInterview.createInterview({
-        host: 'currentuser@email.com',
-        details: this.state.detailsValue,
-        occursOnDate: this.state.dateValue,
-        occursAtTime: this.state.timeValue,
-        participants: this.state.participantsValue
+        this.consumeInterview.createInterview({
+            host: 'currentuser@email.com',
+            details: this.state.detailsValue,
+            occursOnDate: this.state.dateValue,
+            occursAtTime: this.state.timeValue,
+            participants: this.state.participantsValue
       })
+      this.setState({ modalOpen: false })
+      this.forceUpdate();
       event.preventDefault();
+    }
+
+    handleOpen(event) {
+        this.setState({ modalOpen: true })
+    }
+
+    handleCancel(event) {
+        this.setState({ modalOpen: false })
     }
 
     render() {
         return (
-            <Modal size='small' trigger={ 
-                <button class='ui medium circular icon button' floated='right' size='small' role='button'>
+            <Modal size='small' open={this.state.modalOpen} onClose={this.handleCancel} trigger={ 
+                <button class='ui medium circular icon button' onClick={this.handleOpen} floated='right' size='small' role='button'>
                     <i aria-hidden='true' class='add icon' />
                 </button>
             }>
@@ -67,11 +80,11 @@ class CreateInterview extends React.Component {
                             <Input fluid label='Participants' placeholder={'participant@email.com'} onChange={this.handleParticipantsChange}/>
                         </List.Item>
                         <List.Item>
-                            <Input fluid label='Details' placeholder='THese are interview details.' onChange={this.handleDetailsChange}/>
+                            <Input fluid label='Details' placeholder='These are interview details.' onChange={this.handleDetailsChange}/>
                         </List.Item>
                         </List>
                         <Button primary onClick={this.handleSubmit}>Create</Button>
-                        <Button secondary>Cancel</Button>
+                        <Button secondary onClick={this.handleCancel}>Cancel</Button>
                     </Modal.Content>
         </Modal>
         )
