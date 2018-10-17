@@ -164,7 +164,7 @@ class InterviewList extends Component {
                                 details={interview.details}
                                 date={interview.occursOnDate} 
                                 time={interview.occursAtTime}
-                                image={faces[0]} 
+                                image={faces[Math.floor(Math.random() * 2) + 1]} 
                                 icon='calendar alternate outline' />
                 </List.Content>
                 </List.Item> 
@@ -175,12 +175,6 @@ class InterviewList extends Component {
     render() {
         return (
             <div>
-                <Grid.Row>
-                    <Header as='h3'>
-                        Scheduled Interviews
-                        <CreateInterview/>
-                    </Header>
-                </Grid.Row>
                 <Grid.Row>
                     <List horizontal>
                         {this.populateList()}

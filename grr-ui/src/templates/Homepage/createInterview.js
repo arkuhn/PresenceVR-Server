@@ -49,16 +49,16 @@ class CreateInterview extends React.Component {
 
     render() {
         return (
-            <Modal size='mini' trigger={ 
-                <button class='ui massive circular icon button' attached='right' size='small' role='button'>
+            <Modal size='small' trigger={ 
+                <button class='ui medium circular icon button' floated='right' size='small' role='button'>
                     <i aria-hidden='true' class='add icon' />
                 </button>
             }>
-            <Header icon='alternate calendar outline' content='Interview Details' />
+            <Header icon='alternate calendar outline' content='Create an Interview' />
             <Modal.Content>
                         <List>
                         <List.Item>
-                            <Input fluid label='Date' placeholder={this.props.date} onChange={this.handleDateChange}/>
+                            <Input fluid label='Date' placeholder='MM/DD/YYYY' onChange={this.handleDateChange}/>
                         </List.Item>
                         <List.Item>
                             <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange}/>
