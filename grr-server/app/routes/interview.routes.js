@@ -6,8 +6,8 @@ module.exports = function(app) {
     // Create a new interview
     app.post('/api/interviews', interviews.create);
 
-    // Delete an interview with interviewId
-    app.delete('/api/interviews/:interviewId', interviews.delete);
+    // Delete an interview
+    app.delete('/api/interviews/', interviews.delete);
 
     // Retrieve all interviews
     app.get('/api/interviews/:host', interviews.findAll);

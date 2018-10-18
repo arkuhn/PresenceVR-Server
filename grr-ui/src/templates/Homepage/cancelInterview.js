@@ -8,10 +8,8 @@ class CancelInterview extends React.Component {
     constructor(props) {
         super(props);
         this.consumeInterview = new ConsumeInterview()
-        this.state = {dateValue: props.date,
-                      timeValue: props.time,
-                      participantsValue: props.participants,
-                      detailsValue: props.details,
+        this.state = {
+                      id: props.id,
                       modalOpen: false};
     
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -20,12 +18,8 @@ class CancelInterview extends React.Component {
     }
 
     handleSubmit(event) {
-        this.consumeInterview.cancelInterview({
-            host: 'currentuser@email.com',
-            details: this.state.detailsValue,
-            occursOnDate: this.state.dateValue,
-            occursAtTime: this.state.timeValue,
-            participants: this.state.participantsValue
+        this.consumeInterview.deleteInterview({
+            id: this.props.id
         })
         this.setState({ modalOpen: false })
         window.location.reload();

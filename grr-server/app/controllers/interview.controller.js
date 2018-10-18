@@ -22,14 +22,22 @@ exports.create = function(req, res) {
             console.log(err);
             res.status(500).send({message: "Some error occurred while creating the Interview."});
         } else {
-            console.log('no error')
+            console.log('Interview saved')
             res.send(data);
         }
     });
 };
 
 exports.delete = function(req, res) {
-    res.send({message: "Interview deleted successfully!"});
+    Interview.findOneAndDelete({'_id': req.body.id}, function(err, interview) { 
+        if(err) {
+            console.log(err);
+            res.status(500).send({message: "Some error occurred while deleting the Interview."});
+        } else {
+            console.log('Interview deleted')
+            res.send(interview);
+        }
+    })
 };
 
 exports.update = function(req, res) {

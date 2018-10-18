@@ -18,7 +18,7 @@ class ConsumeInterview {
     //Takes in an interview object
     createInterview(data){
         return axios.post(API_URL + '/api/interviews', { data }).then((response) => {
-            console.log('got a result');
+            console.log('Interview created response');
             console.log(response);
             return response;
         }).catch((error) => {
@@ -30,7 +30,7 @@ class ConsumeInterview {
     getAllInterviews(id){
         return axios.get(API_URL + `/api/interviews/currentuser%40email.com`
         ).then((response) => {
-            console.log('got a result');
+            console.log('Got all interviews for host response');
             console.log(response);
             return response;
         }).catch((error) => {
@@ -41,7 +41,7 @@ class ConsumeInterview {
     //takes in updated interview object
     updateInterview(id){
         return axios.put(API_URL + `/api/interviews/${id}`).then((response) => {
-            console.log('got a result');
+            console.log('Update interview result');
             console.log(response);
             return response;
         }).catch((error) => {
@@ -50,9 +50,9 @@ class ConsumeInterview {
     }
 
     //will work same as interview object
-    cancelInterview(id){
-        return axios.delete(API_URL + `/api/interviews/${id}`).then((response) => {
-            console.log('got a result');
+    deleteInterview(data){
+        return axios.delete(API_URL + `/api/interviews/`, { data }).then((response) => {
+            console.log('Delete interview result');
             console.log(response);
             return response;
         }).catch((error) => {
