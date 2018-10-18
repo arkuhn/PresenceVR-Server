@@ -22,7 +22,7 @@ class EditInterview extends React.Component {
         this.handleParticipantsChange = this.handleParticipantsChange.bind(this);
         this.handleDetailChange = this.handleDetailChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
     }
 
@@ -56,8 +56,7 @@ class EditInterview extends React.Component {
         event.preventDefault();
     }
 
-    handleDelete(event) {
-        this.consumeInterview.cancelInterview(0);
+    handleClose(event) {
         this.setState({ modalOpen: false })
     }
 
@@ -86,8 +85,8 @@ class EditInterview extends React.Component {
                             <Input fluid label='Details' value={this.state.detailsValue} placeholder='Art interview' onChange={this.handleDetailChange} />
                         </List.Item>
                     </List>
-                    <Button primary onClick={this.handleSubmit}>Edit</Button>
-                    <Button secondary onClick={this.handleDelete}>Cancel Interview</Button>
+                    <Button primary onClick={this.handleSubmit}>Save Edit</Button>
+                    <Button secondary onClick={this.handleClose}>Cancel Edit</Button>
             </Modal.Content>
             </Modal>
         );
