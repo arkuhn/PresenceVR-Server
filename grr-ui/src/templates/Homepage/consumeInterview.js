@@ -39,8 +39,8 @@ class ConsumeInterview {
     }
 
     //takes in updated interview object
-    updateInterview(id){
-        return axios.put(API_URL + `/api/interviews/${id}`).then((response) => {
+    updateInterview(data){
+        return axios.put(API_URL + `/api/interviews/`, { data }).then((response) => {
             console.log('Update interview result');
             console.log(response);
             return response;

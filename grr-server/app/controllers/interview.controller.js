@@ -41,7 +41,26 @@ exports.delete = function(req, res) {
 };
 
 exports.update = function(req, res) {
-    res.send({message: "Interview updated successfully!"});
+    const updatedInterview = {
+        host: req.body.data.host,
+        details: req.body.data.details,
+        occursOnDate: req.body.data.occursOnDate,
+        occursAtTime: req.body.data.occursAtTime,
+        scheduledOnDate: new Date().toLocaleDateString("en-US"),
+        participants: req.body.data.participants,
+        loadedAssets: ['test.asset'],
+        loadedEnvironments: ['test.env']
+    }
+    
+    Interview.findByIdAndUpdate({'_id': req.body.data.id}, updatedInterview, function(err, interview) { 
+        if(err) {
+            console.log(err);
+            res.status(500).send({message: "Some error occurred while updating the Interview."});
+        } else {
+            console.log('Interview updated')
+            res.send(interview);
+        }
+    })
 };
 
 exports.findOne = function(req, res) {

@@ -75,7 +75,7 @@ class CreateInterview extends React.Component {
                     <Input fluid label='Time' placeholder='HH:MM:SS' onChange={this.handleTimeChange}/>
                 </List.Item>
                 <List.Item>
-                    <Input fluid label='Participants' placeholder='participant@email.com' onChange={this.handleParticipantsChange}/>
+                    <Input fluid label='Participants' placeholder='participant@email.com, participant2@email.com' onChange={this.handleParticipantsChange}/>
                 </List.Item>
                 <List.Item>
                     <Input fluid label='Details' placeholder='These are interview details.' onChange={this.handleDetailsChange}/>

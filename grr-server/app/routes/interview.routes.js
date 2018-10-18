@@ -16,6 +16,6 @@ module.exports = function(app) {
     //app.get('/api/interviews/', interviews.findOne);
     
     // Update a interview with interviewId
-    app.put('/api/interviews/:interviewId', interviews.update);
+    app.put('/api/interviews/', interviews.update);
 
 }

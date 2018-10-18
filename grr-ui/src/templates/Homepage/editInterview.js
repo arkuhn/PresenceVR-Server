@@ -13,7 +13,8 @@ class EditInterview extends React.Component {
             dateValue: props.date,
             timeValue: props.time,
             participantsValue: props.participants,
-            detailsValue: props.details
+            detailsValue: props.details,
+            id: props.id
         };
 
         this.handleDateChange = this.handleDateChange.bind(this);
@@ -42,8 +43,16 @@ class EditInterview extends React.Component {
     }
 
     handleSubmit(event) {
-        this.consumeInterview.updateInterview(0)
+        this.consumeInterview.updateInterview({
+            id: this.state.id,
+            occursOnDate: this.state.dateValue,
+            occursAtTime: this.state.timeValue,
+            participants: this.state.participantsValue,
+            details: this.state.detailsValue,
+            host: 'currentuser@email.com'
+        })
         this.setState({ modalOpen: false })
+        window.location.reload();
         event.preventDefault();
     }
 

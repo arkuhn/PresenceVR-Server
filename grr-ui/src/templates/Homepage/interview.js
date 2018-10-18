@@ -20,7 +20,7 @@ class Interview extends Component {
             <Card centered>
             <Card.Content textAlign='left'>
                 <Image floated='right' size='mini' src={this.props.image} />
-                <Card.Header>{this.props.participant}</Card.Header>
+                <Card.Header>{this.props.participants}</Card.Header>
                 <Card.Meta>{this.props.details}</Card.Meta>
                 <Card.Description>
                 Scheduled on <strong> {this.props.date} : {this.props.time} </strong>
@@ -32,7 +32,7 @@ class Interview extends Component {
                         Join
                     </Button>
 
-                    <EditInterview participants={this.props.participant} date={this.props.date} time={this.props.time} details={this.props.details}/>
+                    <EditInterview id={this.props.id} participants={this.props.participants} date={this.props.date} time={this.props.time} details={this.props.details}/>
                     
                     <CancelInterview id={this.props.id}/>
                     </div>

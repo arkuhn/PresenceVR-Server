@@ -45,7 +45,7 @@ class InterviewList extends Component {
 
         return this.state.interviews.map((interview) => {
             return  (  
-                <Interview participant={interview.participants.join()} 
+                <Interview participants={interview.participants.join()} 
                                 details={interview.details}
                                 date={interview.occursOnDate} 
                                 time={interview.occursAtTime}
