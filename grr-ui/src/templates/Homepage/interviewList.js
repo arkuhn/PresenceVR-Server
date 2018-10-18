@@ -4,6 +4,7 @@ import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Button, Header, Card, Grid, Modal, List, Input, Image, Divider } from 'semantic-ui-react';
 import ConsumeInterview from './consumeInterview';
 import EditInterview from './editInterview';
+import CancelInterview from './cancelInterview'
 import _ from 'lodash';
 
 
@@ -26,9 +27,8 @@ function Interview(props) {
                         Join
                     </Button>
                     <EditInterview participants={props.participant} date={props.date} time={props.time} details={props.details}/>
-                    <Button basic color='red'>
-                        Cancel
-                    </Button>
+                    
+                    <CancelInterview participants={props.participant} date={props.date} time={props.time} details={props.details}/>
                     </div>
                 </Card.Content>
             </Card.Content>
