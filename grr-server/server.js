@@ -16,21 +16,6 @@ var cors = require('cors');
 var roomModel = require("./app/models/room.model");
 var path = require("path");
 
-//database configs
-var dbConfig = require('./configs/database.config.js');
-var mongoose = require('mongoose');
-
-//database setup
-mongoose.connect(dbConfig.url, {});
-
-mongoose.connection.on('error', function() {
-    console.log('Could not connect to the database. Exiting now...');
-    process.exit();
-});
-
-mongoose.connection.once('open', function() {
-    console.log("Successfully connected to the database");
-});
 
 const HTTP_PORT = process.env.PORT || 8080;
 const HTTPS_PORT = process.env.PORT || 8000;
@@ -67,6 +52,7 @@ app.use(express.static(__dirname + "/../grr-ui/build/", {dotfiles:'allow'}));
 app.use('/images', express.static(__dirname + "/../grr-server/uploads/"));
 
 require('./app/routes/room.routes')(app);
+require('./app/routes/interview.routes')(app);
 
 app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname, '/../grr-ui/build/index.html'), function(err) {
