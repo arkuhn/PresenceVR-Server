@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {API_URL} from "../api.config";
+import {API_URL} from "../templates/api.config";
 var _ = require("lodash");
 
 class ConsumeInterview {
