@@ -19,9 +19,8 @@ ReactDOM.render((
 			<Route exact path='/' component = {LoginPage} />
 			<Route exact path='/home' component = {Homepage} />
 			<Route exact path='/rooms' component = {RoomList} />
-			<Route exact path='/interview' component = {InterviewPage} />
+			<Route exact path='/interview/:id' component = {InterviewPage}/>
 			<Route exact path='/uploads' component = {UploadPage} />
-			<Route path='/rooms/:roomID' component = {AssetMgmt} />
 		</Switch>
 	</BrowserRouter>
 	</div>

@@ -19,6 +19,11 @@ function Participant(user) {
 
 
 class Participants extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {participants: props.participants};
+        console.log("State of participants: " + this.state.participants)
+    }
 
     generateParticipants() {
         const numOfParts = Math.floor(Math.random() * 15) + 1
@@ -45,9 +50,9 @@ class Participants extends Component {
             })
             parts.push(part)
         }
-        return parts.map((part) => {
-            return <Participant name={part.name} status={part.status}/>
-        })
+        //return this.state.participants.map((part) => {
+            return <Participant name={this.state.participants[0]} status={"Online"}/>
+        //})
 
     }
 

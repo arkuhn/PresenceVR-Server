@@ -64,22 +64,21 @@ exports.update = function(req, res) {
 };
 
 exports.findOne = function(req, res) {
-    res.send({message: "Interview successfully found!"});
-    /*Interview.findOne({'name': req.params.roomName}, function(err, interview) {
+    Interview.findOne({'_id': req.params.id}, function(err, interview) {
         if(err) {
             console.log(err);
             if(err.kind === 'ObjectId') {
-                return res.status(404).send({message: "Interview not found with id " + req.params.roomId});
+                return res.status(404).send({message: "Interview not found with id " + req.params.id});
             }
-            return res.status(500).send({message: "Error retrieving interview with id " + req.params.roomId});
+            return res.status(500).send({message: "Error retrieving interview with id " + req.params.id});
         }
 
         if(!interview) {
-            return res.status(404).send({message: "Room not found with id " + req.params.roomId});
+            return res.status(404).send({message: "Room not found with id " + req.params.id});
         }
 
         res.send(interview);
-    });*/
+    });
 };
 
 exports.findAll = function(req, res) {

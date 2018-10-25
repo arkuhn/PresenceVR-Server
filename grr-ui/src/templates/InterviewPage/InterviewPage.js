@@ -6,8 +6,41 @@ import Environments from "./environments"
 import Assets from "./assets"
 import Participants from "./participants"
 import { Grid, Header, Divider, List, Icon, Button } from 'semantic-ui-react';
+import axios from 'axios';
+import {API_URL} from "../api.config";
+
+
+function getInterview(id) {
+    return axios.get(API_URL + `/api/interview/${id}`).then((response) => {
+        console.log('got a result');
+        console.log(response);
+        return response;
+    }).catch((error) => {
+        console.log(error);
+    });
+}
 
 class InterviewPage extends Component {
+    constructor(props) {
+        super(props);
+        this.id = this.props.match.params.id;
+        this.state = {interview: {
+            participants: ['test']
+        }}
+        //this.state.participants = props.participants;
+        //this.state.date = props.date;
+        //this.state.description = props.description;
+    }
+
+    updateList() {
+        getInterview(this.id).then((data) => {
+            this.setState({interview: data.data});
+        });
+    }
+
+    componentDidMount() {
+        this.updateList()
+    }
 
     participants() {
         return (
@@ -67,7 +100,7 @@ class InterviewPage extends Component {
                     <Grid.Column width={4}>
                         {/*Participants*/}
                         <Grid.Row>
-                            <Participants />
+                            <Participants participants={this.state.interview.participants}/>
                         </Grid.Row>
 
                         <Divider />
