@@ -27,6 +27,8 @@ class InterviewPage extends Component {
         this.state = {interview: {
             participants: ['test']
         }}
+
+        this.updateList = this.updateList.bind(this);
         //this.state.participants = props.participants;
         //this.state.date = props.date;
         //this.state.description = props.description;
@@ -34,8 +36,12 @@ class InterviewPage extends Component {
 
     updateList() {
         getInterview(this.id).then((data) => {
+            console.log('got data');
+            console.log(data.data);
             this.setState({interview: data.data});
         });
+        console.log(this.state.interview);
+        console.log("test");
     }
 
     componentDidMount() {

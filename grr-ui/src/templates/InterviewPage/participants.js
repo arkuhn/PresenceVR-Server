@@ -3,14 +3,14 @@ import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Grid, Header, Divider, List, Icon, Button } from 'semantic-ui-react';
 
-function Participant(user) {
+function Participant(props) {
     return (
     <List.Item as='a'>
         <Icon name='user circle' />
         <List.Content>
-            <List.Header>{user.name}</List.Header>
+            <List.Header>{props.name}</List.Header>
             <List.Description>
-            Status: {user.status}
+            Status: {props.status}
             </List.Description>
         </List.Content>
     </List.Item>
@@ -51,9 +51,13 @@ class Participants extends Component {
             parts.push(part)
         }
         //return this.state.participants.map((part) => {
-            return <Participant name={this.state.participants[0]} status={"Online"}/>
+            return <Participant name={this.state.participants} status={"Online"}/>
         //})
 
+    }
+
+    componentWillReceiveProps(props) {
+        this.setState({participants: props.participants});
     }
 
     render() {
