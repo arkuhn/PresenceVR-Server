@@ -5,6 +5,7 @@ import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import Environments from "./environments"
 import Assets from "./assets"
 import Participants from "./participants"
+import ChatPane from "./chat"
 import { Grid, Header, Divider, List, Icon, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import {API_URL} from "../api.config";
@@ -126,7 +127,7 @@ class InterviewPage extends Component {
                         <Divider/>
                         {/* Chat */}
                         <Grid.Row>
-                            {this.chat()}
+                            <ChatPane />
                         </Grid.Row>
                     </Grid.Column>
 
