@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
 import './LoginPage.css';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Button, Header, Icon, Grid, Image, Card, Segment, Divider } from 'semantic-ui-react';
 import {loginWithGoogle, firebaseAuth, isAuthenticated} from "../../utils/firebase";
 
 class LoginPage extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
     render() {
+        if (isAuthenticated) {
+            return <Redirect to='/home'/>
+        }
+        
         return (
             <div class="LoginPage">
                 <Grid centered>
