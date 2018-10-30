@@ -12,12 +12,12 @@ var config = {
 
 firebase.initializeApp(config);
 
-var user = '';
-var isAuthenticated = false;
-const firebaseAuth = firebase.auth();
+export var user = '';
+export var isAuthenticated = false;
+export const firebaseAuth = firebase.auth();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-function loginWithGoogle() {
+export function loginWithGoogle() {
     return firebaseAuth.signInWithRedirect(googleProvider)
     .then((result) => {
         isAuthenticated = true;
@@ -40,13 +40,7 @@ function loginWithGoogle() {
     });
 }
 
-function logout() {
+export function logout() {
     return firebaseAuth.signOut();
 }
 
-export default {
-    logout,
-    loginWithGoogle,
-    isAuthenticated,
-    user
-}

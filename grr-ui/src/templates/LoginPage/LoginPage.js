@@ -11,10 +11,6 @@ class LoginPage extends Component {
     }
 
     render() {
-        if (isAuthenticated) {
-            return <Redirect to='/home'/>
-        }
-        
         return (
             <div class="LoginPage">
                 <Grid centered>
