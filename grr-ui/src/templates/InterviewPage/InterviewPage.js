@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import './InterviewPage.css';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import Environments from "./environments"
 import Assets from "./assets"
 import Participants from "./participants"
 import ChatPane from "./chat"
 import { Grid, Header, Divider, List, Icon, Button } from 'semantic-ui-react';
+import {firebaseAuth} from '../../utils/firebase'
 
 class InterviewPage extends Component {
 
@@ -45,6 +46,9 @@ class InterviewPage extends Component {
     }
 
     render() {
+        if (!firebaseAuth.currentUser) {
+            return <Redirect to='/' />
+        }
         return (
             <div className="InterviewPage">
                 <PresenceVRNavBar/>

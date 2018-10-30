@@ -2,12 +2,16 @@ import React, {Component} from 'react';
 import PresenceVRNavBar from '../PresenceVRNavBar/PresenceVRNavBar';
 //import './RoomList.css';
 import {API_URL} from "../api.config";
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Button, Header, Icon, Grid, Image, Card, Segment, Divider, List } from 'semantic-ui-react';
+import {firebaseAuth} from '../../utils/firebase'
 
 class UploadPage extends Component {
 	
 	render() {
+		if (!firebaseAuth.currentUser) {
+            return <Redirect to='/' />
+        }
 		return (
 			<div className="UploadPage">
 				<PresenceVRNavBar/>
