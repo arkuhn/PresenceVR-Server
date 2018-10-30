@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './InterviewPage.css';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import Environments from "./environments";
 import Assets from "./assets";
@@ -11,6 +11,7 @@ import axios from 'axios';
 import {API_URL} from "../api.config";
 import InterviewAPI from "../../utils/InterviewAPI";
 
+import {firebaseAuth} from '../../utils/firebase'
 
 class InterviewPage extends Component {
     constructor(props) {
@@ -60,6 +61,9 @@ class InterviewPage extends Component {
     }
 
     render() {
+        if (!firebaseAuth.currentUser) {
+            return <Redirect to='/' />
+        }
         return (
             <div className="InterviewPage">
                 <PresenceVRNavBar/>

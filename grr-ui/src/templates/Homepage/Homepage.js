@@ -17,7 +17,6 @@ class Homepage extends Component {
         if (!firebaseAuth.currentUser) {
             return <Redirect to='/' />
         }
-        console.log(firebaseAuth.currentUser)
         return (
             <div className="Homepage">
                 <PresenceVRNavBar/>
