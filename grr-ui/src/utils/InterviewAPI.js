@@ -5,7 +5,7 @@ var _ = require("lodash");
     
 //individual interview call. not sure if we need
 function getInterview(id){
-    return axios.get(API_URL + `/api/interviews/${id}`).then((response) => {
+    return axios.get(API_URL + `/api/interview/${id}`).then((response) => {
         console.log('got a result');
         console.log(response);
         return response;
