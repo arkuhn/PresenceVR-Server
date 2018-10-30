@@ -2,24 +2,15 @@ import React, { Component } from 'react';
 import './InterviewPage.css';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-import Environments from "./environments"
-import Assets from "./assets"
-import Participants from "./participants"
-import ChatPane from "./chat"
+import Environments from "./environments";
+import Assets from "./assets";
+import Participants from "./participants";
+import ChatPane from "./chat";
 import { Grid, Header, Divider, List, Icon, Button } from 'semantic-ui-react';
 import axios from 'axios';
 import {API_URL} from "../api.config";
+import InterviewAPI from "../../utils/InterviewAPI";
 
-
-function getInterview(id) {
-    return axios.get(API_URL + `/api/interview/${id}`).then((response) => {
-        console.log('got a result');
-        console.log(response);
-        return response;
-    }).catch((error) => {
-        console.log(error);
-    });
-}
 
 class InterviewPage extends Component {
     constructor(props) {
@@ -33,7 +24,7 @@ class InterviewPage extends Component {
     }
 
     updateInterview() {
-        getInterview(this.id).then((data) => {
+        InterviewAPI.getInterview(this.id).then((data) => {
             console.log('got data');
             console.log(data.data);
             this.setState({interview: data.data});
