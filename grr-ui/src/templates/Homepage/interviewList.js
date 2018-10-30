@@ -2,17 +2,15 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Button, Header, Card, Grid, Modal, List, Input, Image, Divider } from 'semantic-ui-react';
-import ConsumeInterview from './consumeInterview';
-import Interview from './interview'
-import EditInterview from './editInterview';
-import CancelInterview from './cancelInterview'
+import InterviewAPI from '../../utils/InterviewAPI';
+import Interview from '../InterviewCard/interview'
+import InterviewForm from '../InterviewCard/InterviewForm';
 import _ from 'lodash';
 
 
 class InterviewList extends Component {
     constructor(props) {
         super(props);
-        this.consumeInterview = new ConsumeInterview();
         this.state = {
             interviews: []
         }
@@ -21,7 +19,7 @@ class InterviewList extends Component {
     }
 
     updateList() {
-        this.consumeInterview.getAllInterviews().then((interviews) => {
+        InterviewAPI.getAllInterviews().then((interviews) => {
             this.setState({interviews: interviews.data});
         });
     }
