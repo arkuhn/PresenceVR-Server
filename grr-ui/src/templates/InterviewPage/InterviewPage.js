@@ -49,18 +49,6 @@ class InterviewPage extends Component {
         this.updateList()
     }
 
-    participants() {
-        return (
-            <Header as='h3'>Participants</Header>
-        );
-    }
-
-    chat () {
-        return (
-            <Header as='h3'>Chat</Header>
-        );
-    }
-
     aframe() {
         return (
             <Header as='h3'>Aframe</Header>
