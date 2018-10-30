@@ -26,16 +26,13 @@ class InterviewPage extends Component {
         super(props);
         this.id = this.props.match.params.id;
         this.state = {interview: {
-            participants: ['test']
+            participants: []
         }}
 
-        this.updateList = this.updateList.bind(this);
-        //this.state.participants = props.participants;
-        //this.state.date = props.date;
-        //this.state.description = props.description;
+        this.updateInterview = this.updateInterview.bind(this);
     }
 
-    updateList() {
+    updateInterview() {
         getInterview(this.id).then((data) => {
             console.log('got data');
             console.log(data.data);
@@ -46,7 +43,7 @@ class InterviewPage extends Component {
     }
 
     componentDidMount() {
-        this.updateList()
+        this.updateInterview()
     }
 
     aframe() {
