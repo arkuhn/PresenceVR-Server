@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './LoginPage.css';
 import { Link } from 'react-router-dom';
 import { Button, Header, Icon, Grid, Image, Card, Segment, Divider } from 'semantic-ui-react';
+import {loginWithGoogle, firebaseAuth, isAuthenticated} from "../../utils/firebase";
 
 class LoginPage extends Component {
     render() {
@@ -31,7 +32,7 @@ class LoginPage extends Component {
                             <Icon name='user' /> Log-in to your account
                             </Header>
 
-                            <Button as={Link} to="/home" fluid size='medium' basic color='red'>
+                            <Button onClick={loginWithGoogle} fluid size='medium' basic color='red'>
                                 <Icon name='google' />
                                 Login with Google
                             </Button>
