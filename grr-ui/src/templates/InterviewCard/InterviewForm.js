@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Button, Header, List, Modal, Input} from 'semantic-ui-react';
 import InterviewAPI from '../../utils/InterviewAPI'
+import {firebaseAuth} from "../../utils/firebase";
 
 class InterviewForm extends React.Component {
     constructor(props) {
         super(props)
-        
         if (this.props.type === 'create') {
             this.icon = 'alternate calendar outline'
             this.positiveButtonName = 'Create Interview'
@@ -49,7 +49,7 @@ class InterviewForm extends React.Component {
   
     handleSubmit(event) {
         let data = {
-            host: 'currentuser@email.com',
+            host: firebaseAuth.currentUser.email,
             details: this.state.detailsValue,
             occursOnDate: this.state.dateValue,
             occursAtTime: this.state.timeValue,

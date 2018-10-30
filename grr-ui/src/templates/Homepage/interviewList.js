@@ -19,7 +19,7 @@ class InterviewList extends Component {
     }
 
     updateList() {
-        InterviewAPI.getAllInterviews().then((interviews) => {
+        InterviewAPI.getAllInterviews(this.props.hostEmail).then((interviews) => {
             this.setState({interviews: interviews.data});
         });
     }
@@ -49,7 +49,8 @@ class InterviewList extends Component {
                                 time={interview.occursAtTime}
                                 image={faces[Math.floor(Math.random() * 2) + 1]} 
                                 icon='calendar alternate outline'
-                                id={interview._id} />
+                                id={interview._id}
+                                host={interview.host} />
             )
         })
     }

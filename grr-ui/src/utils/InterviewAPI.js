@@ -27,7 +27,7 @@ function createInterview(data){
 
 //returns all interviews for user. takes in host
 function getAllInterviews(id){
-    return axios.get(API_URL + `/api/interviews/currentuser%40email.com`
+    return axios.get(API_URL + `/api/interviews/${id}`
     ).then((response) => {
         console.log('Got all interviews for host response');
         console.log(response);

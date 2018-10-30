@@ -6,6 +6,7 @@ import InterviewAPI from '../../utils/InterviewAPI';
 import InterviewForm from './InterviewForm';
 import CancelInterview from './cancelInterview'
 import _ from 'lodash';
+import {firebaseAuth} from "../../utils/firebase";
 
 class Interview extends Component {
     constructor(props) {
@@ -16,30 +17,56 @@ class Interview extends Component {
 
     }
     render() {
-        return (
-            <Card centered>
-            <Card.Content textAlign='left'>
-                <Image floated='right' size='mini' src={this.props.image} />
-                <Card.Header>{this.props.participants}</Card.Header>
-                <Card.Meta>{this.props.details}</Card.Meta>
-                <Card.Description>
-                Scheduled on <strong> {this.props.date} : {this.props.time} </strong>
-                </Card.Description>
-                <Divider />
-                <Card.Content extra>
-                    <div className='ui three buttons'>
-                    <Button as={Link} to={"/interview/" + this.state.id} basic color='green'>
-                        Join
-                    </Button>
+        if (_.isEqual(firebaseAuth.currentUser.email, this.props.host)) {
+            return (
+                <Card centered>
+                    <Card.Content textAlign='left'>
+                        <Image floated='right' size='mini' src={this.props.image} />
+                        <Card.Header>{this.props.participants}</Card.Header>
+                        <Card.Meta>{this.props.details}</Card.Meta>
+                        <Card.Description>
+                            Scheduled on <strong> {this.props.date} : {this.props.time} </strong>
+                        </Card.Description>
+                        <Divider />
+                        <Card.Content extra>
+                            <div className='ui three buttons'>
+                                <Button as={Link} to="/interview" basic color='green'>
+                                    Join
+                                </Button>
 
-                    <InterviewForm type='edit' id={this.props.id} participants={this.props.participants} date={this.props.date} time={this.props.time} details={this.props.details}/>
-                    
-                    <CancelInterview id={this.props.id}/>
-                    </div>
-                </Card.Content>
-            </Card.Content>
-            </Card>
-        )
+                                <InterviewForm type='edit' id={this.props.id} participants={this.props.participants} date={this.props.date} time={this.props.time} details={this.props.details} />
+
+                                <CancelInterview id={this.props.id} />
+                            </div>
+                        </Card.Content>
+                    </Card.Content>
+                </Card>
+            )
+        }
+        else {
+            return (
+                <Card centered>
+                    <Card.Content textAlign='left'>
+                        <Image floated='right' size='mini' src={this.props.image} />
+                        <Card.Header>{this.props.participants}</Card.Header>
+                        <Card.Meta>{this.props.details}</Card.Meta>
+                        <Card.Description>
+                            Scheduled on <strong> {this.props.date} : {this.props.time} </strong>
+                        </Card.Description>
+                        <Divider />
+                        <Card.Content extra>
+                            <div className='ui three buttons'>
+                                <Button as={Link} to="/interview" basic color='green'>
+                                    Join
+                                </Button>
+
+                                <CancelInterview id={this.props.id} />
+                            </div>
+                        </Card.Content>
+                    </Card.Content>
+                </Card>
+            )
+        }
     }
 }
 
