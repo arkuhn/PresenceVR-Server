@@ -3,7 +3,7 @@ import './Homepage.css';
 import { Redirect } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import InterviewList from "./interviewList"
-import CreateInterview from './createInterview'
+import InterviewForm from '../InterviewCard/InterviewForm'
 import { Button, Header, Icon, Grid, Segment, Menu, List, Card, Popup, Divider} from 'semantic-ui-react';
 import {firebaseAuth} from '../../utils/firebase'
 
@@ -43,7 +43,7 @@ class Homepage extends Component {
                         <InterviewList />
 
                         <Segment basic floated='right'>
-                            <CreateInterview />
+                            <InterviewForm type='create'/>
                         </Segment>
 
                     </Grid.Column>
