@@ -49,7 +49,6 @@ class InterviewForm extends React.Component {
   
     handleSubmit(event) {
         let data = {
-            host: firebaseAuth.currentUser.email,
             details: this.state.detailsValue,
             occursOnDate: this.state.dateValue,
             occursAtTime: this.state.timeValue,

@@ -11,13 +11,10 @@ admin.initializeApp({
 const authenticateToken = (idToken) => {
     console.log('authenticating token')
     return admin.auth().verifyIdToken(idToken)
-        .then(function(decodedToken) {
-            var uid = decodedToken.uid;
-            return true;
-            // ...
-        }).catch(function(error) {
-            // Handle error
-            return false;
+        .then((decodedToken) => {
+            var email = decodedToken.email;
+            var name = decodedToken.name
+            return { email, name };
         });
 }
 
