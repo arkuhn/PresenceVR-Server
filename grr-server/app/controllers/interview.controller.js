@@ -1,9 +1,7 @@
 var Interview = require('../models/interview.model.js');
-
+var  firebase  = require('../../firebase')
 
 exports.create = function(req, res) {
-    // Create and Save a new Note
-    console.log(req.body);
 
     var interview = new Interview({
         host: req.body.data.host,
@@ -83,6 +81,11 @@ exports.findOne = function(req, res) {
 };
 
 exports.findAll = function(req, res) {
+    console.log(req.headers)
+    if (!req.headers.authorization || !firebase.authenticateToken(req.headers.authorization)) {
+        return res.status(500).send({message: "Some error occurred while retrieving interviews."}); 
+    }
+
     Interview.find({'host': req.params.host}, function(err, interviews){
         if(err){
             console.log(err)
