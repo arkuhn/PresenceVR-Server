@@ -40,7 +40,7 @@ class InterviewList extends Component {
         
         const faces = ['https://react.semantic-ui.com/images/avatar/large/steve.jpg', 'https://react.semantic-ui.com/images/avatar/large/molly.png',
             'https://react.semantic-ui.com/images/avatar/large/jenny.jpg'];
-
+        
         return this.state.interviews.map((interview) => {
             return  (  
                 <Interview participants={interview.participants.join()} 
