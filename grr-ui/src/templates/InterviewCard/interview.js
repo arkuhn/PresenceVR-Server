@@ -22,10 +22,10 @@ class Interview extends Component {
                 <Card centered>
                     <Card.Content textAlign='left'>
                         <Image floated='right' size='mini' src={this.props.image} />
-                        <Card.Header>{this.props.participants}</Card.Header>
+                        <Card.Header> {this.props.date} : {this.props.time} </Card.Header>
                         <Card.Meta>{this.props.details}</Card.Meta>
                         <Card.Description>
-                            Scheduled on <strong> {this.props.date} : {this.props.time} </strong>
+                        Participants: {this.props.participants}
                         </Card.Description>
                         <Divider />
                         <Card.Content extra>
@@ -48,10 +48,10 @@ class Interview extends Component {
                 <Card centered>
                     <Card.Content textAlign='left'>
                         <Image floated='right' size='mini' src={this.props.image} />
-                        <Card.Header>{this.props.participants}</Card.Header>
+                        <Card.Header> {this.props.date} : {this.props.time} </Card.Header>
                         <Card.Meta>{this.props.details}</Card.Meta>
                         <Card.Description>
-                            Scheduled on <strong> {this.props.date} : {this.props.time} </strong>
+                            Participants: {this.props.participants}
                         </Card.Description>
                         <Divider />
                         <Card.Content extra>
