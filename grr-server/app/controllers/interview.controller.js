@@ -2,6 +2,9 @@ var Interview = require('../models/interview.model.js');
 var  firebase  = require('../../firebase')
 
 exports.create = function(req, res) {
+    if (!req.headers.authorization || !firebase.authenticateToken(req.headers.authorization)) {
+        return res.status(500).send({message: "Some error occurred while creating the interview."}); 
+    }
 
     var interview = new Interview({
         host: req.body.data.host,
@@ -27,6 +30,9 @@ exports.create = function(req, res) {
 };
 
 exports.delete = function(req, res) {
+    if (!req.headers.authorization || !firebase.authenticateToken(req.headers.authorization)) {
+        return res.status(500).send({message: "Some error occurred while deleting the interview."}); 
+    }
     Interview.findOneAndDelete({'_id': req.body.id}, function(err, interview) { 
         if(err) {
             console.log(err);
@@ -39,6 +45,9 @@ exports.delete = function(req, res) {
 };
 
 exports.update = function(req, res) {
+    if (!req.headers.authorization || !firebase.authenticateToken(req.headers.authorization)) {
+        return res.status(500).send({message: "Some error occurred while updating interview."}); 
+    }
     const updatedInterview = {
         host: req.body.data.host,
         details: req.body.data.details,
@@ -61,27 +70,7 @@ exports.update = function(req, res) {
     })
 };
 
-exports.findOne = function(req, res) {
-    res.send({message: "Interview successfully found!"});
-    /*Interview.findOne({'name': req.params.roomName}, function(err, interview) {
-        if(err) {
-            console.log(err);
-            if(err.kind === 'ObjectId') {
-                return res.status(404).send({message: "Interview not found with id " + req.params.roomId});
-            }
-            return res.status(500).send({message: "Error retrieving interview with id " + req.params.roomId});
-        }
-
-        if(!interview) {
-            return res.status(404).send({message: "Room not found with id " + req.params.roomId});
-        }
-
-        res.send(interview);
-    });*/
-};
-
 exports.findAll = function(req, res) {
-    console.log(req.headers)
     if (!req.headers.authorization || !firebase.authenticateToken(req.headers.authorization)) {
         return res.status(500).send({message: "Some error occurred while retrieving interviews."}); 
     }
