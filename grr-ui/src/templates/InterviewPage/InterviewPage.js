@@ -2,25 +2,37 @@ import React, { Component } from 'react';
 import './InterviewPage.css';
 import { Redirect } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-import Environments from "./environments"
-import Assets from "./assets"
-import Participants from "./participants"
-import ChatPane from "./chat"
-import { Grid, Header, Divider, List, Icon, Button } from 'semantic-ui-react';
+import Environments from "./environments";
+import Assets from "./assets";
+import Participants from "./participants";
+import ChatPane from "./chat";
+import { Grid, Header, Divider, Icon, Button } from 'semantic-ui-react';
+import InterviewAPI from "../../utils/InterviewAPI";
 import {firebaseAuth} from '../../utils/firebase'
 
 class InterviewPage extends Component {
+    constructor(props) {
+        super(props);
+        this.id = this.props.match.params.id;
+        this.state = {interview: {
+            participants: []
+        }}
 
-    participants() {
-        return (
-            <Header as='h3'>Participants</Header>
-        );
+        this.updateInterview = this.updateInterview.bind(this);
     }
 
-    chat () {
-        return (
-            <Header as='h3'>Chat</Header>
-        );
+    updateInterview() {
+        InterviewAPI.getInterview(this.id).then((data) => {
+            console.log('got data');
+            console.log(data.data);
+            this.setState({interview: data.data});
+        });
+        console.log(this.state.interview);
+        console.log("test");
+    }
+
+    componentDidMount() {
+        this.updateInterview()
     }
 
     aframe() {
@@ -72,7 +84,7 @@ class InterviewPage extends Component {
                     <Grid.Column width={4}>
                         {/*Participants*/}
                         <Grid.Row>
-                            <Participants />
+                            <Participants participants={this.state.interview.participants}/>
                         </Grid.Row>
 
                         <Divider />

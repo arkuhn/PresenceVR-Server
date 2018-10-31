@@ -22,7 +22,7 @@ function createInterview(data){
 function getAllInterviews(id){
     return firebaseAuth.currentUser.getIdToken(true).then((token) => {
         let config = {headers: {Authorization: `Bearer + ${token}`}};
-        return axios.get(API_URL + `/api/interviews/currentuser%40email.com`
+        return axios.get(API_URL + `/api/interviews/api/interviews/${id}`
         , config).then((response) => {
             console.log('Got all interviews for host response');
             console.log(response);

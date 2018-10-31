@@ -39,7 +39,7 @@ class Homepage extends Component {
                             </Header>
                         </Grid.Row>
                         
-                        <InterviewList />
+                        <InterviewList hostEmail={firebaseAuth.currentUser.email}/>
 
                         <Segment basic floated='right'>
                             <InterviewForm type='create'/>
