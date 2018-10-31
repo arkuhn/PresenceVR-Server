@@ -12,24 +12,23 @@ var config = {
 
 firebase.initializeApp(config);
 
-export var user = '';
-export var isAuthenticated = false;
 export const firebaseAuth = firebase.auth();
 const googleProvider = new firebase.auth.GoogleAuthProvider();
+var loading = false;
 
 export function loginWithGoogle() {
+    loading = true;
     return firebaseAuth.signInWithRedirect(googleProvider)
     .then((result) => {
-        isAuthenticated = true;
+        loading = false;
         // This gives you a Google Access Token. You can use it to access the Google API.
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
-        console.log('here')
-        console.log(user)
-        console.log(isAuthenticated)
+
     })
     .catch((err) => {
+        loading = false;
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -42,5 +41,9 @@ export function loginWithGoogle() {
 
 export function logout() {
     return firebaseAuth.signOut();
+}
+
+export function isLoading() {
+    return loading;
 }
 

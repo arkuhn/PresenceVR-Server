@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './LoginPage.css';
 import { Link, Redirect } from 'react-router-dom';
 import { Button, Header, Icon, Grid, Image, Card, Segment, Divider } from 'semantic-ui-react';
-import {loginWithGoogle, firebaseAuth} from "../../utils/firebase";
+import {loginWithGoogle, isLoading, firebaseAuth} from "../../utils/firebase";
 
 class LoginPage extends Component {
 
@@ -26,7 +26,7 @@ class LoginPage extends Component {
             return <Redirect to='/home' />
         }
         return (
-            <div class="LoginPage">
+            <div>
                 <Grid centered>
                 <Grid.Row/>
                     {/* Header */}
