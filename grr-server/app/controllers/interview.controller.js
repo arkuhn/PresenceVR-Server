@@ -3,6 +3,7 @@ var  firebase  = require('../../firebase')
 
 exports.create = function(req, res) {
     if (!req.headers.authorization || !firebase.authenticateToken(req.headers.authorization)) {
+        console.log('Unauthenticated request received')
         return res.status(500).send({message: "Some error occurred while creating the interview."}); 
     }
 
@@ -31,6 +32,7 @@ exports.create = function(req, res) {
 
 exports.delete = function(req, res) {
     if (!req.headers.authorization || !firebase.authenticateToken(req.headers.authorization)) {
+        console.log('Unauthenticated request received')
         return res.status(500).send({message: "Some error occurred while deleting the interview."}); 
     }
     Interview.findOneAndDelete({'_id': req.body.id}, function(err, interview) { 
@@ -46,6 +48,7 @@ exports.delete = function(req, res) {
 
 exports.update = function(req, res) {
     if (!req.headers.authorization || !firebase.authenticateToken(req.headers.authorization)) {
+        console.log('Unauthenticated request received')
         return res.status(500).send({message: "Some error occurred while updating interview."}); 
     }
     const updatedInterview = {
@@ -72,6 +75,7 @@ exports.update = function(req, res) {
 
 exports.findAll = function(req, res) {
     if (!req.headers.authorization || !firebase.authenticateToken(req.headers.authorization)) {
+        console.log('Unauthenticated request received')
         return res.status(500).send({message: "Some error occurred while retrieving interviews."}); 
     }
 
