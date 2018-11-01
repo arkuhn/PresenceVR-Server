@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
-import { Button, Header, Card, Grid, Modal, List, Input, Image, Divider } from 'semantic-ui-react';
+import { Button, Header, Card, Grid, Modal, List, Input, Image, Loader, Dimmer } from 'semantic-ui-react';
 import InterviewAPI from '../../utils/InterviewAPI';
 import Interview from '../InterviewCard/interview'
 import InterviewForm from '../InterviewCard/InterviewForm';
@@ -12,15 +12,18 @@ class InterviewList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            interviews: []
+            interviews: [],
+            loading: false
         }
         this.updateList = this.updateList.bind(this);
         this.populateList = this.populateList.bind(this);
     }
 
     updateList() {
-        InterviewAPI.getAllInterviews(this.props.hostEmail).then((interviews) => {
+        this.setState({loading: true})
+        InterviewAPI.getAllInterviews(this.props.hostEmail).then((interviews) => {  
             this.setState({interviews: interviews.data});
+            this.setState({loading: false})
         });
     }
 
@@ -29,6 +32,15 @@ class InterviewList extends Component {
     }
 
     populateList() {
+        if (this.state.loading) {
+            return (<div>
+                <br/>
+                <br/>
+                <Dimmer active inverted>
+                    <Loader> Loading schedule </Loader>
+                </Dimmer>
+            </div>)
+        }
         if (this.state.interviews.length === 0) {
             return (
             <List.Item>
