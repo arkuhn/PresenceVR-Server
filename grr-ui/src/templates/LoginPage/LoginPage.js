@@ -22,7 +22,7 @@ class LoginPage extends Component {
     }
 
     render() {
-        if (this.state.loggedIn) {
+        if (this.state.loggedIn || firebaseAuth.currentUser) {
             return <Redirect to='/home' />
         }
         return (

@@ -37,7 +37,7 @@ class Participants extends Component {
     render() {
         const css = ` 
         .ParticipantsList {
-            height: 80%;
+            height: 700px;
             overflow:scroll;
             max-width: 100%;
             overflow-x: hidden;

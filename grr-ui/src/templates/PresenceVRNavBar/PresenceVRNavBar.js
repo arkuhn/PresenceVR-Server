@@ -31,7 +31,7 @@ class PresenceVRNavBar extends Component {
                         <List.Content>
                             <List.Header>Username</List.Header>
                             <List.Description>
-                            test1234@rit.edu
+                            {firebaseAuth.currentUser.email}
                             </List.Description>
                         </List.Content>
                     </List.Item>
