@@ -21,6 +21,13 @@ class InterviewCard extends Component {
     }
 
     populateParticipantList() {
+        if (this.props.participants.length === 0) {
+            return (
+                <List.Item>
+                    No participants added!
+                </List.Item>
+            )
+        }
         return this.props.participants.map((participant) => {
             return (
                 <List.Item>

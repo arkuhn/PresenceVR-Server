@@ -4,18 +4,19 @@ var  firebase  = require('../../firebase')
 exports.create = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
+
+            let participants = (req.body.data.participants)
             var interview = new Interview({
                 host: email,
                 details: req.body.data.details,
                 occursOnDate: req.body.data.occursOnDate,
                 occursAtTime: req.body.data.occursAtTime,
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                participants: req.body.data.participants.split(','),
+                participants: participants.split(','),
                 loadedAssets: ['test.asset'],
                 loadedEnvironments: ['test.env']
                 
             });
-
             interview.save(function(err, data) {
                 if(err) {
                     console.log(err);
@@ -49,14 +50,14 @@ exports.delete = function(req, res) {
 exports.update = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
-            console.log(req.body.data)
+            let participants = (req.body.data.participants)
             const updatedInterview = {
                 host: email,
                 details: req.body.data.details,
                 occursOnDate: req.body.data.occursOnDate,
                 occursAtTime: req.body.data.occursAtTime,
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                participants: req.body.data.participants,
+                participants: participants.split(','),
                 loadedAssets: ['test.asset'],
                 loadedEnvironments: ['test.env']
             }

@@ -28,7 +28,7 @@ class InterviewForm extends React.Component {
             this.state = {
                 dateValue: props.date,
                 timeValue: props.time,
-                participantsValue: props.participants,
+                participantsValue: props.participants.join(),
                 detailsValue: props.details,
                 id: props.id,
                 modalOpen: false
