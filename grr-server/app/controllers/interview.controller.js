@@ -10,7 +10,7 @@ exports.create = function(req, res) {
                 occursOnDate: req.body.data.occursOnDate,
                 occursAtTime: req.body.data.occursAtTime,
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                participants: req.body.data.participants,
+                participants: req.body.data.participants.split(','),
                 loadedAssets: ['test.asset'],
                 loadedEnvironments: ['test.env']
                 
@@ -30,9 +30,10 @@ exports.create = function(req, res) {
 };
 
 exports.delete = function(req, res) {
+    console.log(req.headers)
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
-            Interview.findOneAndDelete({'_id': req.body.id}, function(err, interview) { 
+            Interview.findOneAndDelete({'_id': req.headers.id}, function(err, interview) { 
                 if(err) {
                     console.log(err);
                     res.status(500).send({message: "Some error occurred while deleting the Interview."});
@@ -54,7 +55,7 @@ exports.update = function(req, res) {
                 occursOnDate: req.body.data.occursOnDate,
                 occursAtTime: req.body.data.occursAtTime,
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                participants: req.body.data.participants,
+                participants: req.body.data.participants.split(','),
                 loadedAssets: ['test.asset'],
                 loadedEnvironments: ['test.env']
             }

@@ -5,13 +5,16 @@ var _ = require("lodash");
     
 
 function getInterview(id){
-    return axios.get(API_URL + `/api/interview/${id}`).then((response) => {
-        console.log('got a result');
-        console.log(response);
-        return response;
-    }).catch((error) => {
-        console.log(error);
-    });
+    return firebaseAuth.currentUser.getIdToken(true).then((token) => {
+        let config = {headers: {Authorization: `${token}`}};
+        return axios.get(API_URL + `/api/interview/${id}`, config).then((response) => {
+            console.log('got a result');
+            console.log(response);
+            return response;
+        }).catch((error) => {
+            console.log(error);
+        })
+    })
 }
 
 //Takes in an interview object
@@ -58,10 +61,10 @@ function updateInterview(data){
 }
 
 //will work same as interview object
-function deleteInterview(data){
+function deleteInterview(id){
     return firebaseAuth.currentUser.getIdToken(true).then((token) => {
-        let config = {headers: {Authorization: `${token}`}};
-        return axios.delete(API_URL + `/api/interviews/`, { data }, config).then((response) => {
+        let config = {headers: {Authorization: `${token}`, id }};
+        return axios.delete(API_URL + `/api/interviews/`, config).then((response) => {
             console.log('Delete interview result');
             console.log(response);
             return response;

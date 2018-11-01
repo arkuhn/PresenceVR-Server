@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Button, Header, Card, Grid, Modal, List, Input, Image, Loader, Dimmer } from 'semantic-ui-react';
 import InterviewAPI from '../../utils/InterviewAPI';
-import Interview from '../InterviewCard/interview'
+import InterviewCard from '../InterviewCard/interviewCard'
 import InterviewForm from '../InterviewCard/InterviewForm';
 import _ from 'lodash';
+import { firebaseAuth } from '../../utils/firebase';
 
 
 class InterviewList extends Component {
@@ -49,20 +50,23 @@ class InterviewList extends Component {
             </List.Content>
             </List.Item>)
         }
-        
-        const faces = ['https://react.semantic-ui.com/images/avatar/large/steve.jpg', 'https://react.semantic-ui.com/images/avatar/large/molly.png',
-            'https://react.semantic-ui.com/images/avatar/large/jenny.jpg'];
-        
+    
         return this.state.interviews.map((interview) => {
+            let face = '';
+            let hosting = false;
+            if (interview.host === firebaseAuth.currentUser.email) {
+                face = firebaseAuth.currentUser.photoURL;
+                hosting = true;
+            }
             return  (  
-                <Interview participants={interview.participants.join()} 
+                <InterviewCard participants={interview.participants} 
                                 details={interview.details}
                                 date={interview.occursOnDate} 
                                 time={interview.occursAtTime}
-                                image={faces[Math.floor(Math.random() * 2) + 1]} 
+                                image={face} 
                                 icon='calendar alternate outline'
                                 id={interview._id}
-                                host={interview.host} />
+                                host={hosting} />
             )
         })
     }
