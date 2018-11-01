@@ -21,17 +21,16 @@ function Participant(props) {
 class Participants extends Component {
     constructor(props) {
         super(props);
-        this.state = {participants: props.participants};
-        console.log("State of participants: " + this.state.participants)
     }
 
     generateParticipants() {
         const statuses = ["Online", "Offline"]
-        return <Participant name={this.state.participants} status={statuses[Math.floor(Math.random() * 2)]}/>
-    }
-
-    componentWillReceiveProps(props) {
-        this.setState({participants: props.participants});
+        if (this.props.participants.length === 0) {
+            return <p> No particpants added!</p>
+        }
+        return this.props.participants.map((participant) => {
+            return <Participant name={participant} status={statuses[Math.floor(Math.random() * 2)]}/>
+        })
     }
 
     render() {
