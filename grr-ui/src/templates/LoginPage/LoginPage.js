@@ -1,12 +1,32 @@
 import React, { Component } from 'react';
 import './LoginPage.css';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Button, Header, Icon, Grid, Image, Card, Segment, Divider } from 'semantic-ui-react';
+import {loginWithGoogle, firebaseAuth} from "../../utils/firebase";
 
 class LoginPage extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            loggedIn: false
+        }
+    }
+
+    componentDidMount() {
+        firebaseAuth.onAuthStateChanged((user) => {
+            if (user){
+                this.setState({loggedIn: true})
+            }
+        })
+    }
+
     render() {
+        if (this.state.loggedIn || firebaseAuth.currentUser) {
+            return <Redirect to='/home' />
+        }
         return (
-            <div class="LoginPage">
+            <div>
                 <Grid centered>
                 <Grid.Row/>
                     {/* Header */}
@@ -31,7 +51,7 @@ class LoginPage extends Component {
                             <Icon name='user' /> Log-in to your account
                             </Header>
 
-                            <Button as={Link} to="/home" fluid size='medium' basic color='red'>
+                            <Button onClick={loginWithGoogle} fluid size='medium' basic color='red'>
                                 <Icon name='google' />
                                 Login with Google
                             </Button>

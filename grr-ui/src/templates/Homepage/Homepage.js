@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './Homepage.css';
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import InterviewList from "./interviewList"
 import InterviewForm from '../InterviewCard/InterviewForm'
 import { Button, Header, Icon, Grid, Segment, Menu, List, Card, Popup, Divider} from 'semantic-ui-react';
+import {firebaseAuth} from '../../utils/firebase'
 
 class Homepage extends Component {
     
@@ -13,6 +14,9 @@ class Homepage extends Component {
     }
 
     render() {
+        if (!firebaseAuth.currentUser) {
+            return <Redirect to='/' />
+        }
         return (
             <div className="Homepage">
                 <PresenceVRNavBar/>
@@ -35,7 +39,7 @@ class Homepage extends Component {
                             </Header>
                         </Grid.Row>
                         
-                        <InterviewList />
+                        <InterviewList hostEmail={firebaseAuth.currentUser.email}/>
 
                         <Segment basic floated='right'>
                             <InterviewForm type='create'/>

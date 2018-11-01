@@ -13,7 +13,7 @@ module.exports = function(app) {
     app.get('/api/interviews/:host', interviews.findAll);
 
     // Retrieve a single interview with interviewId
-    //app.get('/api/interviews/', interviews.findOne);
+    app.get('/api/interview/:id', interviews.findOne);
     
     // Update a interview with interviewId
     app.put('/api/interviews/', interviews.update);

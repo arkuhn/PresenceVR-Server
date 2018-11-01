@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './PresenceVRNavBar.css';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { Menu, Header, Button, Modal, Dropdown, Icon, List, Segment } from 'semantic-ui-react';
+import {logout, firebaseAuth} from '../../utils/firebase'
 
 class PresenceVRNavBar extends Component {
 
@@ -12,6 +13,11 @@ class PresenceVRNavBar extends Component {
 
     handleItemClick (e, { name }) {
         this.setState({ activeItem: name })
+    }
+
+    handleLogOut() {
+        logout()
+        window.location.reload();
     }
 
     accountButton () {
@@ -25,13 +31,13 @@ class PresenceVRNavBar extends Component {
                         <List.Content>
                             <List.Header>Username</List.Header>
                             <List.Description>
-                            test1234@rit.edu
+                            {firebaseAuth.currentUser.email}
                             </List.Description>
                         </List.Content>
                     </List.Item>
                     </List>
                 <br/>
-                    <Button as={Link} to="/" fluid>Log out</Button>
+                    <Button onClick={this.handleLogOut} fluid>Log out</Button>
                 </Modal.Content>
             </Modal>
         );
