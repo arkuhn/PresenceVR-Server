@@ -5,14 +5,17 @@ exports.create = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
 
-            let participants = (req.body.data.participants)
+            let participants = (req.body.data.participants).split(',')
+            if (participants.length === 1 && participants[0] === '') {
+                participants = []
+            }
             var interview = new Interview({
                 host: email,
                 details: req.body.data.details,
                 occursOnDate: req.body.data.occursOnDate,
                 occursAtTime: req.body.data.occursAtTime,
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                participants: participants.split(','),
+                participants: participants,
                 loadedAssets: ['test.asset'],
                 loadedEnvironments: ['test.env']
                 
@@ -50,14 +53,17 @@ exports.delete = function(req, res) {
 exports.update = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
-            let participants = (req.body.data.participants)
+            let participants = (req.body.data.participants).split(',')
+            if (participants.length === 1 && participants[0] === '') {
+                participants = []
+            }
             const updatedInterview = {
                 host: email,
                 details: req.body.data.details,
                 occursOnDate: req.body.data.occursOnDate,
                 occursAtTime: req.body.data.occursAtTime,
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                participants: participants.split(','),
+                participants: participants,
                 loadedAssets: ['test.asset'],
                 loadedEnvironments: ['test.env']
             }

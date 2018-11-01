@@ -21,7 +21,7 @@ class InterviewCard extends Component {
     }
 
     populateParticipantList() {
-        if (this.props.participants.length === 0) {
+        if ((this.props.participants).length === 0) {
             return (
                 <List.Item>
                     No participants added!
