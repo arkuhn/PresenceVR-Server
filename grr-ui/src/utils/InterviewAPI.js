@@ -4,6 +4,16 @@ import { firebaseAuth } from './firebase'
 var _ = require("lodash");
     
 
+function getInterview(id){
+    return axios.get(API_URL + `/api/interview/${id}`).then((response) => {
+        console.log('got a result');
+        console.log(response);
+        return response;
+    }).catch((error) => {
+        console.log(error);
+    });
+}
+
 //Takes in an interview object
 function createInterview(data){
     return firebaseAuth.currentUser.getIdToken(true).then((token) => {
@@ -62,5 +72,5 @@ function deleteInterview(data){
 }
 
 export default {
-    createInterview, getAllInterviews, updateInterview, deleteInterview
+    getInterview, createInterview, getAllInterviews, updateInterview, deleteInterview
 }

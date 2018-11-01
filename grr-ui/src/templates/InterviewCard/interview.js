@@ -30,7 +30,7 @@ class Interview extends Component {
                         <Divider />
                         <Card.Content extra>
                             <div className='ui three buttons'>
-                                <Button as={Link} to="/interview" basic color='green'>
+                                <Button as={Link} to={"/interview/" + this.state.id} basic color='green'>
                                     Join
                                 </Button>
 
@@ -56,7 +56,7 @@ class Interview extends Component {
                         <Divider />
                         <Card.Content extra>
                             <div className='ui three buttons'>
-                                <Button as={Link} to="/interview" basic color='green'>
+                                <Button as={Link} to={"/interview/" + this.state.id} basic color='green'>
                                     Join
                                 </Button>
 

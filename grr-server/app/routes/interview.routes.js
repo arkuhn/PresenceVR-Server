@@ -11,6 +11,9 @@ module.exports = function(app) {
 
     // Retrieve all interviews
     app.get('/api/interviews/:host', interviews.findAll);
+
+    // Retrieve a single interview with interviewId
+    app.get('/api/interview/:id', interviews.findOne);
     
     // Update a interview with interviewId
     app.put('/api/interviews/', interviews.update);

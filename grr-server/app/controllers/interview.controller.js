@@ -72,6 +72,24 @@ exports.update = function(req, res) {
     })
 };
 
+exports.findOne = function(req, res) {
+    Interview.findOne({'_id': req.params.id}, function(err, interview) {
+        if(err) {
+            console.log(err);
+            if(err.kind === 'ObjectId') {
+                return res.status(404).send({message: "Interview not found with id " + req.params.id});
+            }
+            return res.status(500).send({message: "Error retrieving interview with id " + req.params.id});
+        }
+
+        if(!interview) {
+            return res.status(404).send({message: "Room not found with id " + req.params.id});
+        }
+
+        res.send(interview);
+    });
+};
+
 exports.findAll = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
