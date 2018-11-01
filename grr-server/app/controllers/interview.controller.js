@@ -49,13 +49,14 @@ exports.delete = function(req, res) {
 exports.update = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
+            console.log(req.body.data)
             const updatedInterview = {
-                host: req.body.data.host,
+                host: email,
                 details: req.body.data.details,
                 occursOnDate: req.body.data.occursOnDate,
                 occursAtTime: req.body.data.occursAtTime,
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                participants: req.body.data.participants.split(','),
+                participants: req.body.data.participants,
                 loadedAssets: ['test.asset'],
                 loadedEnvironments: ['test.env']
             }
