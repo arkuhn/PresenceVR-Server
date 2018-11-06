@@ -9,6 +9,7 @@ import ChatPane from "./chat";
 import { Grid, Header, Divider, Icon, Button } from 'semantic-ui-react';
 import InterviewAPI from "../../utils/InterviewAPI";
 import {firebaseAuth} from '../../utils/firebase'
+import './a-frame.css'
 
 class InterviewPage extends Component {
     constructor(props) {
@@ -36,8 +37,24 @@ class InterviewPage extends Component {
     }
 
     aframe() {
+        const css = ` 
+        .aframeComponent {
+            height:250px;
+            overflow:scroll;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        `
+
         return (
+            <div>
             <Header as='h3'>Aframe</Header>
+            <a-scene className='aframeComponent' embedded> 
+                <a-entity id="box" geometry="primitive: box" material="color: red"></a-entity>
+            </a-scene>
+            <style>{css}</style>  
+            </div>
+            
         );
     }
 
