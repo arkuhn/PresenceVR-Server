@@ -6,11 +6,10 @@ import Environments from "./environments";
 import Assets from "./assets";
 import Participants from "./participants";
 import ChatPane from "./chat";
-import AframeInterview from "./aframeInterviewInterview"
+import AframeInterview from "./aframeInterview"
 import { Grid, Header, Divider, Icon, Button } from 'semantic-ui-react';
 import InterviewAPI from "../../utils/InterviewAPI";
 import {firebaseAuth} from '../../utils/firebase'
-import './a-frame.css'
 
 class InterviewPage extends Component {
     constructor(props) {
