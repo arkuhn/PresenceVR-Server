@@ -6,6 +6,7 @@ import Environments from "./environments";
 import Assets from "./assets";
 import Participants from "./participants";
 import ChatPane from "./chat";
+import AframeInterview from "./aframeInterviewInterview"
 import { Grid, Header, Divider, Icon, Button } from 'semantic-ui-react';
 import InterviewAPI from "../../utils/InterviewAPI";
 import {firebaseAuth} from '../../utils/firebase'
@@ -34,28 +35,6 @@ class InterviewPage extends Component {
 
     componentDidMount() {
         this.updateInterview()
-    }
-
-    aframe() {
-        const css = ` 
-        .aframeComponent {
-            height:250px;
-            overflow:scroll;
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-        `
-
-        return (
-            <div>
-            <Header as='h3'>Aframe</Header>
-            <a-scene className='aframeComponent' embedded> 
-                <a-entity id="box" geometry="primitive: box" material="color: red"></a-entity>
-            </a-scene>
-            <style>{css}</style>  
-            </div>
-            
-        );
     }
 
     configuration() {
@@ -115,7 +94,7 @@ class InterviewPage extends Component {
                     <Grid.Column width={8}>
                         {/* Browser mode */}
                         <Grid.Row>
-                            {this.aframe()}
+                            <AframeInterview />
                         </Grid.Row>
                         
                         <Divider/>
