@@ -11,10 +11,11 @@ class AframeInterview extends Component {
 
     render() {
         return (
-            <div>
+            <div className="aframeContainer">
             <Header as='h3'>Aframe</Header>
             <a-scene className='aframeComponent' embedded> 
                 <a-entity id="box" geometry="primitive: box" material="color: red"></a-entity>
+                <a-entity environment="preset: forest; dressingAmount: 500"></a-entity>
             </a-scene>
             </div>
         )

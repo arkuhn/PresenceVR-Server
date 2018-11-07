@@ -94,6 +94,8 @@ class InterviewPage extends Component {
                         {/* Browser mode */}
                         <Grid.Row>
                             <AframeInterview />
+                            <br/>
+                            <br/>
                         </Grid.Row>
                         
                         <Divider/>
