@@ -37,6 +37,16 @@ exports.delete = function(req, res) {
     console.log(req.headers)
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
+            console.log(req.headers.authorization)
+            Interview.findOne({'_id': req.headers.id}, function(err, interview) {
+                console.log("Validating Interview:")
+                console.log(interview.host)
+                if(interview.host != email){
+                    console.log("Invalid Host Email")
+                    res.status(401).send("Invalid Host Email")
+                    return
+                }
+            })
             Interview.findOneAndDelete({'_id': req.headers.id}, function(err, interview) { 
                 if(err) {
                     console.log(err);
