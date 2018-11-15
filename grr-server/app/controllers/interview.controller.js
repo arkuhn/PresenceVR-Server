@@ -1,6 +1,19 @@
 var Interview = require('../models/interview.model.js');
 var  firebase  = require('../../firebase')
 
+function userIsHost(id, email) {
+    Interview.findOne({'_id': id}, function(err, interview) {
+        console.log("Validating Interview:")
+        console.log(interview.host)
+        if(interview.host != email){
+            console.log("Invalid Host Email")
+            return false
+        }
+    })
+    return true;
+}
+
+
 exports.create = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
@@ -37,15 +50,19 @@ exports.delete = function(req, res) {
     console.log(req.headers)
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
-            Interview.findOneAndDelete({'_id': req.headers.id}, function(err, interview) { 
-                if(err) {
-                    console.log(err);
-                    res.status(500).send({message: "Some error occurred while deleting the Interview."});
-                } else {
-                    console.log('Interview deleted')
-                    res.send(interview);
-                }
-            })
+            if(userIsHost(req.headers.id, email)) {
+                Interview.findOneAndDelete({'_id': req.headers.id}, function(err, interview) { 
+                    if(err) {
+                        console.log(err);
+                        res.status(500).send({message: "Some error occurred while deleting the Interview."});
+                    } else {
+                        console.log('Interview deleted');
+                        res.send(interview);
+                    }
+                })
+            } else {
+                res.status(403).send('Forbidden: Invalid Host Email');
+            }
         }
     })
 };
@@ -53,30 +70,34 @@ exports.delete = function(req, res) {
 exports.update = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
-            let participants = (req.body.data.participants).split(',')
-            if (participants.length === 1 && participants[0] === '') {
-                participants = []
-            }
-            const updatedInterview = {
-                host: email,
-                details: req.body.data.details,
-                occursOnDate: req.body.data.occursOnDate,
-                occursAtTime: req.body.data.occursAtTime,
-                scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                participants: participants,
-                loadedAssets: ['test.asset'],
-                loadedEnvironments: ['test.env']
-            }
-            
-            Interview.findByIdAndUpdate({'_id': req.body.data.id}, updatedInterview, function(err, interview) { 
-                if(err) {
-                    console.log(err);
-                    res.status(500).send({message: "Some error occurred while updating the Interview."});
-                } else {
-                    console.log('Interview updated')
-                    res.send(interview);
+            if(userIsHost(req.body.data.id)) {
+                let participants = (req.body.data.participants).split(',')
+                if (participants.length === 1 && participants[0] === '') {
+                    participants = []
                 }
-            })
+                const updatedInterview = {
+                    host: email,
+                    details: req.body.data.details,
+                    occursOnDate: req.body.data.occursOnDate,
+                    occursAtTime: req.body.data.occursAtTime,
+                    scheduledOnDate: new Date().toLocaleDateString("en-US"),
+                    participants: participants,
+                    loadedAssets: ['test.asset'],
+                    loadedEnvironments: ['test.env']
+                }
+                
+                Interview.findByIdAndUpdate({'_id': req.body.data.id}, updatedInterview, function(err, interview) { 
+                    if(err) {
+                        console.log(err);
+                        res.status(500).send({message: "Some error occurred while updating the Interview."});
+                    } else {
+                        console.log('Interview updated')
+                        res.send(interview);
+                    }
+                })
+            } else {
+                res.status(403).send('Forbidden: Invalid Host Email');
+            }
         }
     })
 };
@@ -102,7 +123,7 @@ exports.findOne = function(req, res) {
 exports.findAll = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
-            Interview.find({'host': req.params.host}, function(err, interviews){
+            Interview.find({$or: [{'host': req.params.host}, {'participants': req.params.host}]}, function(err, interviews){
                 if(err){
                     console.log(err)
                     return res.status(500).send({message: "Some error occurred while retrieving interviews."});
