@@ -74,6 +74,20 @@ function deleteInterview(id){
     })
 }
 
+//remove the current participant from the interview
+function leaveInterview(id){
+    return firebase.currentUser.getIdToken(true).then((token) => {
+        let config = {headers: {Authorization: `${token}`, id }};
+        return axios.patch(API_URL + `/api/interviews/${id}`, config).then((response) => {
+            console.log('Removing participant from interview');
+            console.log(response);
+            return response;
+        }).catch((error) => {
+            console.log(error);
+        });
+    });
+}
+
 export default {
     getInterview, createInterview, getAllInterviews, updateInterview, deleteInterview
 }
