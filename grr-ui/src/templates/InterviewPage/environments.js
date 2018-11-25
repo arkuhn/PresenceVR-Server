@@ -57,16 +57,11 @@ class Environments extends Component {
         )    
     }
     generateEnvironments() {
-        const numOfEnvironments = Math.floor(Math.random() * 15) + 1
-        for (let i = 0; i < numOfEnvironments; i++) { 
-            const Environment = ({
-                name: `Environment ${i}`,
-                date: `8/${i}/18`
-            })
-            this.environments.push(Environment)
+        if (this.props.environments.length === 0) {
+            return <p> No environments added!</p>
         }
         return this.environments.map((environment) => {
-            return <Environment name={environment.name} date={environment.date} icon='image outline'/>
+            return <Environment name={environment.name} date={'0/0/00'} icon='image outline'/>
         })
     }
 
