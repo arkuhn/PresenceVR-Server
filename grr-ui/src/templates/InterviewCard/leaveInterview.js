@@ -18,19 +18,8 @@ class LeaveInterview extends React.Component {
     }
 
     handleSubmit(event) {
-        console.log('SUBMIT');
-        InterviewAPI.getInterview(this.props.id).then((data) => {
-            console.log(data);
-            let interview = data.data;
-            interview.participants = interview.participants.filter(function(value, index, arr) {
-                return value != firebaseAuth.currentUser.email;
-            });
-            interview.id = this.props.id;
-            interview.participants = interview.participants.join(',');
-            console.log(interview);
-            InterviewAPI.updateInterview(interview).then(() => window.location.reload())
-        });
-        this.setState({ modalOpen: false })
+        InterviewAPI.leaveInterview(this.props.id).then(() => window.location.reload());
+        this.setState({ modalOpen: false });
         event.preventDefault();
     }
 
