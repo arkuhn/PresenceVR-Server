@@ -131,7 +131,7 @@ class InterviewList extends Component {
                         <Grid.Column width={8}>
                             <Header as='h2'>
                                 <Header.Content>
-                                    Non-Hosted Interviews
+                                    Participating Interviews
                                 </Header.Content>
                             </Header>
                             <Divider />
