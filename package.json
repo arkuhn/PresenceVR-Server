@@ -12,6 +12,8 @@
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "express-force-ssl": "^0.3.2",
+    "filepond": "^3.3.2",
+    "filepond-plugin-image-preview": "^3.1.4",
     "firebase": "^5.5.6",
     "firebase-admin": "^6.1.0",
     "mongoose": "^5.3.3",
@@ -21,6 +23,7 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-calendar": "^2.17.4",
     "react-dom": "^16.1.1",
+    "react-filepond": "^5.0.0",
     "request": "^2.83.0",
     "socket.io": "^2.0.4",
     "underscore": "1.5.x"

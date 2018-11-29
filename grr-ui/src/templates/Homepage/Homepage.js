@@ -6,6 +6,12 @@ import InterviewList from "./interviewList"
 import InterviewForm from '../InterviewCard/InterviewForm'
 import { Button, Header, Icon, Grid, Segment, Menu, List, Card, Popup, Divider} from 'semantic-ui-react';
 import {firebaseAuth} from '../../utils/firebase'
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+
+registerPlugin(FilePondPluginImagePreview);
 
 class Homepage extends Component {
     
@@ -32,6 +38,7 @@ class Homepage extends Component {
                                 <Icon name='calendar alternate outline' />
                                 <Header.Content>
                                         Interview Schedule
+                                        <FilePond />
                                     </Header.Content>
                                 
                                 
