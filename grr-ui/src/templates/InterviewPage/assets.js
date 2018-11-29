@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Header, Modal, List, Icon, Button, Divider } from 'semantic-ui-react';
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+
+registerPlugin(FilePondPluginImagePreview);
 
 function Asset(props) {
     return (
@@ -51,22 +57,18 @@ class Assets extends Component {
                         })}
                     </List>
                     <Divider />
-                    <Button onClick={this.handleModelClose} fluid>Load</Button>
+                    <FilePond />
+                    <Button onClick={this.handleModelClose} fluid>Close</Button>
                 </Modal.Content>
             </Modal>
         )    
     }
     generateAssets() {
-        const numOfAssets = Math.floor(Math.random() * 15) + 1
-        for (let i = 0; i < numOfAssets; i++) { 
-            const asset = ({
-                name: `Asset ${i}`,
-                date: `8/${i}/18`
-            })
-            this.assets.push(asset)
+        if (this.props.assets.length === 0) {
+            return <p> No environments added!</p>
         }
-        return this.assets.map((asset) => {
-            return <Asset name={asset.name} date={asset.date} icon='boxes'/>
+        return this.props.assets.map((asset) => {
+            return <Asset name={asset.name} date={'0/0/00'} icon='boxes'/>
         })
     }
 

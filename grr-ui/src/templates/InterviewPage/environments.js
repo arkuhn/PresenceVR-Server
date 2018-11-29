@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PresenceVRNavBar from "../PresenceVRNavBar/PresenceVRNavBar"
 import { Header, Modal, List, Icon, Button, Divider } from 'semantic-ui-react';
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond/dist/filepond.min.css';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+
+registerPlugin(FilePondPluginImagePreview);
 
 function Environment(props) {
     return (
@@ -51,22 +57,18 @@ class Environments extends Component {
                         })}
                     </List>
                     <Divider />
-                    <Button onClick={this.handleModelClose} fluid>Load</Button>
+                    <FilePond />
+                    <Button onClick={this.handleModelClose} fluid>Close</Button>
                 </Modal.Content>
             </Modal>
         )    
     }
     generateEnvironments() {
-        const numOfEnvironments = Math.floor(Math.random() * 15) + 1
-        for (let i = 0; i < numOfEnvironments; i++) { 
-            const Environment = ({
-                name: `Environment ${i}`,
-                date: `8/${i}/18`
-            })
-            this.environments.push(Environment)
+        if (this.props.environments.length === 0) {
+            return <p> No environments added!</p>
         }
-        return this.environments.map((environment) => {
-            return <Environment name={environment.name} date={environment.date} icon='image outline'/>
+        return this.props.environments.map((environment) => {
+            return <Environment name={environment.name} date={'0/0/00'} icon='image outline'/>
         })
     }
 
