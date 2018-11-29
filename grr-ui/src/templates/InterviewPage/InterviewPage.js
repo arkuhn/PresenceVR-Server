@@ -17,7 +17,7 @@ class InterviewPage extends Component {
         this.id = this.props.match.params.id;
         this.state = {interview: {
             participants: [],
-            environments: []
+            loadedEnvironments: []
         }}
 
         this.updateInterview = this.updateInterview.bind(this);
@@ -111,7 +111,7 @@ class InterviewPage extends Component {
                     <Grid.Column width={4}>
                         {/* Environments */}
                         <Grid.Row>
-                            <Environments environments={this.state.interview.environments}/>
+                            <Environments environments={this.state.interview.loadedEnvironments}/>
                         </Grid.Row>
                         <Divider/>
                         {/* Assets */}

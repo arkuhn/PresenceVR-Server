@@ -60,7 +60,7 @@ class Environments extends Component {
         if (this.props.environments.length === 0) {
             return <p> No environments added!</p>
         }
-        return this.environments.map((environment) => {
+        return this.props.environments.map((environment) => {
             return <Environment name={environment.name} date={'0/0/00'} icon='image outline'/>
         })
     }
