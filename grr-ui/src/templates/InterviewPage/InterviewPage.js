@@ -17,7 +17,8 @@ class InterviewPage extends Component {
         this.id = this.props.match.params.id;
         this.state = {interview: {
             participants: [],
-            loadedEnvironments: []
+            loadedEnvironments: [],
+            loadedAssets: []
         }}
 
         this.updateInterview = this.updateInterview.bind(this);
@@ -27,7 +28,9 @@ class InterviewPage extends Component {
         InterviewAPI.getInterview(this.id).then((data) => {
             console.log('got data');
             console.log(data.data);
-            this.setState({interview: data.data});
+            this.setState({
+                interview: data.data
+            });
         });
         console.log(this.state.interview);
         console.log("test");
@@ -116,7 +119,7 @@ class InterviewPage extends Component {
                         <Divider/>
                         {/* Assets */}
                         <Grid.Row>
-                            <Assets />
+                            <Assets assets={this.state.interview.loadedAssets}/>
                         </Grid.Row>
                     </Grid.Column>
                 </Grid>
