@@ -27,7 +27,7 @@
 1. Create a Firebase project [here](https://console.firebase.google.com/u/0/?pli=1)
 
 2. Navigate to the service accounts tab in the project settings
-   ![firebase_settings](.\docs\firebase_settings.JPG)
+   ![firebase_settings](/docs/firebase_settings.JPG)
 
 3. Use the 'Generate new private key' button to download a file called serviceAccountKey.json into /configs. 
 
@@ -37,11 +37,11 @@
 
 5.  Update the firebaseConfig in '/configs/index.js' to point to your firebase (this is also on the Service accounts tab)
 
-   ![firebase_url](.\docs\firebase_url.JPG)
+   ![firebase_url](/docs/firebase_url.JPG)
 
 6. Update the databaseConfig in '/configs/index.js' to point to your database
 
-   ![database_url](.\docs\database_url.JPG)
+   ![database_url](/docs/database_url.JPG)
 
 7. TODO: include STUN/TURN server set up
 
