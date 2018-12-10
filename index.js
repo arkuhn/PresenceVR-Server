@@ -8,7 +8,7 @@ var serveStatic = require('serve-static');  // serve static files
 let socketIo = require("socket.io");        // web socket external module
 var easyrtc = require('./lib/easyrtc_server');               // EasyRTC external module
 let request = require('request');
-const configs = require("./configs/configs");
+const { myIceConfig } = require('./configs');
 let env = require('node-env-file');
 env(__dirname + '/.env');
 var bodyParser = require('body-parser');
@@ -69,8 +69,8 @@ let options, socketServer, secureServer;
 
 if (prod) { 
     options = {
-        key:  fs.readFileSync(configs.https.key),
-        cert: fs.readFileSync(configs.https.cert)
+        key:  fs.readFileSync(myIceConfig.https.key),
+        cert: fs.readFileSync(myIceConfig.https.cert)
     }
 
     secureServer = https.createServer( options, app);
@@ -88,7 +88,7 @@ if (prod) {
 easyrtc.setOption("logLevel", "debug");
 
 
-easyrtc.on("getIceConfig", request.bind(this, configs.request, (error, response, body) => {
+easyrtc.on("getIceConfig", request.bind(this, myIceConfig.request, (error, response, body) => {
     if (!error && response.statusCode == 200) {
         let info = JSON.parse(body);
         console.log(info.v.iceServers);

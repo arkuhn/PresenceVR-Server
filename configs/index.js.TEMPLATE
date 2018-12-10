@@ -1,4 +1,4 @@
-const myIceConfigs = {
+const myIceConfig = {
   ident: "DtheSecond",
   domain: "https://global.xirsys.net",
   application: "MyFirstApp",
@@ -32,4 +32,14 @@ const myIceConfigs = {
   }
 }
 
-module.exports = myIceConfigs;
+const firebaseConfig = {
+  url: "myfirebaseurl.com"
+}
+
+const databaseConfig = {
+  url: 'mongodb://127.0.0.1/mydatabasename'
+}
+
+
+
+module.exports = { myIceConfig, firebaseConfig, databaseConfig };

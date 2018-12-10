@@ -1,7 +1,8 @@
 var admin = require('firebase-admin');
 var serviceAccount = require('./configs/serviceAccountKey.json');
-var databaseURL = require('./configs/firebase').url;
+const { firebaseConfig } = require('./configs')
 
+const databaseURL = firebaseConfig.url
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL

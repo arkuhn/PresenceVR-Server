@@ -1,9 +1,9 @@
 //database configs
-var dbConfig = require('./configs/database.config.js');
+const { databaseConfig } = require('./configs');
 var mongoose = require('mongoose');
 
 //database setup
-mongoose.connect(dbConfig.url, {});
+mongoose.connect(databaseConfig.url, {});
 
 var db = mongoose.connection;
 
