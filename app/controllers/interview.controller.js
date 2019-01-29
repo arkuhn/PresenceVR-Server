@@ -164,6 +164,7 @@ exports.findOne = function(req, res) {
 exports.findAll = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
+            //Need to be using authenticated email not paramter email
             Interview.find({$or: [{'host': req.params.host}, {'participants': req.params.host}]}, function(err, interviews){
                 if(err){
                     console.log(err)

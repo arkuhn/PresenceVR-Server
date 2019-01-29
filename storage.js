@@ -14,4 +14,4 @@ module.exports = multer({
     storage,
     limits:{fileSize: 1000000},
     fileFilter
-}).single("assetUpload")
+}).single("uploadedFile")

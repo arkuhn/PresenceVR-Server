@@ -1,4 +1,4 @@
-var Asset = require('../models/asset.model.js');
+var Upload = require('../models/upload.model.js');
 var  firebase  = require('../../firebase')
 var upload = require('../../storage')
 var fs = require('fs')
@@ -10,7 +10,7 @@ const moveFile = (req, res, email) => {
     let destination = path + req.files[0].filename
     mv(source, destination, {mkdirp: true}, function(err) {
         if (err) {
-            res.status(500).send({message: "Some error occurred while copying asset"});
+            res.status(500).send({message: "Some error occurred while copying upload"});
         }
     });
 }
@@ -22,25 +22,26 @@ exports.create = function(req, res) {
             upload(req, res, (err) => {
                 console.log(req)
                 if (err) {
-                    res.status(500).send({message: "Some error occurred while uploading asset."});
+                    res.status(500).send({message: "Some error occurred while uploading upload."});
                 }
             
                 //Move the file to 
                 console.log(req.files[0])
                 moveFile(req, res, email)
 
-                var asset = new Asset({
+                var upload = new Upload({
                     name: req.files[0].filename,
                     uploadedOnDate: Date.now(),
                     owner: email,   
-                    type: req.files[0].mimetype
+                    type: req.headers.type,
+                    filetype: req.files[0].mimetype
                 })
 
-                asset.save(function(err, data) {
+                upload.save(function(err, data) {
                     if (err) {
-                        res.status(500).send({message: "Some error occured saving asset model"})
+                        res.status(500).send({message: "Some error occured saving upload model"})
                     }
-                    console.log('Asset saved')
+                    console.log('Upload saved')
                 })
 
                 res.status(200).send({message: "File successfully uploaded"});                    
@@ -51,3 +52,21 @@ exports.create = function(req, res) {
 }
 
 
+exports.findAll = function(req, res) {
+    firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
+        if({ email, name}) { 
+            Upload.find({'owner': email}, function(err, uploads){
+                if(err){
+                    console.log(err)
+                    return res.status(500).send({message: "Some error occurred while retrieving uploads."});
+                }
+                else if(!uploads) {
+                    return res.status(404)
+                }
+                else {
+                    return res.send(uploads);
+                }
+            });
+        }
+    })
+}
