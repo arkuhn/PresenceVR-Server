@@ -70,3 +70,8 @@ exports.findAll = function(req, res) {
         }
     })
 }
+
+
+exports.delete = function(req, res) {
+    return res.status(200);
+}
