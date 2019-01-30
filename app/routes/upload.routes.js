@@ -8,6 +8,6 @@ module.exports = function(app) {
     app.get('/api/uploads', uploads.findAll);
 
     // Delete a specific upload by id
-    app.get('/api/uploads/:id', uploads.delete);
+    app.delete('/api/uploads/:id', uploads.delete);
 
 }

@@ -73,5 +73,6 @@ exports.findAll = function(req, res) {
 
 
 exports.delete = function(req, res) {
-    return res.status(200);
+    console.log('DELETING: ' + req.params.id)
+    return res.status(200).send(req.params.id);
 }
