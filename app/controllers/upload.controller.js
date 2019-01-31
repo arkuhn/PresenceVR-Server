@@ -96,3 +96,24 @@ exports.findOne = function(req, res) {
         }
     })
 };
+
+
+exports.delete = function(req, res) {
+    firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
+        if({ email, name}) { 
+            console.log("Recieved authenticated uploads delete by user: " + email);
+            Upload.findOneAndDelete({'owner': email, '_id': req.params.id}, function(err, upload){
+                if(err){
+                    console.log(err)
+                    return res.status(500).send({message: "Some error occurred while deleting upload."});
+                }
+                else if(!upload) {
+                    return res.status(404).send({message: "No upload found matching id and owner."});
+                }
+                else {
+                    return res.send(upload);
+                }
+            });
+        }
+    })
+};

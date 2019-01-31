@@ -7,4 +7,7 @@ module.exports = function(app) {
     // Retrieve all uploads
     app.get('/api/uploads', uploads.findAll);
 
+    // Delete a specific upload by id
+    app.delete('/api/uploads/:id', uploads.delete);
+
 }
