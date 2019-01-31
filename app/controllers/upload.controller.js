@@ -13,7 +13,7 @@ const moveFile = (req, res, email) => {
             res.status(500).send({message: "Some error occurred while copying upload"});
         }
     });
-}
+};
 
 exports.create = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
@@ -49,7 +49,7 @@ exports.create = function(req, res) {
             });
         }
     })
-}
+};
 
 
 exports.findAll = function(req, res) {
@@ -69,4 +69,30 @@ exports.findAll = function(req, res) {
             });
         }
     })
-}
+};
+
+exports.findOne = function(req, res) {
+    firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
+        if({ email, name}) { 
+            Upload.findOne({'_id': req.params.id}, function(err, upload) {
+                if(err) {
+                    console.log(err);
+                    if(err.kind === 'ObjectId') {
+                        return res.status(404).send({message: "Upload not found with id " + req.params.id});
+                    }
+                    return res.status(500).send({message: "Error retrieving upload with id " + req.params.id});
+                }
+
+                if(upload.owner != email) {
+                    return res.status(500).send({message: "Error retrieving upload with id " + req.params.id});
+                }
+
+                if(!upload) {
+                    return res.status(404).send({message: "Upload not found with id " + req.params.id});
+                }
+
+                return res.sendFIle(upload.fullpath, {root: '.'});
+            });
+        }
+    })
+};
