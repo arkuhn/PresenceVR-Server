@@ -181,7 +181,6 @@ exports.findAll = function(req, res) {
     })
 };
 
-
 exports.patchParticipants = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({email, name}) => {
         if({ email, name}) {
@@ -208,4 +207,32 @@ exports.patchParticipants = function(req, res) {
             });
         }
     });
+};
+
+exports.patchAssets = function(req, res) {
+    firebase.authenticateToken(req.headers.authorization).then(({email, name}) => {
+        if({ email, name}) {
+            Interview.findOne({'_id': req.params.id}, function(err, interview) {
+                if(err) {
+                    console.log(err);
+                    if(err.kind === 'ObjectId') {
+                        return res.status(404).send({message: "Interview not found with id " + req.params.id});
+                    }
+                    return res.status(500).send({message: "Error retrieving interview with id " + req.params.id});
+                }
+                else {
+                    interview.loadedAssets.push(req.params.assetId);
+                    Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
+                        if(err) {
+                            console.log(err);
+                            res.status(500).send({message: "Some error occurred while updating the Interview."});
+                        } else {
+                            console.log('Interview updated')
+                            res.send(interview);
+                        }
+                    });
+                }
+            });
+        }
+    })
 };

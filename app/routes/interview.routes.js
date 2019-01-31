@@ -21,4 +21,7 @@ module.exports = function(app) {
     // Patch an interview's participants list by removing the current user's email
     app.patch('/api/interviews/:id', interviews.patchParticipants);
 
+    // Patch an interview's assets list by updating the assets loaded to be rendered
+    app.patch('/api/interviews/:id/:assetId', interviews.patchAssets);
+
 }
