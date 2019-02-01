@@ -43,25 +43,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-//Disbale forceSsl in dev
-//app.use(forceSsl);
-//app.use(serveStatic('static', {'index': 'grr-ui/build/index.html'}));
-app.use(express.static(__dirname + "/../grr-ui/build/https/", {dotfiles:'allow'}));
-app.use(express.static(__dirname + "/../grr-ui/build/https2/", {dotfiles:'allow'}));
-app.use(express.static(__dirname + "/../grr-ui/build/", {dotfiles:'allow'}));
-app.use('/images', express.static(__dirname + "/../grr-server/uploads/"));
+
+app.use(express.static('uploads', {root : '.'}))
 
 require('./app/routes/room.routes')(app);
 require('./app/routes/interview.routes')(app);
 require('./app/routes/upload.routes')(app);
 
-app.get('*', function(req, res) {
-    res.sendFile(path.join(__dirname, '/../grr-ui/build/index.html'), function(err) {
-        if (err) {
-            res.status(500).send(err);
-        }
-    });
-})
+
+
 
 
 let httpServer = http.createServer(app);

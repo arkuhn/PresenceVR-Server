@@ -66,7 +66,7 @@ exports.create = function(req, res) {
                 occursAtTime: req.body.data.occursAtTime,
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
                 participants: participants,
-                loadedAssets: ['test.asset'],
+                loadedAssets: [],
                 loadedEnvironment: 'default'
                 
             });

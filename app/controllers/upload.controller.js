@@ -4,17 +4,6 @@ var upload = require('../../storage')
 var fs = require('fs')
 var mv = require('mv')
 
-const moveFile = (req, res, email) => {
-    let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/'
-    let source = './uploads/' + req.files[0].filename
-    let destination = path + req.files[0].filename
-    mv(source, destination, {mkdirp: true}, function(err) {
-        if (err) {
-            res.status(500).send({message: "Some error occurred while copying upload"});
-        }
-    });
-};
-
 exports.create = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) { 
@@ -27,14 +16,22 @@ exports.create = function(req, res) {
             
                 //Move the file to 
                 console.log(req.files[0])
-                moveFile(req, res, email)
+                let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/'
+                let source = './uploads/' + req.files[0].filename
+                let destination = path + req.files[0].filename
+                mv(source, destination, {mkdirp: true}, function(err) {
+                    if (err) {
+                        res.status(500).send({message: "Some error occurred while copying upload"});
+                    }
+                });
 
                 var upload = new Upload({
                     name: req.files[0].filename,
                     uploadedOnDate: Date.now(),
                     owner: email,   
                     type: req.headers.type,
-                    filetype: req.files[0].mimetype
+                    filetype: req.files[0].mimetype,
+                    fullpath: ('/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename)
                 })
 
                 upload.save(function(err, data) {
@@ -83,15 +80,17 @@ exports.findOne = function(req, res) {
                     return res.status(500).send({message: "Error retrieving upload with id " + req.params.id});
                 }
 
-                if(upload.owner != email) {
-                    return res.status(500).send({message: "Error retrieving upload with id " + req.params.id});
-                }
-
                 if(!upload) {
                     return res.status(404).send({message: "Upload not found with id " + req.params.id});
                 }
 
-                return res.sendFIle(upload.fullpath, {root: '.'});
+                if(upload.owner != email) {
+                    return res.status(500).send({message: "Error retrieving upload with id " + req.params.id});
+                }
+
+                
+
+                return res.send(upload)
             });
         }
     })
