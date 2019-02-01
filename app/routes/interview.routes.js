@@ -16,7 +16,7 @@ module.exports = function(app) {
     app.get('/api/interview/:id', interviews.findOne);
     
     // Update a interview with interviewId
-    app.put('/api/interviews/', interviews.update);
+    app.put('/api/interviews/:id', interviews.update);
 
     // Patch an interview's participants list by removing the current user's email
     app.patch('/api/interviews/:id', interviews.patchParticipants);

@@ -67,7 +67,7 @@ exports.create = function(req, res) {
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
                 participants: participants,
                 loadedAssets: ['test.asset'],
-                loadedEnvironments: ['test.env']
+                loadedEnvironment: 'default'
                 
             });
             interview.save(function(err, data) {
@@ -107,38 +107,32 @@ exports.delete = function(req, res) {
 exports.update = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
-            //if(userIsHost(req.body.data.id) || leavingInterview(req.body.data.id, email, req.body.data)) {
-                //if(leavingInterview(req.body.data.id, email, req.body.data)) {
-                //    email = req.body.data.host;
-                //}
-                console.log(req.body);
-                let participants = (req.body.data.participants).split(',')
-                if (participants.length === 1 && participants[0] === '') {
-                    participants = []
+            console.log(req.body)
+            var payload = req.body.data
+
+
+            //Handle the special case of participants
+            if (payload.participants) {
+                if (payload.participants.length === 1 && payload.participants[0] === '') {
+                    payload.participants = []
+                }   
+                payload.participants = payload.participants.split(',')
+            }
+
+            //Update multiple fields at once
+            if (Object.keys(req.body.data).length > 1){
+                payload = { $set: req.body.data }
+            }
+            
+            Interview.findOneAndUpdate({'_id': req.params.id}, payload, function(err, interview) { 
+                if(err) {
+                    console.log(err);
+                    res.status(500).send({message: "Some error occurred while updating the Interview."});
+                } else {
+                    console.log('Interview updated')
+                    res.send(interview);
                 }
-                const updatedInterview = {
-                    host: email,
-                    details: req.body.data.details,
-                    occursOnDate: req.body.data.occursOnDate,
-                    occursAtTime: req.body.data.occursAtTime,
-                    scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                    participants: participants,
-                    loadedAssets: ['test.asset'],
-                    loadedEnvironments: ['test.env']
-                }
-                
-                Interview.findByIdAndUpdate({'_id': req.body.data.id}, updatedInterview, function(err, interview) { 
-                    if(err) {
-                        console.log(err);
-                        res.status(500).send({message: "Some error occurred while updating the Interview."});
-                    } else {
-                        console.log('Interview updated')
-                        res.send(interview);
-                    }
-                })
-            //} else {
-            //    res.status(403).send('Forbidden: Invalid Host Email');
-            //}
+            })
         }
     })
 };
