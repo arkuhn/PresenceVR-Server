@@ -220,8 +220,19 @@ exports.patchAssets = function(req, res) {
                     }
                     return res.status(500).send({message: "Error retrieving interview with id " + req.params.id});
                 }
-                else {
-                    interview.loadedAssets.push(req.params.assetId);
+                else if(interview) {
+
+                    // Remove if asset is already loaded, otherwise add asset to list
+                    if(interview.loadedAssets.includes(req.params.assetId)) {
+                        console.log("Removing asset with id (" + req.params.assetId + ") from interview with id (" + req.params.id + ")");
+                        interview.loadedAssets = interview.loadedAssets.filter((value, index, arr) => {
+                            return (value != req.params.assetId);
+                        });
+                    }
+                    else {
+                        console.log("Adding asset with id (" + req.params.assetId + ") to interview with id (" + req.params.id + ")");
+                        interview.loadedAssets.push(req.params.assetId);
+                    }
                     Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
                         if(err) {
                             console.log(err);
@@ -231,6 +242,10 @@ exports.patchAssets = function(req, res) {
                             res.send(interview);
                         }
                     });
+                }
+                else {
+                    console.log("No interview found with id: " + re.params.id);
+                    return res.status(404).send({message: "Interview not found with id " + req.params.id});
                 }
             });
         }
