@@ -25,6 +25,8 @@
     "express-force-ssl": "^0.3.2",
     "firebase": "^5.7.0",
     "firebase-admin": "^6.3.0",
+    "gm": "^1.23.1",
+    "image-size": "^0.7.1",
     "mongoose": "^5.3.15",
     "multer": "^1.4.1",
     "mv": "^2.1.1",

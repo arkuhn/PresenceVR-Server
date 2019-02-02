@@ -3,19 +3,20 @@ var  firebase  = require('../../firebase')
 var upload = require('../../storage')
 var fs = require('fs')
 var mv = require('mv')
+var getSize = require('image-size');
+
 
 exports.create = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) { 
             console.log('Received authenticated file upload request')
             upload(req, res, (err) => {
-                console.log(req)
                 if (err) {
                     res.status(500).send({message: "Some error occurred while uploading upload."});
                 }
             
                 //Move the file to 
-                console.log(req.files[0])
+                //console.log(req.files[0])
                 let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/'
                 let source = './uploads/' + req.files[0].filename
                 let destination = path + req.files[0].filename
@@ -23,28 +24,33 @@ exports.create = function(req, res) {
                     if (err) {
                         res.status(500).send({message: "Some error occurred while copying upload"});
                     }
+                    getSize(path + req.files[0].filename, function (err, size) {
+                        if (err) {
+                            res.status(500).send({message: "Some error occured getting image size"})
+                        }
+
+                        var upload = new Upload({
+                            name: req.files[0].filename,
+                            uploadedOnDate: Date.now(),
+                            owner: email,   
+                            type: req.headers.type,
+                            filetype: req.files[0].mimetype,
+                            fullpath: ('/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename),
+                            height: size.height,
+                            width: size.width
+                        })
+    
+                        upload.save(function(err, data) {
+                            if (err) {
+                                res.status(500).send({message: "Some error occured saving upload model"})
+                            }
+                            console.log('Upload saved')
+                            res.status(200).send({message: "File successfully uploaded"});  
+                        })
+                      });
                 });
-
-                var upload = new Upload({
-                    name: req.files[0].filename,
-                    uploadedOnDate: Date.now(),
-                    owner: email,   
-                    type: req.headers.type,
-                    filetype: req.files[0].mimetype,
-                    fullpath: ('/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename)
-                })
-
-                upload.save(function(err, data) {
-                    if (err) {
-                        res.status(500).send({message: "Some error occured saving upload model"})
-                    }
-                    console.log('Upload saved')
-                })
-
-                res.status(200).send({message: "File successfully uploaded"});                    
-
-            });
-        }
+            })
+        }        
     })
 };
 

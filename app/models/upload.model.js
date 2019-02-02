@@ -6,7 +6,9 @@ var UploadSchema = new mongoose.Schema({
     owner: String,
     type: String,
     filetype: String,
-    fullpath: String
+    fullpath: String,
+    height: Number,
+    width: Number
 }, {
     timestamps: true
 });
