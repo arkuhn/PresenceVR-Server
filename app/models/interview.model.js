@@ -9,7 +9,7 @@ var InterviewSchema = new mongoose.Schema({
     scheduledOnDate: String,
     participants: [String],
     loadedAssets: [String],
-    loadedEnvironments: [String]
+    loadedEnvironment: String
 }, {
     timestamps: true
 });

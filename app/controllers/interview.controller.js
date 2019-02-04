@@ -66,8 +66,8 @@ exports.create = function(req, res) {
                 occursAtTime: req.body.data.occursAtTime,
                 scheduledOnDate: new Date().toLocaleDateString("en-US"),
                 participants: participants,
-                loadedAssets: ['test.asset'],
-                loadedEnvironments: ['test.env']
+                loadedAssets: [],
+                loadedEnvironment: 'default'
                 
             });
             interview.save(function(err, data) {
@@ -107,38 +107,32 @@ exports.delete = function(req, res) {
 exports.update = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
         if({ email, name}) {
-            //if(userIsHost(req.body.data.id) || leavingInterview(req.body.data.id, email, req.body.data)) {
-                //if(leavingInterview(req.body.data.id, email, req.body.data)) {
-                //    email = req.body.data.host;
-                //}
-                console.log(req.body);
-                let participants = (req.body.data.participants).split(',')
-                if (participants.length === 1 && participants[0] === '') {
-                    participants = []
+            console.log(req.body)
+            var payload = req.body.data
+
+
+            //Handle the special case of participants
+            if (payload.participants) {
+                if (payload.participants.length === 1 && payload.participants[0] === '') {
+                    payload.participants = []
+                }   
+                payload.participants = payload.participants.split(',')
+            }
+
+            //Update multiple fields at once
+            if (Object.keys(req.body.data).length > 1){
+                payload = { $set: req.body.data }
+            }
+            
+            Interview.findOneAndUpdate({'_id': req.params.id}, payload, function(err, interview) { 
+                if(err) {
+                    console.log(err);
+                    res.status(500).send({message: "Some error occurred while updating the Interview."});
+                } else {
+                    console.log('Interview updated')
+                    res.send(interview);
                 }
-                const updatedInterview = {
-                    host: email,
-                    details: req.body.data.details,
-                    occursOnDate: req.body.data.occursOnDate,
-                    occursAtTime: req.body.data.occursAtTime,
-                    scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                    participants: participants,
-                    loadedAssets: ['test.asset'],
-                    loadedEnvironments: ['test.env']
-                }
-                
-                Interview.findByIdAndUpdate({'_id': req.body.data.id}, updatedInterview, function(err, interview) { 
-                    if(err) {
-                        console.log(err);
-                        res.status(500).send({message: "Some error occurred while updating the Interview."});
-                    } else {
-                        console.log('Interview updated')
-                        res.send(interview);
-                    }
-                })
-            //} else {
-            //    res.status(403).send('Forbidden: Invalid Host Email');
-            //}
+            })
         }
     })
 };
@@ -181,7 +175,6 @@ exports.findAll = function(req, res) {
     })
 };
 
-
 exports.patchParticipants = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({email, name}) => {
         if({ email, name}) {
@@ -208,4 +201,47 @@ exports.patchParticipants = function(req, res) {
             });
         }
     });
+};
+
+exports.patchAssets = function(req, res) {
+    firebase.authenticateToken(req.headers.authorization).then(({email, name}) => {
+        if({ email, name}) {
+            Interview.findOne({'_id': req.params.id}, function(err, interview) {
+                if(err) {
+                    console.log(err);
+                    if(err.kind === 'ObjectId') {
+                        return res.status(404).send({message: "Interview not found with id " + req.params.id});
+                    }
+                    return res.status(500).send({message: "Error retrieving interview with id " + req.params.id});
+                }
+                else if(interview) {
+
+                    // Remove if asset is already loaded, otherwise add asset to list
+                    if(interview.loadedAssets.includes(req.params.assetId)) {
+                        console.log("Removing asset with id (" + req.params.assetId + ") from interview with id (" + req.params.id + ")");
+                        interview.loadedAssets = interview.loadedAssets.filter((value, index, arr) => {
+                            return (value != req.params.assetId);
+                        });
+                    }
+                    else {
+                        console.log("Adding asset with id (" + req.params.assetId + ") to interview with id (" + req.params.id + ")");
+                        interview.loadedAssets.push(req.params.assetId);
+                    }
+                    Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
+                        if(err) {
+                            console.log(err);
+                            res.status(500).send({message: "Some error occurred while updating the Interview."});
+                        } else {
+                            console.log('Interview updated')
+                            res.send(interview);
+                        }
+                    });
+                }
+                else {
+                    console.log("No interview found with id: " + re.params.id);
+                    return res.status(404).send({message: "Interview not found with id " + req.params.id});
+                }
+            });
+        }
+    })
 };
