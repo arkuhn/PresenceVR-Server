@@ -115,8 +115,14 @@ exports.delete = function(req, res) {
                 else if(!upload) {
                     return res.status(404).send({message: "No upload found matching id and owner."});
                 }
-                else {
-                    return res.send(upload);
+                var path = './uploads/' + upload.fullpath
+                if (fs.existsSync(path)) {
+                    fs.unlink(path, (err) => {
+                        if (err) {
+                            return res.status(500).send({message: "Some error occurred while deleting upload."});
+                        }
+                        return res.status(200).send({message: "Upload deleted"});
+                      });
                 }
             });
         }
