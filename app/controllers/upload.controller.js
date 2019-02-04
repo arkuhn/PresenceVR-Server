@@ -116,15 +116,16 @@ exports.delete = function(req, res) {
                     return res.status(404).send({message: "No upload found matching id and owner."});
                 }
                 var path = './uploads/' + upload.fullpath
-                if (fs.existsSync(path)) {
-                    fs.unlink(path, (err) => {
-                        if (err) {
-                            return res.status(500).send({message: "Some error occurred while deleting upload."});
-                        }
-                        return res.status(200).send({message: "Upload deleted"});
-                      });
+                if (!fs.existsSync(path)) {
+                    return res.status(404).send({message: "No upload found "});
                 }
-                return res.status(404).send({message: "No upload found "});
+                fs.unlink(path, (err) => {
+                        return res.status(404).send({message: "No upload found "});
+                    if (err) {
+                        return res.status(500).send({message: "Some error occurred while deleting upload."});
+                    }
+                    return res.status(200).send({message: "Upload deleted"});
+                });
             });
         }
     })
