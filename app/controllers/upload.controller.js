@@ -120,7 +120,6 @@ exports.delete = function(req, res) {
                     return res.status(404).send({message: "No upload found "});
                 }
                 fs.unlink(path, (err) => {
-                        return res.status(404).send({message: "No upload found "});
                     if (err) {
                         return res.status(500).send({message: "Some error occurred while deleting upload."});
                     }
