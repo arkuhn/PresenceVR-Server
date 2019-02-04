@@ -44,7 +44,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-app.use(express.static('uploads', {root : '.'}))
+//app.use(express.static('uploads', {root : '.'}))
 
 require('./app/routes/room.routes')(app);
 require('./app/routes/interview.routes')(app);

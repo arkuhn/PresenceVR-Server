@@ -125,12 +125,14 @@ exports.delete = function(req, res) {
 
 exports.getFile = function(req, res) {
     firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
-        if({ email, name} && req.params.uid === email.replace(/[^a-zA-Z0-9]/g, '')) {
-            let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.params.file
+        if({ email, name}) {
+            //TODO potential file escaping
+            let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.params.filename
             if (fs.existsSync(path)) {
-                var bitmap = fs.readFileSync(file);
+                console.log('Converting and sending image')
+                var bitmap = fs.readFileSync(path);
                 var data = new Buffer(bitmap).toString('base64');
-               return res.send(data)
+                return res.send(data)
             } 
             return res.status(404).send({message: "File not found"})
         }
