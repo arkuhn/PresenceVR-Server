@@ -122,3 +122,18 @@ exports.delete = function(req, res) {
         }
     })
 };
+
+exports.getFile = function(req, res) {
+    firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
+        if({ email, name} && req.params.uid === email.replace(/[^a-zA-Z0-9]/g, '')) {
+            let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.params.file
+            if (fs.existsSync(path)) {
+                var bitmap = fs.readFileSync(file);
+                var data = new Buffer(bitmap).toString('base64');
+               return res.send(data)
+            } 
+            return res.status(404).send({message: "File not found"})
+        }
+        return res.status(500).send({message: "Some error occurred while finding upload."});
+    })
+}
