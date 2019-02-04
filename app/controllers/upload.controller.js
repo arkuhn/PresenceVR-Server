@@ -124,6 +124,7 @@ exports.delete = function(req, res) {
                         return res.status(200).send({message: "Upload deleted"});
                       });
                 }
+                return res.status(404).send({message: "No upload found "});
             });
         }
     })
