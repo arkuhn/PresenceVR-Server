@@ -1,5 +1,6 @@
 var Interview = require('../models/interview.model.js');
 var  firebase  = require('../../firebase')
+var Upload = require('../models/upload.model.js');
 
 function userIsHost(id, email) {
     Interview.findOne({'_id': id}, function(err, interview) {
@@ -11,6 +12,39 @@ function userIsHost(id, email) {
         }
     })
     return true;
+}
+
+function filterLoadedAssets(loadedAssets, interviewID) {
+    filteredAssets = [];
+    modified = false;   // Track if we had to update anything and pass that on
+
+    for (var i = loadedAssets.length - 1; i >= 0; i--) {
+
+        // Remove if duplicate
+        if(filteredAssets.includes(loadedAssets[i])) {
+            console.log("Removing duplicate Asset (" + loadedAssets[i] +
+                        ") from Interview (" + interviewID + ")");
+            modified = true;
+            continue;
+        }
+
+        // Use axios to check if it exists in the database
+        Upload.findOne({'_id': loadedAssets[i]}, function(err, upload) {
+            if(err || !upload) {
+                console.log("Filtering out bad Asset (" + loadedAssets[i] +
+                        ") from Interview (" + interviewID + ")");
+                modified = true;
+                continue;
+            }
+            else {
+                // Asset exists in database -> Add to filtered array
+                // NOTE: We assume if it is in the database, the file exists too
+                filteredAssets.append(loadedAssets[i]);
+            }
+        });
+    }
+
+    return modified, filteredAssets;
 }
 
 function leavingInterview(id, email, newData) {
