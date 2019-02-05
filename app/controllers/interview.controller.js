@@ -219,8 +219,6 @@ exports.findOne = function(req, res) {
 
         // Filter loadedAssets and update if modified
         filterLoadedAssets(interview.loadedAssets, interview._id, (modified, filteredAssets) => {
-            console.log(modified);
-            console.log(filteredAssets);
             if(modified) {
                 interview.loadedAssets = filteredAssets;
                 Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
