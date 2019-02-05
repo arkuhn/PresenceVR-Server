@@ -1,5 +1,5 @@
 var Interview = require('../models/interview.model.js');
-var  firebase  = require('../../firebase')
+var firebase  = require('../../firebase')
 var Upload = require('../models/upload.model.js');
 
 function userIsHost(id, email) {
@@ -14,43 +14,61 @@ function userIsHost(id, email) {
     return true;
 }
 
-function filterLoadedAssets(loadedAssets, interviewID) {
-    let filteredAssets = [];
-    let modified = false;   // Track if we had to update anything and pass that on
+function validateAssetExists(assetId, callback) {
+    let exists = null;
 
-    for (var i = loadedAssets.length - 1; i >= 0; i--) {
-
-        // Remove if duplicate
-        if(filteredAssets.includes(loadedAssets[i])) {
-            console.log("Removing duplicate Asset (" + loadedAssets[i] +
-                        ") from Interview (" + interviewID + ")");
-            modified = true;
-            continue;
-        }
-
-        // Use axios to check if it exists in the database
-        let result = Upload.findOne({'_id': loadedAssets[i]}, function(err, upload) {
-            if(err || !upload) {return false;}
-            else {return true;}
-        });
-
-        // Check if we found the Asset in the database
-        if(result) {
-            // Asset exists in database -> Add to filtered array
-            // NOTE: We assume if it is in the database, the file exists too
-            filteredAssets.push(loadedAssets[i]);
-            continue;
+    // Use axios to check if it exists in the database
+    Upload.findOne({'_id': assetId}, function(err, upload) {
+        if(err || !upload) {
+            //No Asset found
+            exists = false;
         }
         else {
-            //No Asset found
-            console.log("Filtering out bad Asset (" + loadedAssets[i] +
-                        ") from Interview (" + interviewID + ")");
+            // Asset exists in database -> Add to filtered array
+            // NOTE: We assume if it is in the database, the file exists too
+            exists = true;
+        }
+
+        callback(exists, assetId);
+    });
+}
+
+function filterLoadedAssets(loadedAssets, interviewID, callback) {
+    console.log("Filtering Assets of Interview (" + interviewID + "):");
+    let filteredAssets = [];
+    let modified = false;   // Track if we had to update anything and pass that on
+    let curr = null;
+    let callback_count = loadedAssets.length;    // Number of callbacks returned
+
+    for (var i = loadedAssets.length - 1; i >= 0; i--) {
+        curr = loadedAssets[i];
+
+        // Remove if duplicate
+        if(filteredAssets.includes(curr)) {
+            console.log("Removed");
             modified = true;
             continue;
         }
-    }
 
-    return modified, filteredAssets;
+        // Check if Asset exists
+        validateAssetExists(curr, (exists, assetId) => {
+            if(exists) {
+                console.log("\tKeeping Asset (" + assetId + ")");
+                filteredAssets.push(assetId);
+            }
+            else {
+                console.log("\tRemoving Asset (" + assetId + ")");
+                modified = true;
+            }
+            callback_count--;
+            if(callback_count <= 0){
+                callback(modified, filteredAssets);
+            }
+            return;
+        });
+
+        continue;
+    }
 }
 
 function leavingInterview(id, email, newData) {
@@ -192,23 +210,25 @@ exports.findOne = function(req, res) {
         }
 
         // Filter loadedAssets and update if modified
-        let mod, filteredAssets = filterLoadedAssets(interview.loadedAssets, interview._id);
-
-        if(mod) {
-            interview.loadedAssets = filteredAssets;
-            Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
-                if(err) {
-                    console.log(err);
-                    res.status(500).send({message: "Some error occurred while updating the Interview with filtered Assets."});
-                } else {
-                    console.log('Interview updated with filtered Assets.')
-                    res.send(interview);
-                }
-            });
-        }
-        else {
-            res.send(interview);
-        }
+        filterLoadedAssets(interview.loadedAssets, interview._id, (modified, filteredAssets) => {
+            console.log(modified);
+            console.log(filteredAssets);
+            if(modified) {
+                interview.loadedAssets = filteredAssets;
+                Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
+                    if(err) {
+                        console.log(err);
+                        res.status(500).send({message: "Some error occurred while updating the Interview with filtered Assets."});
+                    } else {
+                        console.log('Interview updated with filtered Assets.')
+                        res.send(interview);
+                    }
+                });
+            }
+            else {
+                res.send(interview);
+            }
+        });
     });
 };
 
