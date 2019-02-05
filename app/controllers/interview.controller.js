@@ -35,17 +35,25 @@ function validateAssetExists(assetId, callback) {
 
 function filterLoadedAssets(loadedAssets, interviewID, callback) {
     console.log("Filtering Assets of Interview (" + interviewID + "):");
+
+    // Check if list is empty
+    if(loadedAssets.length == 0) {
+        console.log("\tNothing to be done.");
+        callback(false, []);
+    }
+
     let filteredAssets = [];
     let modified = false;   // Track if we had to update anything and pass that on
     let curr = null;
     let callback_count = loadedAssets.length;    // Number of callbacks returned
+
 
     for (var i = loadedAssets.length - 1; i >= 0; i--) {
         curr = loadedAssets[i];
 
         // Remove if duplicate
         if(filteredAssets.includes(curr)) {
-            console.log("Removed");
+            console.log("\tRemoving Asset (" + assetId + ")");
             modified = true;
             continue;
         }
