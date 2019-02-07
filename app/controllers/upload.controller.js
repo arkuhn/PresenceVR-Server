@@ -21,9 +21,9 @@ exports.create = function(req, res) {
             let source = './uploads/' + req.files[0].filename
             let destination = path + req.files[0].filename
             mv(source, destination, {mkdirp: true}, function(err) {
-                if (err) { throw errors.uploadError()}
+                if (err) { return utils.handleErrors(errors.uploadError(), res) }
                 getSize(path + req.files[0].filename, function (err, size) {
-                    if (err) { throw errors.uploadError()}
+                    if (err) { return utils.handleErrors(errors.uploadError(), res) }
 
                     var upload = new Upload({
                         name: req.files[0].filename,
@@ -103,9 +103,7 @@ exports.delete = function(req, res) {
                     return res.status(404).send({message: "No upload found "});
                 }
                 fs.unlink(path, (err) => {
-                    if (err) {
-                        return res.status(500).send({message: "Some error occurred while deleting upload."});
-                    }
+                    if (err) { return utils.handleErrors(errors.uploadError(), res) }
                     return res.status(200).send({message: "Upload deleted"});
                 });
             });
@@ -126,7 +124,7 @@ exports.getFile = function(req, res) {
             var data = new Buffer(bitmap).toString('base64');
             return res.send(data)
         } 
-        throw errors.notFound()
+        utils.handleErrors(errors.uploadError(), res)
     })
     .catch((err) => {
         utils.handleErrors(err, res)
