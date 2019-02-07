@@ -21,14 +21,21 @@ function validateAssetExists(assetId, callback) {
 
     // Use axios to check if it exists in the database
     Upload.findOne({'_id': assetId}, function(err, upload) {
+
+        exists = true;  
+
         if(err || !upload) {
             //No Asset found
+            console.error("Asset (" + assetId + ") does not exist in database.");
             exists = false;
         }
         else {
             // Asset exists in database -> Add to filtered array
-            // NOTE: We assume if it is in the database, the file exists too
-            exists = true;
+            let path = './uploads/' + upload.fullpath;
+            if (!fs.existsSync(path)) {
+                console.error("Asset (" + assetId + ") does not exist in database.");
+                esists = false;
+            } 
         }
 
         callback(exists, assetId);
