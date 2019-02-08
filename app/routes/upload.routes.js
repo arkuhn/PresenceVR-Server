@@ -13,4 +13,6 @@ module.exports = function(app) {
     // Delete a specific upload by id
     app.delete('/api/uploads/:id', uploads.delete);
 
+    app.get('/uploads/:filename', uploads.getFile);
+
 }

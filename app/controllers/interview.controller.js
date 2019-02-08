@@ -1,17 +1,21 @@
 var Interview = require('../models/interview.model.js');
-var  firebase  = require('../../firebase')
+var utils = require('../utils')
+var errors = require('../utils/errors')
+var uploadUtils = require('../utils/uploadUtils');
+
 
 function userIsHost(id, email) {
-    Interview.findOne({'_id': id}, function(err, interview) {
-        console.log("Validating Interview:")
-        console.log(interview.host)
-        if(interview.host != email){
-            console.log("Invalid Host Email")
-            return false
+    var query = Interview.findOne({'_id': id}).exec()
+    return query.then((interview) => {
+        if (!interview) { throw errors.notFound() }
+        if (interview.host === email ) {
+            return true
         }
+        console.warn('User is not host')
+        throw errors.badAuth()
     })
-    return true;
 }
+
 
 function leavingInterview(id, email, newData) {
     console.log("Checking if leaving Interview:")
@@ -52,196 +56,201 @@ function isEquivalent(a, b) {
 }
 
 exports.create = function(req, res) {
-    firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
-        if({ email, name}) {
-
-            let participants = (req.body.data.participants).split(',')
-            if (participants.length === 1 && participants[0] === '') {
-                participants = []
-            }
-            var interview = new Interview({
-                host: email,
-                details: req.body.data.details,
-                occursOnDate: req.body.data.occursOnDate,
-                occursAtTime: req.body.data.occursAtTime,
-                scheduledOnDate: new Date().toLocaleDateString("en-US"),
-                participants: participants,
-                loadedAssets: [],
-                loadedEnvironment: 'default'
-                
-            });
-            interview.save(function(err, data) {
-                if(err) {
-                    console.log(err);
-                    res.status(500).send({message: "Some error occurred while creating the Interview."});
-                } else {
-                    console.log('Interview saved')
-                    res.send(data);
-                }
-            });
+    utils.authenticateRequest(req)
+    .then((email) => {
+        let participants = (req.body.data.participants).split(',')
+        if (participants.length === 1 && participants[0] === '') {
+            participants = []
         }
+        var interview = new Interview({
+            host: email,
+            details: req.body.data.details,
+            occursOnDate: req.body.data.occursOnDate,
+            occursAtTime: req.body.data.occursAtTime,
+            scheduledOnDate: new Date().toLocaleDateString("en-US"),
+            participants: participants,
+            loadedAssets: [],
+            loadedEnvironment: 'default'
+            
+        });
+        interview.save(function(err, data) {
+            if (err) { return utils.handleMongoErrors(err, res) }
+            else {
+                console.log('Interview saved')
+                res.send(data);
+            }
+        });
+    })
+    .catch((err) => {
+        utils.handleErrors(err, res)
     })
 };
 
 exports.delete = function(req, res) {
-    console.log(req.headers)
-    firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
-        if({ email, name}) {
-            if(userIsHost(req.headers.id, email)) {
-                Interview.findOneAndDelete({'_id': req.headers.id}, function(err, interview) { 
-                    if(err) {
-                        console.log(err);
-                        res.status(500).send({message: "Some error occurred while deleting the Interview."});
-                    } else {
-                        console.log('Interview deleted');
-                        res.send(interview);
-                    }
-                })
-            } else {
-                res.status(403).send('Forbidden: Invalid Host Email');
-            }
-        }
+    utils.authenticateRequest(req)
+    .then((email) => {
+        return userIsHost(req.headers.id, email)
     })
+    .then(() => {
+        Interview.findOneAndDelete({'_id': req.headers.id}, function(err, interview) { 
+            if (err) { return utils.handleMongoErrors(err, res) }
+            console.log('Interview deleted');
+            res.send(interview);
+        })
+    })
+    .catch((err) => {
+        utils.handleErrors(err, res)
+    })   
 };
 
 exports.update = function(req, res) {
-    firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
-        if({ email, name}) {
-            console.log(req.body)
-            var payload = req.body.data
-
-
-            //Handle the special case of participants
-            if (payload.participants) {
-                if (payload.participants.length === 1 && payload.participants[0] === '') {
-                    payload.participants = []
-                }   
-                payload.participants = payload.participants.split(',')
-            }
-
-            //Update multiple fields at once
-            if (Object.keys(req.body.data).length > 1){
-                payload = { $set: req.body.data }
-            }
-            
-            Interview.findOneAndUpdate({'_id': req.params.id}, payload, function(err, interview) { 
-                if(err) {
-                    console.log(err);
-                    res.status(500).send({message: "Some error occurred while updating the Interview."});
-                } else {
-                    console.log('Interview updated')
-                    res.send(interview);
-                }
-            })
-        }
+    utils.authenticateRequest(req)
+    .then((email) => {
+        return userIsHost(req.params.id, email)
     })
+    .then(() => {
+        var payload = req.body.data
+
+        //Handle the special case of participants
+        if (payload.participants) {
+            if (payload.participants.length === 1 && payload.participants[0] === '') {
+                payload.participants = []
+            }   
+            payload.participants = payload.participants.split(',')
+        }
+
+        //Update multiple fields at once
+        if (Object.keys(req.body.data).length > 1){
+            payload = { $set: req.body.data }
+        }
+        return payload
+    }).then((payload) => {
+        Interview.findOneAndUpdate({'_id': req.params.id}, payload, function(err, interview) { 
+            if (err) { return utils.handleMongoErrors(err, res) }
+            console.log('Interview updated')
+            res.send(interview);
+        })
+    })
+    .catch((err) => {
+        utils.handleErrors(err, res)
+    })  
 };
 
 exports.findOne = function(req, res) {
-    Interview.findOne({'_id': req.params.id}, function(err, interview) {
-        if(err) {
-            console.log(err);
-            if(err.kind === 'ObjectId') {
-                return res.status(404).send({message: "Interview not found with id " + req.params.id});
+    utils.authenticateRequest(req)
+    .then(() => {
+        return Interview.findOne({'_id': req.params.id}, function(err, interview) {
+            if (err) { return utils.handleMongoErrors(err, res) }
+    
+            if(!interview) {
+                return res.status(404).send({message: "Room not found with id " + req.params.id});
             }
-            return res.status(500).send({message: "Error retrieving interview with id " + req.params.id});
-        }
+            
+            // Filter loadedAssets and update if modified
+            uploadUtils.filterUploads(interview.loadedAssets, (modified, filteredAssets) => {
+                if(modified) {
+                    interview.loadedAssets = filteredAssets;
+                    Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
+                        if (err) { return utils.handleMongoErrors(err, res) }
+                        else {
+                            console.log('Interview updated with filtered Assets.')
+                            res.send(interview);
+                        }
+                    });
+                }
+                else {
+                    res.send(interview);
+                }
+            });
+        });
+    })
+    .catch((err) => {
+        utils.handleErrors(err, res)
+    })  
 
-        if(!interview) {
-            return res.status(404).send({message: "Room not found with id " + req.params.id});
-        }
-
-        res.send(interview);
-    });
+    
 };
 
 exports.findAll = function(req, res) {
-    firebase.authenticateToken(req.headers.authorization).then(({ email, name}) => {
-        if({ email, name}) {
-            //Need to be using authenticated email not paramter email
-            Interview.find({$or: [{'host': req.params.host}, {'participants': req.params.host}]}, function(err, interviews){
-                if(err){
-                    console.log(err)
-                    return res.status(500).send({message: "Some error occurred while retrieving interviews."});
-                }
-                else if(!interviews) {
-                    return res.status(404)
-                }
-                else {
-                    return res.send(interviews);
-                }
-            });
-        }
+    utils.authenticateRequest(req)
+    .then((email) => {
+        Interview.find({$or: [{'host': email}, {'participants': email}]}, function(err, interviews){
+            if (err) { return utils.handleMongoErrors(err, res) }
+            else if(!interviews) {
+                return res.status(404)
+            }
+            else {
+                console.log('Sending all inteviews for ' + email)
+                return res.send(interviews);
+            }
+        });
     })
+    .catch((err) => {
+        utils.handleErrors(err, res)
+    })  
 };
 
 exports.patchParticipants = function(req, res) {
-    firebase.authenticateToken(req.headers.authorization).then(({email, name}) => {
-        if({ email, name}) {
-            Interview.findOne({'_id': req.params.id}, function(err, interview) {
-                if(err) {
-                    console.log(err);
-                    if(err.kind === 'ObjectId') {
-                        return res.status(404).send({message: "Interview not found with id " + req.params.id});
+    utils.authenticateRequest(req)
+    .then((email) => {
+        return userIsHost(req.params.id, email)
+    })
+    .then((email) => {
+        Interview.findOne({'_id': req.params.id}, function(err, interview) {
+            if (err) { return utils.handleMongoErrors(err, res) }
+            else {
+                interview.participants = interview.participants.filter(part => part != email);
+                Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
+                    if (err) { return utils.handleMongoErrors(err, res) }
+                    else {
+                        console.log('Interview' + req.params.id + 'updated')
+                        res.send(interview);
                     }
-                    return res.status(500).send({message: "Error retrieving interview with id " + req.params.id});
-                }
-                else {
-                    interview.participants = interview.participants.filter(part => part != email);
-                    Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
-                        if(err) {
-                            console.log(err);
-                            res.status(500).send({message: "Some error occurred while updating the Interview."});
-                        } else {
-                            console.log('Interview updated')
-                            res.send(interview);
-                        }
-                    });
-                }
-            });
-        }
-    });
+                });
+            }
+        });
+    })
+    .catch((err) => {
+        utils.handleErrors(err, res)
+    })  
 };
 
-exports.patchAssets = function(req, res) {
-    firebase.authenticateToken(req.headers.authorization).then(({email, name}) => {
-        if({ email, name}) {
-            Interview.findOne({'_id': req.params.id}, function(err, interview) {
-                if(err) {
-                    console.log(err);
-                    if(err.kind === 'ObjectId') {
-                        return res.status(404).send({message: "Interview not found with id " + req.params.id});
-                    }
-                    return res.status(500).send({message: "Error retrieving interview with id " + req.params.id});
-                }
-                else if(interview) {
 
-                    // Remove if asset is already loaded, otherwise add asset to list
-                    if(interview.loadedAssets.includes(req.params.assetId)) {
-                        console.log("Removing asset with id (" + req.params.assetId + ") from interview with id (" + req.params.id + ")");
-                        interview.loadedAssets = interview.loadedAssets.filter((value, index, arr) => {
-                            return (value != req.params.assetId);
-                        });
-                    }
-                    else {
-                        console.log("Adding asset with id (" + req.params.assetId + ") to interview with id (" + req.params.id + ")");
-                        interview.loadedAssets.push(req.params.assetId);
-                    }
-                    Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
-                        if(err) {
-                            console.log(err);
-                            res.status(500).send({message: "Some error occurred while updating the Interview."});
-                        } else {
-                            console.log('Interview updated')
-                            res.send(interview);
-                        }
+exports.patchAssets = function(req, res) {
+    utils.authenticateRequest(req)
+    .then((email) => {
+        return userIsHost(req.params.id, email)
+    })
+    .then(() => {
+        Interview.findOne({'_id': req.params.id}, function(err, interview) {
+            if (err) { return utils.handleMongoErrors(err, res) }
+            else if(interview) {
+                // Remove if asset is already loaded, otherwise add asset to list
+                if(interview.loadedAssets.includes(req.params.assetId)) {
+                    console.log("Removing asset with id (" + req.params.assetId + ") from interview with id (" + req.params.id + ")");
+                    interview.loadedAssets = interview.loadedAssets.filter((value, index, arr) => {
+                        return (value != req.params.assetId);
                     });
                 }
                 else {
-                    console.log("No interview found with id: " + re.params.id);
-                    return res.status(404).send({message: "Interview not found with id " + req.params.id});
+                    console.log("Adding asset with id (" + req.params.assetId + ") to interview with id (" + req.params.id + ")");
+                    interview.loadedAssets.push(req.params.assetId);
                 }
-            });
-        }
+                Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
+                    if (err) { return utils.handleMongoErrors(err, res) }
+                    else {
+                        console.log('Interview updated')
+                        res.send(interview);
+                    }
+                });
+            }
+            else {
+                console.log("No interview found with id: " + re.params.id);
+                return res.status(404).send({message: "Interview not found with id " + req.params.id});
+            }
+        });
     })
+    .catch((err) => {
+        utils.handleErrors(err, res)
+    })  
 };

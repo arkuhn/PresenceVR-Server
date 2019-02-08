@@ -10,10 +10,10 @@ module.exports = function(app) {
     app.delete('/api/interviews/', interviews.delete);
 
     // Retrieve all interviews
-    app.get('/api/interviews/:host', interviews.findAll);
+    app.get('/api/interviews/', interviews.findAll);
 
     // Retrieve a single interview with interviewId
-    app.get('/api/interview/:id', interviews.findOne);
+    app.get('/api/interviews/:id', interviews.findOne);
     
     // Update a interview with interviewId
     app.put('/api/interviews/:id', interviews.update);
