@@ -4,6 +4,7 @@ var Upload = require('../models/upload.model.js');
 var utils = require('../utils')
 var errors = require('../utils/errors')
 var fs = require('fs')
+var uploadUtils = require('../utils/uploadUtils');
 
 
 function userIsHost(id, email) {
