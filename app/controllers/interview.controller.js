@@ -146,22 +146,7 @@ exports.findOne = function(req, res) {
                 return res.status(404).send({message: "Room not found with id " + req.params.id});
             }
             
-            // Filter loadedAssets and update if modified
-            uploadUtils.filterUploads(interview.loadedAssets, (modified, filteredAssets) => {
-                if(modified) {
-                    interview.loadedAssets = filteredAssets;
-                    Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
-                        if (err) { return utils.handleMongoErrors(err, res) }
-                        else {
-                            console.log('Interview updated with filtered Assets.')
-                            res.send(interview);
-                        }
-                    });
-                }
-                else {
-                    res.send(interview);
-                }
-            });
+            res.send(interview);
         });
     })
     .catch((err) => {
