@@ -1,9 +1,6 @@
 var Interview = require('../models/interview.model.js');
-var firebase  = require('../../firebase')
-var Upload = require('../models/upload.model.js');
 var utils = require('../utils')
 var errors = require('../utils/errors')
-var fs = require('fs')
 var uploadUtils = require('../utils/uploadUtils');
 
 
@@ -19,77 +16,6 @@ function userIsHost(id, email) {
     })
 }
 
-function validateAssetExists(assetId, callback) {
-    let exists = null;
-
-    // Use axios to check if it exists in the database
-    Upload.findOne({'_id': assetId}, function(err, upload) {
-
-        exists = true;  
-
-        if(err || !upload) {
-            //No Asset found
-            console.error("Asset (" + assetId + ") does not exist in database.");
-            exists = false;
-        }
-        else {
-            // Asset exists in database -> Add to filtered array
-            let path = './uploads/' + upload.fullpath;
-            if (!fs.existsSync(path)) {
-                console.error("Asset (" + assetId + ") does not exist in database.");
-                esists = false;
-            } 
-        }
-
-        callback(exists, assetId);
-    });
-}
-
-function filterLoadedAssets(loadedAssets, interviewID, callback) {
-    console.log("Filtering Assets of Interview (" + interviewID + "):");
-
-    // Check if list is empty
-    if(loadedAssets.length == 0) {
-        console.log("\tNothing to be done.");
-        callback(false, []);
-    }
-
-    let filteredAssets = [];
-    let modified = false;   // Track if we had to update anything and pass that on
-    let curr = null;
-    let callback_count = loadedAssets.length;    // Number of callbacks returned
-
-
-    for (var i = loadedAssets.length - 1; i >= 0; i--) {
-        curr = loadedAssets[i];
-
-        // Remove if duplicate
-        if(filteredAssets.includes(curr)) {
-            console.log("\tRemoving Asset (" + assetId + ")");
-            modified = true;
-            continue;
-        }
-
-        // Check if Asset exists
-        validateAssetExists(curr, (exists, assetId) => {
-            if(exists) {
-                console.log("\tKeeping Asset (" + assetId + ")");
-                filteredAssets.push(assetId);
-            }
-            else {
-                console.log("\tRemoving Asset (" + assetId + ")");
-                modified = true;
-            }
-            callback_count--;
-            if(callback_count <= 0){
-                callback(modified, filteredAssets);
-            }
-            return;
-        });
-
-        continue;
-    }
-}
 
 function leavingInterview(id, email, newData) {
     console.log("Checking if leaving Interview:")
