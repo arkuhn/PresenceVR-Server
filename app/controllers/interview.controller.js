@@ -3,6 +3,8 @@ var firebase  = require('../../firebase')
 var Upload = require('../models/upload.model.js');
 var utils = require('../utils')
 var errors = require('../utils/errors')
+var fs = require('fs')
+
 
 function userIsHost(id, email) {
     var query = Interview.findOne({'_id': id}).exec()
