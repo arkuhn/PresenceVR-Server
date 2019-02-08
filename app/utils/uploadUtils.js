@@ -1,4 +1,5 @@
 var Upload = require('../models/upload.model.js');
+var uploadUtils = require('./uploadUtils');
 var fs = require('fs');
 
 
@@ -56,7 +57,7 @@ exports.filterUploads = function(uploadList, callback) {
         }
 
         // Check if Upload exists
-        validateUploadExists(curr, (exists, uploadId) => {
+        uploadUtils.validateUploadExists(curr, (exists, uploadId) => {
             if(exists) {
                 console.log("\tKeeping Upload (" + uploadId + ")");
                 filteredUploads.push(uploadId);
