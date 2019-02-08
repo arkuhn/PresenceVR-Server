@@ -120,9 +120,11 @@ exports.getFile = function(req, res) {
         let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.params.filename
         if (fs.existsSync(path)) {
             console.log('Converting and sending image')
-            var bitmap = fs.readFileSync(path);
-            var data = new Buffer(bitmap).toString('base64');
-            return res.send(data)
+            return fs.readFile(path, function(err, data) {
+                if(err) {return utils.handleErrors(errors.uploadError(), res)}
+                return res.send(Buffer.from(data).toString('base64'))
+            });
+            
         } 
         utils.handleErrors(errors.uploadError(), res)
     })
