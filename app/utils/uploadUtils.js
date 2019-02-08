@@ -2,7 +2,7 @@ var Upload = require('../models/upload.model.js');
 var fs = require('fs');
 
 
-function validateUploadExists(uploadId, callback) {
+exports.validateUploadExists = function(uploadId, callback) {
     let exists = null;
 
     // Use axios to check if it exists in the database
@@ -30,7 +30,7 @@ function validateUploadExists(uploadId, callback) {
 }
 
 
-function filterUploads(uploadList, callback) {
+exports.filterUploads = function(uploadList, callback) {
     console.log("Filtering Uploads:");
 
     // Check if list is empty
