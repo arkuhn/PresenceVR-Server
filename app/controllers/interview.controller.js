@@ -221,7 +221,7 @@ exports.findOne = function(req, res) {
             }
             
             // Filter loadedAssets and update if modified
-            filterLoadedAssets(interview.loadedAssets, interview._id, (modified, filteredAssets) => {
+            uploadUtils.filterUploads(interview.loadedAssets, (modified, filteredAssets) => {
                 if(modified) {
                     interview.loadedAssets = filteredAssets;
                     Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
