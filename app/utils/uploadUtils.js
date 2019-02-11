@@ -93,7 +93,7 @@ exports.filterUploads = function(uploadList, callback) {
                 if(isUploadObjects) {
                     let filteredUploads = [];
                     for (var i = uploadList.length - 1; i >= 0; i--) {
-                        if(filteredUploadIds.contains(uploadList[i]._id)) {
+                        if(filteredUploadIds.includes(uploadList[i]._id)) {
                             filteredUploads.push(uploadList[i]);
                         }
                     }
