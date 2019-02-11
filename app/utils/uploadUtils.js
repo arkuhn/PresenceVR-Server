@@ -79,3 +79,63 @@ exports.filterUploads = function(uploadList, callback) {
         continue;
     }
 }
+
+
+exports.cleanupBadUpload = function(uploadId, uploadPath) {
+
+    // If uploadId is given, attempt to remove it from the database
+    if(uploadId) {
+
+        // Remove Upload Database Entry
+        Upload.findOneAndDelete({'_id': uploadId}, function(err, upload) {
+
+            // Handle Errors
+            if(err) {
+                console.error("Failed to remove bad upload (" + uploadId + ")");
+                console.error(err);
+            }
+            else if(!upload) {
+                console.error("Failed to remove bad upload (" + uploadId + ")");
+                console.error("No errors to report");
+            }
+
+            // Report success
+            else {
+                console.log("Removed bad upload (" + upload._id + ") from database");
+            }
+
+        });
+    }
+
+    // If uploadPath is given, attempt to remove the file from the server
+    else if(uploadPath) {
+
+        // Ensure File does exist
+        if(!fs.existsSync(uploadPath)) {
+            console.error("Upload cannot be cleaned up at (" + uploadPath + "): File not found");
+        }
+
+        // Attempt to remove if it does
+        else {
+            fs.unlink(uploadPath, (err) => {
+
+                // Handle errors
+                if(err) {
+                    console.error("Upload cannot be cleaned up at (" + uploadPath + "): Failed to unlink file");
+                }
+
+                // Report success
+                else {
+                    console.log("Removed bad upload file (" + uploadPath + ")");
+                }
+            });
+        }
+    }
+
+    // If neither uploadId nor uploadPath are given, log this and move on
+    else {
+        console.log("Ignoring empty cleanupBadUpload call");
+    }
+
+    return
+}
