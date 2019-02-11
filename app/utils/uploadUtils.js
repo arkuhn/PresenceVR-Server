@@ -81,12 +81,12 @@ exports.filterUploads = function(uploadList, callback) {
 }
 
 
-exports.cleanupBadUpload = function(uploadId, uploadPath) {
+exports.cleanupBadUpload = function(uploadId, uploadPath=null) {
 
     // If uploadId is given, attempt to remove it from the database
     if(uploadId) {
 
-        // Remove Upload Database Entry
+        // Attempt to remove Upload Database Entry
         Upload.findOneAndDelete({'_id': uploadId}, function(err, upload) {
 
             // Handle Errors
@@ -99,7 +99,7 @@ exports.cleanupBadUpload = function(uploadId, uploadPath) {
                 console.error("No errors to report");
             }
 
-            // Report success
+            // Otherwise report success
             else {
                 console.log("Removed bad upload (" + upload._id + ") from database");
             }
