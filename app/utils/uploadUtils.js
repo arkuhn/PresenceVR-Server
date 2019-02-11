@@ -40,17 +40,33 @@ exports.filterUploads = function(uploadList, callback) {
         callback(false, []);
     }
 
-    let filteredUploads = [];
+    let uploadIdList = [];          // Used to extract out only upload ids
+    let isUploadObjects = false;    // Remember if the uploadList contained upload objects
+
+    // If uploadList contains objects with _id, extract list of ids
+    if(uploadList[0]._id) {
+        isUploadObjects = true;
+        for (var i = uploadList.length - 1; i >= 0; i--) {
+            uploadIdList.push(uploadList[i]._id);
+        }
+    }
+
+    // Otherwise, assume the uploadList is a list of ids
+    else {
+        uploadIdList = uploadList;
+    }
+
+    let filteredUploadIds = [];
     let modified = false;   // Track if we had to update anything and pass that on
     let curr = null;
-    let callback_count = uploadList.length;    // Number of callbacks returned
+    let callback_count = uploadIdList.length;    // Number of callbacks returned
 
 
-    for (var i = uploadList.length - 1; i >= 0; i--) {
-        curr = uploadList[i];
+    for (var i = uploadIdList.length - 1; i >= 0; i--) {
+        curr = uploadIdList[i];
 
         // Remove if duplicate
-        if(filteredUploads.includes(curr)) {
+        if(filteredUploadIds.includes(curr)) {
             console.log("\tRemoving duplicate Upload (" + curr + ") from list.");
             modified = true;
             continue;
@@ -60,7 +76,7 @@ exports.filterUploads = function(uploadList, callback) {
         uploadUtils.validateUploadExists(curr, (exists, uploadId) => {
             if(exists) {
                 console.log("\tKeeping Upload (" + uploadId + ") in list.");
-                filteredUploads.push(uploadId);
+                filteredUploadIds.push(uploadId);
             }
             else {
                 console.log("\tRemoving bad Upload (" + uploadId + ") from list.");
@@ -72,7 +88,22 @@ exports.filterUploads = function(uploadList, callback) {
             // TODO: Update to Promises to better handle failed async calls
             callback_count--;
             if(callback_count <= 0){
-                callback(modified, filteredUploads);
+
+                // If we recieved upload objects, we must return objects
+                if(isUploadObjects) {
+                    let filteredUploads = [];
+                    for (var i = uploadList.length - 1; i >= 0; i--) {
+                        if(filteredUploadIds.contains(uploadList[i]._id)) {
+                            filteredUploads.push(uploadList[i]);
+                        }
+                    }
+                    callback(modified, filteredUploads);
+                }
+
+                // Otherwise just return the list
+                else {
+                    callback(modified, filteredUploadIds);
+                }
             }
             return;
         });
