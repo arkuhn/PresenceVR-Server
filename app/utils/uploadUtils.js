@@ -17,12 +17,14 @@ exports.validateUploadExists = function(uploadId, callback) {
             exists = false;
         }
         else {
-            // Upload exists in database -> Add to filtered array
+            // Upload exists in database
+            // Check if the file also exists
             let path = './uploads/' + upload.fullpath;
             if (!fs.existsSync(path)) {
-                console.error("Upload (" + uploadId + ") does not exist in database.");
+                console.error("Upload (" + uploadId + ") file does not exist.");
+                // TODO: Uncomment and validate call below
+                //uploadUtils.cleanupBadUpload(uploadId);
                 esists = false;
-                // TODO: Resolve invalid database entry
             } 
         }
 
@@ -51,7 +53,7 @@ exports.filterUploads = function(uploadList, callback) {
 
         // Remove if duplicate
         if(filteredUploads.includes(curr)) {
-            console.log("\tRemoving Upload (" + curr + ")");
+            console.log("\tRemoving duplicate Upload (" + curr + ").");
             modified = true;
             continue;
         }
@@ -59,11 +61,11 @@ exports.filterUploads = function(uploadList, callback) {
         // Check if Upload exists
         uploadUtils.validateUploadExists(curr, (exists, uploadId) => {
             if(exists) {
-                console.log("\tKeeping Upload (" + uploadId + ")");
+                console.log("\tKeeping Upload (" + uploadId + ").");
                 filteredUploads.push(uploadId);
             }
             else {
-                console.log("\tRemoving Upload (" + uploadId + ")");
+                console.log("\tRemoving bad Upload (" + uploadId + ").");
                 modified = true;
             }
 
@@ -91,17 +93,17 @@ exports.cleanupBadUpload = function(uploadId, uploadPath=null) {
 
             // Handle Errors
             if(err) {
-                console.error("Failed to remove bad upload (" + uploadId + ")");
+                console.error("Failed to remove bad upload (" + uploadId + ").");
                 console.error(err);
             }
             else if(!upload) {
-                console.error("Failed to remove bad upload (" + uploadId + ")");
+                console.error("Failed to remove bad upload (" + uploadId + ").");
                 console.error("No errors to report");
             }
 
             // Otherwise report success
             else {
-                console.log("Removed bad upload (" + upload._id + ") from database");
+                console.log("Removed bad upload (" + upload._id + ") from database.");
             }
 
         });
@@ -112,7 +114,7 @@ exports.cleanupBadUpload = function(uploadId, uploadPath=null) {
 
         // Ensure File does exist
         if(!fs.existsSync(uploadPath)) {
-            console.error("Upload cannot be cleaned up at (" + uploadPath + "): File not found");
+            console.error("Upload cannot be cleaned up at (" + uploadPath + "): File not found.");
         }
 
         // Attempt to remove if it does
@@ -121,12 +123,12 @@ exports.cleanupBadUpload = function(uploadId, uploadPath=null) {
 
                 // Handle errors
                 if(err) {
-                    console.error("Upload cannot be cleaned up at (" + uploadPath + "): Failed to unlink file");
+                    console.error("Upload cannot be cleaned up at (" + uploadPath + "): Failed to unlink file.");
                 }
 
                 // Report success
                 else {
-                    console.log("Removed bad upload file (" + uploadPath + ")");
+                    console.log("Removed bad upload file (" + uploadPath + ").");
                 }
             });
         }
@@ -134,7 +136,7 @@ exports.cleanupBadUpload = function(uploadId, uploadPath=null) {
 
     // If neither uploadId nor uploadPath are given, log this and move on
     else {
-        console.log("Ignoring empty cleanupBadUpload call");
+        console.log("Ignoring empty cleanupBadUpload call.");
     }
 
     return
