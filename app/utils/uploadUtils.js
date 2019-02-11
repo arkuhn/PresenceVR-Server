@@ -53,7 +53,7 @@ exports.filterUploads = function(uploadList, callback) {
 
         // Remove if duplicate
         if(filteredUploads.includes(curr)) {
-            console.log("\tRemoving duplicate Upload (" + curr + ").");
+            console.log("\tRemoving duplicate Upload (" + curr + ") from list.");
             modified = true;
             continue;
         }
@@ -61,11 +61,11 @@ exports.filterUploads = function(uploadList, callback) {
         // Check if Upload exists
         uploadUtils.validateUploadExists(curr, (exists, uploadId) => {
             if(exists) {
-                console.log("\tKeeping Upload (" + uploadId + ").");
+                console.log("\tKeeping Upload (" + uploadId + ") in list.");
                 filteredUploads.push(uploadId);
             }
             else {
-                console.log("\tRemoving bad Upload (" + uploadId + ").");
+                console.log("\tRemoving bad Upload (" + uploadId + ") from list.");
                 modified = true;
             }
 
