@@ -24,7 +24,7 @@ exports.validateUploadExists = function(uploadId, callback) {
                 console.error("Upload (" + uploadId + ") file does not exist.");
                 // TODO: Uncomment and validate call below
                 //uploadUtils.cleanupBadUpload(uploadId);
-                esists = false;
+                exists = false;
             } 
         }
 
