@@ -1,5 +1,6 @@
 var Upload = require('../models/upload.model.js');
-var  firebase  = require('../../firebase')
+var uploadUtils = require('../utils/uploadUtils');
+var firebase  = require('../../firebase')
 var upload = require('../../storage')
 var fs = require('fs')
 var mv = require('mv')
