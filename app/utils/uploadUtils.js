@@ -26,7 +26,7 @@ exports.validateUploadExists = function(uploadId, callback) {
             } 
         }
 
-        callback(exists, uploadId);
+        return callback(exists, uploadId);
     });
 }
 
@@ -37,7 +37,7 @@ exports.filterUploads = function(uploadList, callback) {
     // Check if list is empty
     if(uploadList.length == 0) {
         console.log("\tNothing to be done.");
-        callback(false, []);
+        return callback(false, []);
     }
 
     let uploadIdList = [];          // Used to extract out only upload ids
@@ -97,12 +97,12 @@ exports.filterUploads = function(uploadList, callback) {
                             filteredUploads.push(uploadList[i]);
                         }
                     }
-                    callback(modified, filteredUploads);
+                    return callback(modified, filteredUploads);
                 }
 
                 // Otherwise just return the list
                 else {
-                    callback(modified, filteredUploadIds);
+                    return callback(modified, filteredUploadIds);
                 }
             }
             return;
