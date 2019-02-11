@@ -61,7 +61,9 @@ exports.findAll = function(req, res) {
                 return res.status(404)
             }
             else {
-                return res.send(uploads);
+                uploadUtils.filterUploads(uploads, (modified, filteredUploads) => {
+                    res.send(filteredUploads);
+                });
             }
         });
     })
