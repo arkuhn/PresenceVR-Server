@@ -22,8 +22,6 @@ exports.validateUploadExists = function(uploadId, callback) {
             let path = './uploads/' + upload.fullpath;
             if (!fs.existsSync(path)) {
                 console.error("Upload (" + uploadId + ") file does not exist.");
-                // TODO: Uncomment and validate call below
-                //uploadUtils.cleanupBadUpload(uploadId);
                 exists = false;
             } 
         }
@@ -66,6 +64,7 @@ exports.filterUploads = function(uploadList, callback) {
             }
             else {
                 console.log("\tRemoving bad Upload (" + uploadId + ") from list.");
+                uploadUtils.cleanupBadUpload(uploadId);
                 modified = true;
             }
 
