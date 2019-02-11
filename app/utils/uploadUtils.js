@@ -97,7 +97,7 @@ exports.cleanupBadUpload = function(uploadId, uploadPath=null) {
             }
             else if(!upload) {
                 console.error("Failed to remove bad upload (" + uploadId + ").");
-                console.error("No errors to report");
+                console.error("\tNo errors to report");
             }
 
             // Otherwise report success
