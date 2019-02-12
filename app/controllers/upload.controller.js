@@ -1,11 +1,7 @@
 var Upload = require('../models/upload.model.js');
-<<<<<<< HEAD
 var uploadUtils = require('../utils/uploadUtils');
 var firebase  = require('../../firebase')
-=======
 var Interview = require('../models/interview.model.js')
-var  firebase  = require('../../firebase')
->>>>>>> interaction
 var upload = require('../../storage')
 var fs = require('fs')
 var mv = require('mv')
