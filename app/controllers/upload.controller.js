@@ -1,5 +1,6 @@
 var Upload = require('../models/upload.model.js');
-var  firebase  = require('../../firebase')
+var uploadUtils = require('../utils/uploadUtils');
+var firebase  = require('../../firebase')
 var upload = require('../../storage')
 var fs = require('fs')
 var mv = require('mv')
@@ -60,7 +61,9 @@ exports.findAll = function(req, res) {
                 return res.status(404)
             }
             else {
-                return res.send(uploads);
+                uploadUtils.filterUploads(uploads, (modified, filteredUploads) => {
+                    res.send(filteredUploads);
+                });
             }
         });
     })
