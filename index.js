@@ -41,7 +41,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
-app.use(cors());
+
+
+var corsOptions = {
+  origin: true,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+app.use(cors(corsOptions));
+app.options('*', cors()); // include before other routes
 
 
 //app.use(express.static('uploads', {root : '.'}))
@@ -57,8 +64,7 @@ var port = process.env.PORT || 8080;
 
 let webServer = http.createServer(app);
 
-
-var socketServer = socketIo.listen(webServer, {"log level":1});
+var socketServer = socketIo.listen(webServer, {"log level":1, origins: "http://localhost:* http://127.0.0.1:*"});
 
 var myIceServers = [
   {"url":"stun:stun.l.google.com:19302"},
@@ -79,6 +85,7 @@ var myIceServers = [
 easyrtc.setOption("appIceServers", myIceServers);
 easyrtc.setOption("logLevel", "debug");
 easyrtc.setOption("demosEnable", false);
+easyrtc.setOption("transport", ['websocket']);
 
 // Overriding the default easyrtcAuth listener, only so we can directly access its callback
 easyrtc.events.on("easyrtcAuth", function(socket, easyrtcid, msg, socketCallback, callback) {
