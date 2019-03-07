@@ -132,6 +132,7 @@ exports.update = function(req, res) {
         })
     })
     .catch((err) => {
+        console.error(err)
         utils.handleErrors(err, res)
     })  
 };
@@ -177,9 +178,6 @@ exports.findAll = function(req, res) {
 
 exports.patchParticipants = function(req, res) {
     utils.authenticateRequest(req)
-    .then((email) => {
-        return userIsHost(req.params.id, email)
-    })
     .then((email) => {
         Interview.findOne({'_id': req.params.id}, function(err, interview) {
             if (err) { return utils.handleMongoErrors(err, res) }

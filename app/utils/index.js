@@ -21,6 +21,7 @@ exports.authenticateRequest = function(req) {
 Takes an optional description for uncaught errors
 */
 exports.handleErrors = function(err, res) {
+    console.error(err)
     if (err.code && err.description) {
         return res.status(err.code).send(err.description)
     }
@@ -29,6 +30,7 @@ exports.handleErrors = function(err, res) {
 }
 
 exports.handleMongoErrors = function(err, res) {
+    console.error(err)
     if (err.kind === 'ObjectId') {
         res.status(404).send('Resource not found')
     } else {
