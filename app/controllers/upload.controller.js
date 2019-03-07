@@ -24,7 +24,7 @@ exports.create = function(req, res) {
             mv(source, destination, {mkdirp: true}, function(err) {                
                 if (err) { return utils.handleErrors(errors.uploadError(), res) }
 
-                if (req.files[0].mimetype.includes("png") || req.files[0].mimetype.includes("jpg")){
+                if (req.files[0].mimetype.includes("png") || req.files[0].mimetype.includes("jpeg")){
                     getSize(path + req.files[0].filename, function (err, size) {
                         
                         if (err) { return utils.handleErrors(errors.uploadError(), res) }
