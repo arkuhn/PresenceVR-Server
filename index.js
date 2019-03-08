@@ -64,7 +64,7 @@ var port = process.env.PORT || 8080;
 
 let webServer = http.createServer(app);
 
-var socketServer = socketIo.listen(webServer, {"log level":1, origins: "http://localhost:* http://127.0.0.1:*"});
+var socketServer = socketIo.listen(webServer, {"log level":1, origins: "* *"});
 
 var myIceServers = [
   {"url":"stun:stun.l.google.com:19302"},
