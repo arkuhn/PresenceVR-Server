@@ -4,7 +4,7 @@ var fs = require('fs')
 const destination = './uploads/'
 const filename = (req, file, cb) => cb(null, file.originalname + Date.now())
 
-const allowedImagesExts = ['jpg', 'png', 'gif', 'jpeg']
+const allowedImagesExts = ['jpg', 'png', 'gif', 'jpeg', 'obj']
 const fileFilter =  (req, file, cb) => 
   cb(null, allowedImagesExts.includes(file.originalname.split('.').pop()))
 
