@@ -132,6 +132,7 @@ exports.update = function(req, res) {
         })
     })
     .catch((err) => {
+        console.error(err)
         utils.handleErrors(err, res)
     })  
 };
@@ -175,67 +176,46 @@ exports.findAll = function(req, res) {
     })  
 };
 
-exports.patchParticipants = function(req, res) {
+exports.patch = function(req, res) { 
     utils.authenticateRequest(req)
     .then((email) => {
-        return userIsHost(req.params.id, email)
-    })
-    .then((email) => {
-        Interview.findOne({'_id': req.params.id}, function(err, interview) {
+        Interview.find({$or: [{'host': email}, {'participants': email}], $and: [{'_id': req.params.id}] }, function(err, interviews){
             if (err) { return utils.handleMongoErrors(err, res) }
-            else {
-                interview.participants = interview.participants.filter(part => part != email);
-                Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
+            if (interviews && interviews[0]) {
+                var interview = interviews[0]
+                var isHost = (interview.host === email)
+                var isParticipant = (interview.participants.includes(email))
+
+                var isRenderOperation = (req.body.field === 'loadedAssets' && (req.body.op === 'remove' || req.body.op === 'add'))
+                var isLeaveOperation = (req.body.field==='participants' && req.body.op === 'remove')
+                if (!isHost && !isParticipant) {
+                    return res.status(403).send({message: 'Unauthorized interview update'})
+                }
+                if (isParticipant && !isRenderOperation && !isLeaveOperation) {
+                    return res.status(403).send({message: 'Unauthorized interview update'})
+                }
+
+                if (req.body.op === 'add') {
+                    interview[req.body.field].push(req.body.value)
+                }
+                if (req.body.op === 'remove') {
+                    var index = interview[req.body.field].indexOf(req.body.value)
+                    if (index === -1) {
+                        return res.status(404).send({message: 'Cannot remove element that does not exist'})
+                    }
+                    interview[req.body.field].splice(index, 1)
+                }
+
+                return Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, newInterview){
                     if (err) { return utils.handleMongoErrors(err, res) }
                     else {
-                        console.log('Interview' + req.params.id + 'updated')
-                        res.send(interview);
+                        console.log('Interview patched')
+                        return res.send(interview);
                     }
                 });
-            }
-        });
-    })
-    .catch((err) => {
-        utils.handleErrors(err, res)
-    })  
-};
 
-
-exports.patchAssets = function(req, res) {
-    utils.authenticateRequest(req)
-    .then((email) => {
-        return userIsHost(req.params.id, email)
-    })
-    .then(() => {
-        Interview.findOne({'_id': req.params.id}, function(err, interview) {
-            if (err) { return utils.handleMongoErrors(err, res) }
-            else if(interview) {
-                // Remove if asset is already loaded, otherwise add asset to list
-                if(interview.loadedAssets.includes(req.params.assetId)) {
-                    console.log("Removing asset with id (" + req.params.assetId + ") from interview with id (" + req.params.id + ")");
-                    interview.loadedAssets = interview.loadedAssets.filter((value, index, arr) => {
-                        return (value != req.params.assetId);
-                    });
-                }
-                else {
-                    console.log("Adding asset with id (" + req.params.assetId + ") to interview with id (" + req.params.id + ")");
-                    interview.loadedAssets.push(req.params.assetId);
-                }
-                Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, interview){
-                    if (err) { return utils.handleMongoErrors(err, res) }
-                    else {
-                        console.log('Interview updated')
-                        res.send(interview);
-                    }
-                });
             }
-            else {
-                console.log("No interview found with id: " + re.params.id);
-                return res.status(404).send({message: "Interview not found with id " + req.params.id});
-            }
-        });
+            return res.status(500).send({message: 'User not host or participant of any such interview'})
+        })
     })
-    .catch((err) => {
-        utils.handleErrors(err, res)
-    })  
-};
+}

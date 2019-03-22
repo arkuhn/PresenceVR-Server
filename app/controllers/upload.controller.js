@@ -14,17 +14,41 @@ exports.create = function(req, res) {
     utils.authenticateRequest(req)
     .then((email) => {
         console.log('Received authenticated file upload request')
-        upload(req, res, (err) => {
-            if (err) { throw errors.uploadError()}
-        
+        upload(req, res, (err) => {           
+            if (err) { throw errors.uploadError()}       
             //Move the file to 
             //console.log(req.files[0])
             let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/'
             let source = './uploads/' + req.files[0].filename
             let destination = path + req.files[0].filename
-            mv(source, destination, {mkdirp: true}, function(err) {
+            mv(source, destination, {mkdirp: true}, function(err) {                
                 if (err) { return utils.handleErrors(errors.uploadError(), res) }
-                getSize(path + req.files[0].filename, function (err, size) {
+
+                if (req.files[0].mimetype.includes("png") || req.files[0].mimetype.includes("jpeg")){
+                    getSize(path + req.files[0].filename, function (err, size) {
+                        
+                        if (err) { return utils.handleErrors(errors.uploadError(), res) }
+
+                        var upload = new Upload({
+                            name: req.files[0].filename,
+                            uploadedOnDate: Date.now(),
+                            owner: email,   
+                            type: req.headers.type,
+                            filetype: req.files[0].mimetype,
+                            fullpath: ('/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename),
+                            height: size.height,
+                            width: size.width
+                        })
+
+                        upload.save(function(err, data) {
+                            if (err) { return utils.handleMongoErrors(err, res) }
+                            console.log('Upload saved')
+                            res.status(200).send({message: "File successfully uploaded"});  
+                        })
+                    });
+                }
+                else if (req.files[0].mimetype.includes("octet-stream")){
+                    
                     if (err) { return utils.handleErrors(errors.uploadError(), res) }
 
                     var upload = new Upload({
@@ -34,8 +58,6 @@ exports.create = function(req, res) {
                         type: req.headers.type,
                         filetype: req.files[0].mimetype,
                         fullpath: ('/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename),
-                        height: size.height,
-                        width: size.width
                     })
 
                     upload.save(function(err, data) {
@@ -43,7 +65,7 @@ exports.create = function(req, res) {
                         console.log('Upload saved')
                         res.status(200).send({message: "File successfully uploaded"});  
                     })
-                });
+                }
             });
         })
     })
@@ -62,9 +84,10 @@ exports.findAll = function(req, res) {
                 return res.status(404)
             }
             else {
-                uploadUtils.filterUploads(uploads, (modified, filteredUploads) => {
-                    res.send(filteredUploads);
-                });
+                res.send(uploads)
+                //uploadUtils.filterUploads(uploads, (modified, filteredUploads) => {
+                //    res.send(filteredUploads);
+                //});
             }
         });
     })
@@ -76,14 +99,13 @@ exports.findAll = function(req, res) {
 exports.findOne = function(req, res) {
     utils.authenticateRequest(req)
     .then((email) => {
-        Upload.findOne({'_id': req.params.id}, function(err, upload) {
+        console.log('Finding upload with id: ', req.params.id)
+        return Upload.findOne({'_id': req.params.id}, function(err, upload) {
             if (err) { return utils.handleMongoErrors(err, res) }
             if(!upload) {
                 return res.status(404).send({message: "Upload not found with id " + req.params.id});
             }
-            if(upload.owner != email) {
-                return res.status(500).send({message: "Error retrieving upload with id " + req.params.id});
-            }
+            
             return res.send(upload)
         });
     })
@@ -136,16 +158,26 @@ exports.getFile = function(req, res) {
     utils.authenticateRequest(req)
     .then((email) => {
         //TODO potential file escaping
-        let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.params.filename
-        if (fs.existsSync(path)) {
-            console.log('Converting and sending image')
-            return fs.readFile(path, function(err, data) {
-                if(err) {return utils.handleErrors(errors.uploadError(), res)}
-                return res.send(Buffer.from(data).toString('base64'))
-            });
-            
-        } 
-        utils.handleErrors(errors.uploadError(), res)
+        console.log('Finding file with id: ', req.params.id)
+         Upload.findOne({'_id': req.params.id}, function(err, upload) {
+             
+            if (err) { return utils.handleMongoErrors(err, res) }
+            if(!upload) {
+                return res.status(404).send({message: "Upload not found with id " + req.params.id});
+            }
+            let path = './uploads/' + upload.fullpath
+
+            if (fs.existsSync(path)) {
+                console.log('Converting and sending image')
+                return fs.readFile(path, function(err, data) {
+                    if(err) {return utils.handleErrors(errors.uploadError(), res)}
+                    return res.send(Buffer.from(data).toString('base64'))
+                });
+            } else {
+                return res.status(404).send({message: "Upload not found with id " + req.params.id});
+            }
+        });
+     
     })
     .catch((err) => {
         utils.handleErrors(err, res)
