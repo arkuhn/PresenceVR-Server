@@ -72,6 +72,10 @@ if (prod) {
 // Start Express http server on port 8080
 //var webServer = http.createServer(app);
 
+socketServer.on("connection", function(socket){
+    console.log("Socket Connection Established with ID :"+ socket.id)
+})
+
 
 // Start Socket.io so it attaches itself to Express server
 
