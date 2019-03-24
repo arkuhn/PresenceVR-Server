@@ -7,9 +7,7 @@ exports.getToken = function (req, res) {
 
     utils.authenticateRequest(req)
         .then((email) => {
-            return userIsHost(req.headers.id, email)
-        }).then(() => {
-            var identity = faker.name.findName();
+            var identity = email;
 
             // Create an access token which we will sign and return to the client,
             // containing the grant we just created
