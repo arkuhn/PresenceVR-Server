@@ -41,7 +41,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
-app.use(cors());
+
+
+var corsOptions = {
+  origin: true,
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+app.use(cors(corsOptions));
+app.options('*', cors()); // include before other routes
 
 
 //app.use(express.static('uploads', {root : '.'}))
@@ -50,43 +57,35 @@ require('./app/routes/room.routes')(app);
 require('./app/routes/interview.routes')(app);
 require('./app/routes/upload.routes')(app);
 
+// Get port or default to 8080
+var port = process.env.PORT || 8080;
 
 
 
+let webServer = http.createServer(app);
 
-let httpServer = http.createServer(app);
+var socketServer = socketIo.listen(webServer, {"log level":1, origins: "*:*"});
 
-let options, socketServer, secureServer;
-
-if (prod) { 
-    options = {
-        key:  fs.readFileSync(myIceConfig.https.key),
-        cert: fs.readFileSync(myIceConfig.https.cert)
-    }
-
-    secureServer = https.createServer( options, app);
-    socketServer = socketIo.listen(secureServer, {"log level":1});
-} else {
-    socketServer = socketIo.listen(httpServer, {"log level":1});
-}
-// Start Express http server on port 8080
-//var webServer = http.createServer(app);
-
-
-// Start Socket.io so it attaches itself to Express server
-
-
+var myIceServers = [
+  {"url":"stun:stun.l.google.com:19302"},
+  {"url":"stun:stun1.l.google.com:19302"},
+  {"url":"stun:stun2.l.google.com:19302"},
+  {"url":"stun:stun3.l.google.com:19302"}
+  // {
+  //   "url":"turn:[ADDRESS]:[PORT]",
+  //   "username":"[USERNAME]",
+  //   "credential":"[CREDENTIAL]"
+  // },
+  // {
+  //   "url":"turn:[ADDRESS]:[PORT][?transport=tcp]",
+  //   "username":"[USERNAME]",
+  //   "credential":"[CREDENTIAL]"
+  // }
+];
+easyrtc.setOption("appIceServers", myIceServers);
 easyrtc.setOption("logLevel", "debug");
-
-
-easyrtc.on("getIceConfig", request.bind(this, myIceConfig.request, (error, response, body) => {
-    if (!error && response.statusCode == 200) {
-        let info = JSON.parse(body);
-        console.log(info.v.iceServers);
-        easyrtc.setOption('appIceServers', info.v.iceServers);
-      }
-}));
-
+easyrtc.setOption("demosEnable", false);
+easyrtc.setOption("transport", ['websocket']);
 
 // Overriding the default easyrtcAuth listener, only so we can directly access its callback
 easyrtc.events.on("easyrtcAuth", function(socket, easyrtcid, msg, socketCallback, callback) {
@@ -96,7 +95,6 @@ easyrtc.events.on("easyrtcAuth", function(socket, easyrtcid, msg, socketCallback
             return;
         }
 
-        console.log("hiiiiiiii");
         connectionObj.setField("credential", msg.msgData.credential, {"isShared":false});
 
         console.log("["+easyrtcid+"] Credential saved!", connectionObj.getFieldValueSync("credential"));
@@ -105,139 +103,24 @@ easyrtc.events.on("easyrtcAuth", function(socket, easyrtcid, msg, socketCallback
     });
 });
 
-easyrtc.events.on("msgTypeGetRoomList", function (connectionObj, socketCallback, next) {
-    easyrtc.util.logDebug("getRoomList received from client! Checking GRR DB to find rooms");
-    let appObj = connectionObj.getApp();
-    roomModel.find(function (err, rooms) {
-        if(err) {
-            easyrtc.util.logDebug("Unable to retrieve existing rooms from GRR database");
-            // TODO: Send socket.io message back to client explaining error.
-            return;
-        }
-
-        else {
-            connectionObj.generateRoomList(function (error, roomList) {
-                if (error) {
-                    easyrtc.util.logDebug("Unable to retrieve existing EasyRTCServer rooms.");
-                    // TODO: Send socket.io message back to client explaining error.
-                    return;
-                }
-
-                else {
-                    let existingRooms = Object.keys(roomList);
-                    rooms.forEach(function (room) {
-                        if (!existingRooms.includes(room['name'])) {
-                            easyrtc.util.logDebug("Room '" + room['name'] +"' does not exist. Attempting creation.");
-                            appObj.createRoom(room['name'], null, function (err, roomObj) {
-                                if (err) {
-                                    easyrtc.util.logDebug("Unable to create room");
-                                }
-                                else {
-                                    existingRooms.push(room['name']);
-                                    console.log(existingRooms);
-                                }
-                            });
-                        }
-
-                        else {
-                            easyrtc.util.logDebug("Room '"+ room['name'] + "' exists. Doing nothing.");
-                        }
-                    });
-
-                    connectionObj.generateRoomList(function (err, roomList) {
-                        easyrtc.util.sendSocketCallbackMsg(connectionObj.getEasyrtcid(), socketCallback,{"msgType": "roomList", "msgData":{"roomList":roomList}}, appObj);
-                    });
-                }
-            });
-        }
-    });
-});
-
-easyrtc.events.on("msgTypeRoomJoin", function (connectionObj, rooms, socketCallback, next) {
-    easyrtc.util.logDebug("msgTypeRoomJoin received from client!");
-    var appObj = connectionObj.getApp();
-    var roomObject = rooms[Object.keys(rooms)[0]];
-    console.log(roomObject);
-
-    if(roomObject['roomParameter']['joinOnCompletion']) {
-        easyrtc.util.logDebug("Trying to join existing room! Calling roomJoin for room '" + roomObject['roomName'] + "'");
-        appObj.events.defaultListeners.roomJoin(connectionObj, roomObject['roomName'], null, next);
-        easyrtc.util.sendSocketCallbackMsg(connectionObj.getEasyrtcid(), socketCallback, {"msgType": "roomData", "msgData": {}}, appObj);
-    }
-
-    roomModel.findOne({'name': roomObject['roomName']}, function (err, room) {
-        if (err) {
-            console.log(err);
-            if(err.kind === 'ObjectId') {
-                easyrtc.util.logDebug("Cannot find room. Attempting to create");
-                appObj.createRoom(roomObject['roomName'], null, function (err, roomObj) {
-                    if (err) {
-
-                    }
-
-                    else {
-                        easyrtc.util.sendSocketCallbackMsg(connectionObj.getEasyrtcid(), socketCallback, {"msgType": "roomData", "msgData":{"roomData": roomObj.toString()}}, appObj);
-                    }
-                });
-            }
-        }
-
-        if (!room) {
-            easyrtc.util.logDebug("Room object false. Attempting to create ");
-            appObj.createRoom(roomObject['roomName'], null, function (err, roomObj) {
-                if (err) {
-
-                }
-
-                if(roomObject['roomParameter']['joinOnCompletion']) {
-                    appObj.events.defaultListeners.roomJoin(connectionObj, roomObject['roomName'], null, next);
-                }
-                else {
-                    var roomName = roomObject['roomName'];
-                    var roomDataobj = {
-                        roomName : {
-                            "roomName": roomName
-                        }
-                    };
-
-                    easyrtc.util.sendSocketCallbackMsg(connectionObj.getEasyrtcid(), socketCallback, {"msgType": "roomData", "msgData":{"roomData": roomDataobj}}, appObj);
-                }
-            });
-        }
-
-        // room exists in GRR DB so check to see if it exists in EasyRTC Server
-        // if yes, join if joinOnCompletion is true
-        //      otherwise (joinOnCompletion is false),  stop and send message back to client
-        // if no, create (and join) if joinOnCompletion is true
-        //      otherwise (joinOnCompletion is false),  stop and send message back to client
-
-
-    });
-});
-
-easyrtc.events.on("roomCreate", function(appObj, creatorConnectionObj, roomName, roomOptions, callback) {
-    easyrtc.util.logDebug("roomCreate fired! Checking GRR DB for room: " + roomName);
-});
-
+// To test, lets print the credential to the console for every room join!
 easyrtc.events.on("roomJoin", function(connectionObj, roomName, roomParameter, callback) {
-    easyrtc.util.logDebug("roomJoin fired! Attempting to join room");
+    console.log("["+connectionObj.getEasyrtcid()+"] Credential retrieved!", connectionObj.getFieldValueSync("credential"));
     easyrtc.events.defaultListeners.roomJoin(connectionObj, roomName, roomParameter, callback);
 });
 
 // Start EasyRTC server
-const rtcServer = easyrtc.listen(app, socketServer, {logLevel:"debug", logDateEnable:true, logMessagesEnable: true, demosEnable: false, appAutoCreateEnable: false, roomDefaultEnable: false, appDefaultName: 'GameRoomRecruiting'}, function(err, rtcRef) {
-
+var rtc = easyrtc.listen(app, socketServer, null, function(err, rtcRef) {
     console.log("Initiated");
-    rtcRef.app(null, function (err, appObj) {});
 
-    //listen on PORT
-    if (prod) {
-        secureServer.listen(HTTPS_PORT, function () {
-            console.log(`setup HTTPS Server`);
-        });
-    }
+    rtcRef.events.on("roomCreate", function(appObj, creatorConnectionObj, roomName, roomOptions, callback) {
+        console.log("roomCreate fired! Trying to create: " + roomName);
 
-    httpServer.listen(HTTP_PORT, function() {
-        console.log(`Setup HTTP Server`);
+        appObj.events.defaultListeners.roomCreate(appObj, creatorConnectionObj, roomName, roomOptions, callback);
     });
+});
+
+//listen on port
+webServer.listen(port, function () {
+  console.log('listening on http://localhost:' + port);
 });
