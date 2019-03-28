@@ -15,7 +15,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var roomModel = require("./app/models/room.model");
 var path = require("path");
-
+var scokets = require('./sockets')
 
 const HTTP_PORT = process.env.PORT || 8080;
 const HTTPS_PORT = process.env.PORT || 8000;
@@ -56,7 +56,6 @@ app.options('*', cors()); // include before other routes
 require('./app/routes/room.routes')(app);
 require('./app/routes/interview.routes')(app);
 require('./app/routes/upload.routes')(app);
-require('./app/routes/twilio.routes')(app);
 
 // Get port or default to 8080
 var port = process.env.PORT || 8080;
@@ -83,6 +82,7 @@ var myIceServers = [
   //   "credential":"[CREDENTIAL]"
   // }
 ];
+scokets.registerEventHandlers(socketServer)
 easyrtc.setOption("appIceServers", myIceServers);
 easyrtc.setOption("logLevel", "debug");
 easyrtc.setOption("demosEnable", false);
