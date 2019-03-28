@@ -56,6 +56,7 @@ app.options('*', cors()); // include before other routes
 require('./app/routes/room.routes')(app);
 require('./app/routes/interview.routes')(app);
 require('./app/routes/upload.routes')(app);
+require('./app/routes/twilio.routes')(app);
 
 // Get port or default to 8080
 var port = process.env.PORT || 8080;
