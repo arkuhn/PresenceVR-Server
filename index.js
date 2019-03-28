@@ -15,7 +15,7 @@ var bodyParser = require('body-parser');
 var cors = require('cors');
 var roomModel = require("./app/models/room.model");
 var path = require("path");
-
+var scokets = require('./sockets')
 
 const HTTP_PORT = process.env.PORT || 8080;
 const HTTPS_PORT = process.env.PORT || 8000;
@@ -83,6 +83,7 @@ var myIceServers = [
   //   "credential":"[CREDENTIAL]"
   // }
 ];
+scokets.registerEventHandlers(socketServer)
 easyrtc.setOption("appIceServers", myIceServers);
 easyrtc.setOption("logLevel", "debug");
 easyrtc.setOption("demosEnable", false);
