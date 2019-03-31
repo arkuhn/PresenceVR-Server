@@ -34,6 +34,14 @@ const registerEventHandlers = (io) => {
           console.log('received error from client:', client.id)
           console.log(err)
         })
+
+        client.on('Marco', (data) => {
+          io.to(data.id).emit('Marco', data);
+        })
+
+        client.on('Polo', (data) => {
+          io.to(data.id).emit('Polo', data);
+        })
       })
 }
 
