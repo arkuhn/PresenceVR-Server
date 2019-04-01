@@ -160,7 +160,9 @@ exports.getFile = function(req, res) {
         //TODO potential file escaping
         console.log('Finding file with id: ', req.params.id)
          Upload.findOne({'_id': req.params.id}, function(err, upload) {
-             
+            if (upload.owner !== email) {
+                return res.status(403).send({message: "Not yours"});
+            }
             if (err) { return utils.handleMongoErrors(err, res) }
             if(!upload) {
                 return res.status(404).send({message: "Upload not found with id " + req.params.id});
