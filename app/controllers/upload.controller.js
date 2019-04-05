@@ -166,15 +166,16 @@ exports.getFile = function(req, res) {
             }
             let path = './uploads/' + upload.fullpath
 
-            if (fs.existsSync(path)) {
-                console.log('Converting and sending image')
-                return fs.readFile(path, function(err, data) {
+            fs.access(path, (err) => {
+                if (err) {
+                    console.error(err)
+                    return res.status(500).send({message: "Upload not found with id " + req.params.id});
+                }
+                fs.readFile(path, function(err, data) {
                     if(err) {return utils.handleErrors(errors.uploadError(), res)}
                     return res.send(Buffer.from(data).toString('base64'))
                 });
-            } else {
-                return res.status(404).send({message: "Upload not found with id " + req.params.id});
-            }
+            })
         });
      
     })
