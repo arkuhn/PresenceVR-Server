@@ -158,13 +158,19 @@ exports.delete = function(req, res) {
 };
 
 exports.getFile = function(req, res) {
+    //TODO JWT probably shouldnt be in the URL & set to headers here for utility function
+    //Would be better off actually in the headers or body 
     req.headers.authorization = req.params.token
     utils.authenticateRequest(req)
     .then((email) => {
         console.log(email)
         if (req.params.uid === email.replace(/[^a-zA-Z0-9]/g, '')){
-            res.sendFile( path.resolve(__dirname + `/../../storage/uploads/${req.params.uid}/${req.params.filename}`))
+            return res.sendFile( path.resolve(__dirname + `/../../storage/uploads/${req.params.uid}/${req.params.filename}`))
         }
+        return res.status(403).send({message: "Invalid access"});
+    })
+    .catch((err) => {
+        utils.handleErrors(err, res)
     })
    
 }
