@@ -58,6 +58,8 @@ require('./app/routes/interview.routes')(app);
 require('./app/routes/upload.routes')(app);
 require('./app/routes/twilio.routes')(app);
 
+app.use(express.static(__dirname + '/storage'));
+
 // Get port or default to 8080
 var port = process.env.PORT || 8080;
 

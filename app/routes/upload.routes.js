@@ -14,6 +14,5 @@ module.exports = function(app) {
     app.delete('/api/uploads/:id', uploads.delete);
 
     // Retrieve a file by id
-    app.get('/uploads/:id', uploads.getFile);
-
+    app.get('/uploads/:uid/:filename/:token', uploads.getFile);
 }
