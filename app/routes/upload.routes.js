@@ -15,4 +15,14 @@ module.exports = function(app) {
 
     // Retrieve a file by id
     app.get('/uploads/:uid/:filename/:token', uploads.getFile);
+
+    //Dont permit GETs in scratch directory
+    app.get('/uploads/*', (req, res)=> {
+        res.status(500).send()
+    })
+
+    //Dont permit GETs without token included
+    app.get('/uploads/*/*', (req, res)=> {
+        res.status(500).send()
+    })
 }
