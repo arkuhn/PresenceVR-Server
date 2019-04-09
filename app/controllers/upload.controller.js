@@ -21,8 +21,7 @@ exports.create = function(req, res) {
             
             let source = './uploads/' + req.files[0].filename
             let destination = './storage/uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename
-            mv(source, destination, {mkdirp: true}, function(err) {   
-                console.error(err)             
+            mv(source, destination, {mkdirp: true}, function(err) {               
                 if (err) { return utils.handleErrors(errors.uploadError(), res) }
 
                 if (req.files[0].mimetype.includes("png") || req.files[0].mimetype.includes("jpeg")){
@@ -50,7 +49,7 @@ exports.create = function(req, res) {
                         })
                     });
                 }
-                else if (req.files[0].mimetype.includes("octet-stream")){
+                else if (req.files[0].mimetype.includes("octet-stream") || req.files[0].mimetype.includes("o/mp4")){
                     
                     if (err) { return utils.handleErrors(errors.uploadError(), res) }
 
@@ -62,12 +61,14 @@ exports.create = function(req, res) {
                         filetype: req.files[0].mimetype,
                         fullpath: destination
                     })
+                    console.log(upload)
 
                     upload.save(function(err, data) {
                         if (err) { return utils.handleMongoErrors(err, res) }
                         console.log('Upload saved')
                         res.status(200).send({message: "File successfully uploaded"});  
                     })
+                    console.log(err)
                 }
             });
         })
