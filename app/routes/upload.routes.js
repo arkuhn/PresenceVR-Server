@@ -14,7 +14,7 @@ module.exports = function(app) {
     app.delete('/api/uploads/:id', uploads.delete);
 
     // Retrieve a file by id
-    app.get('/uploads/:uid/:filename/:token', uploads.getFile);
+    app.get('/uploads/:uid/:id/:token', uploads.getFile);
 
     //Dont permit GETs in scratch directory
     app.get('/uploads/*', (req, res)=> {

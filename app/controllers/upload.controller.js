@@ -164,10 +164,14 @@ exports.getFile = function(req, res) {
     req.headers.authorization = req.params.token
     utils.authenticateRequest(req)
     .then((email) => {
-        if (req.params.uid === email.replace(/[^a-zA-Z0-9]/g, '')){
-            return res.sendFile( path.resolve(__dirname + `/../../storage/uploads/${req.params.uid}/${req.params.filename}`))
-        }
-        return res.status(403).send({message: "Invalid access"});
+        console.log('Finding file with id: ', req.params.id)
+         Upload.findOne({'_id': req.params.id}, function(err, upload) {
+            if (err) { return utils.handleMongoErrors(err, res) }
+            if(!upload) {
+                return res.status(404).send({message: "Upload not found with id " + req.params.id});
+            }
+            return res.sendFile( path.resolve(upload.fullpath))
+        });
     })
     .catch((err) => {
         utils.handleErrors(err, res)
