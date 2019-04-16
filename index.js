@@ -13,7 +13,6 @@ let env = require('node-env-file');
 env(__dirname + '/.env');
 var bodyParser = require('body-parser');
 var cors = require('cors');
-var roomModel = require("./app/models/room.model");
 var path = require("path");
 var scokets = require('./sockets')
 
@@ -53,7 +52,6 @@ app.options('*', cors()); // include before other routes
 
 //app.use(express.static('uploads', {root : '.'}))
 
-require('./app/routes/room.routes')(app);
 require('./app/routes/interview.routes')(app);
 require('./app/routes/upload.routes')(app);
 require('./app/routes/twilio.routes')(app);
