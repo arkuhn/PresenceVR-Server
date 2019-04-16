@@ -70,6 +70,7 @@ exports.create = function(req, res) {
             scheduledOnDate: new Date().toLocaleDateString("en-US"),
             participants: participants,
             loadedAssets: [],
+            hostCamInVR: false,
             loadedEnvironment: 'default'
             
         });
@@ -204,6 +205,9 @@ exports.patch = function(req, res) {
                         return res.status(404).send({message: 'Cannot remove element that does not exist'})
                     }
                     interview[req.body.field].splice(index, 1)
+                }
+                if (req.body.op === 'replace') {
+                    interview[req.body.field] = req.body.value
                 }
 
                 return Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, newInterview){

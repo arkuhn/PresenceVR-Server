@@ -29,6 +29,18 @@ const registerEventHandlers = (io) => {
           online[client.user] === 0
           io.to(client.room).emit('leave', {user: client.user})
         })
+
+        client.on('leave', function () {
+            console.log('client leave room...', client.id)
+            online[client.user] === 0
+            client.leave(client.room)
+            io.to(client.room).emit('leave', {user: client.user})
+        })
+
+        client.on('update', function() {
+          console.log('client update')
+          io.to(client.room).emit('updateInterview')
+        })
       
         client.on('error', function (err) {
           console.log('received error from client:', client.id)

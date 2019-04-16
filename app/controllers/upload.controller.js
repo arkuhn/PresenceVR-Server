@@ -8,7 +8,7 @@ var mv = require('mv')
 var getSize = require('image-size');
 var utils = require('../utils')
 var errors = require('../utils/errors')
-
+var path = require('path');
 
 exports.create = function(req, res) {
     utils.authenticateRequest(req)
@@ -18,16 +18,18 @@ exports.create = function(req, res) {
             if (err) { throw errors.uploadError()}       
             //Move the file to 
             //console.log(req.files[0])
-            let path = './uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/'
+            
             let source = './uploads/' + req.files[0].filename
-            let destination = path + req.files[0].filename
-            mv(source, destination, {mkdirp: true}, function(err) {                
+            let destination = './storage/uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename
+            mv(source, destination, {mkdirp: true}, function(err) {               
                 if (err) { return utils.handleErrors(errors.uploadError(), res) }
 
                 if (req.files[0].mimetype.includes("png") || req.files[0].mimetype.includes("jpeg")){
-                    getSize(path + req.files[0].filename, function (err, size) {
+                    getSize(destination, function (err, size) {
                         
-                        if (err) { return utils.handleErrors(errors.uploadError(), res) }
+                        if (err) { console.error(err) 
+                            return utils.handleErrors(errors.uploadError(), res) 
+                        }
 
                         var upload = new Upload({
                             name: req.files[0].filename,
@@ -35,7 +37,7 @@ exports.create = function(req, res) {
                             owner: email,   
                             type: req.headers.type,
                             filetype: req.files[0].mimetype,
-                            fullpath: ('/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename),
+                            fullpath: destination,
                             height: size.height,
                             width: size.width
                         })
@@ -47,7 +49,7 @@ exports.create = function(req, res) {
                         })
                     });
                 }
-                else if (req.files[0].mimetype.includes("octet-stream")){
+                else if (req.files[0].mimetype.includes("octet-stream") || req.files[0].mimetype.includes("o/mp4")){
                     
                     if (err) { return utils.handleErrors(errors.uploadError(), res) }
 
@@ -57,14 +59,16 @@ exports.create = function(req, res) {
                         owner: email,   
                         type: req.headers.type,
                         filetype: req.files[0].mimetype,
-                        fullpath: ('/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename),
+                        fullpath: destination
                     })
+                    console.log(upload)
 
                     upload.save(function(err, data) {
                         if (err) { return utils.handleMongoErrors(err, res) }
                         console.log('Upload saved')
                         res.status(200).send({message: "File successfully uploaded"});  
                     })
+                    console.log(err)
                 }
             });
         })
@@ -139,7 +143,7 @@ exports.delete = function(req, res) {
                 return upload
             })
             .then((upload) => {
-                var path = './uploads/' + upload.fullpath
+                var path = upload.fullpath
                 if (!fs.existsSync(path)) {
                     return res.status(404).send({message: `No upload found`});
                 }
@@ -155,33 +159,22 @@ exports.delete = function(req, res) {
 };
 
 exports.getFile = function(req, res) {
+    //TODO JWT probably shouldnt be in the URL & set to headers here for utility function
+    //Would be better off actually in the headers or body 
+    req.headers.authorization = req.params.token
     utils.authenticateRequest(req)
     .then((email) => {
-        //TODO potential file escaping
         console.log('Finding file with id: ', req.params.id)
          Upload.findOne({'_id': req.params.id}, function(err, upload) {
-            if (upload.owner !== email) {
-                return res.status(403).send({message: "Not yours"});
-            }
             if (err) { return utils.handleMongoErrors(err, res) }
             if(!upload) {
                 return res.status(404).send({message: "Upload not found with id " + req.params.id});
             }
-            let path = './uploads/' + upload.fullpath
-
-            if (fs.existsSync(path)) {
-                console.log('Converting and sending image')
-                return fs.readFile(path, function(err, data) {
-                    if(err) {return utils.handleErrors(errors.uploadError(), res)}
-                    return res.send(Buffer.from(data).toString('base64'))
-                });
-            } else {
-                return res.status(404).send({message: "Upload not found with id " + req.params.id});
-            }
+            return res.sendFile( path.resolve(upload.fullpath))
         });
-     
     })
     .catch((err) => {
         utils.handleErrors(err, res)
     })
+   
 }
