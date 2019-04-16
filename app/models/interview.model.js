@@ -9,7 +9,6 @@ var InterviewSchema = new mongoose.Schema({
     scheduledOnDate: String,
     participants: [String],
     loadedAssets: [String],
-    hostCamInVR: Boolean,
     loadedEnvironment: String
 }, {
     timestamps: true
