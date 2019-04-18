@@ -17,7 +17,7 @@ exports.create = function(req, res) {
         upload(req, res, (err) => {           
             if (err) { throw errors.uploadError()}       
             //Move the file to 
-            //console.log(req.files[0])
+            console.log(req.files[0])
             
             let source = './uploads/' + req.files[0].filename
             let destination = './storage/uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename
@@ -51,6 +51,27 @@ exports.create = function(req, res) {
                 }
                 else if (req.files[0].mimetype.includes("octet-stream") || req.files[0].mimetype.includes("o/mp4")){
                     
+                    if (err) { return utils.handleErrors(errors.uploadError(), res) }
+
+                    var upload = new Upload({
+                        name: req.files[0].filename,
+                        uploadedOnDate: Date.now(),
+                        owner: email,   
+                        type: req.headers.type,
+                        filetype: req.files[0].mimetype,
+                        fullpath: destination
+                    })
+                    console.log(upload)
+
+                    upload.save(function(err, data) {
+                        if (err) { return utils.handleMongoErrors(err, res) }
+                        console.log('Upload saved')
+                        res.status(200).send({message: "File successfully uploaded"});  
+                    })
+                    console.log(err)
+                }
+
+                else if (req.files[0].mimetype.includes("application/zip")){
                     if (err) { return utils.handleErrors(errors.uploadError(), res) }
 
                     var upload = new Upload({
