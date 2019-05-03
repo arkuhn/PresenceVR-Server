@@ -47,7 +47,8 @@ An `upload` represents an asset/object that is uploaded to the server by a user.
 - type: String - Typye of upload
 - filetype: String - Mimetype of the upload
 - fullpath: String - Full path to the upload file on the server
-  - This is stored in `/storage/uploads/:stripped_owners_email` where `:stripped_owners_email` represents the email of the owner stripped of any non-alphanumerical characters. (ie. `email.replace(/[^a-zA-Z0-9]/g,'')`)
+  - This is stored in `/storage/uploads/:stripped_owners_email` where `:stripped_owners_email` represents the email of the owner stripped of any non-alphanumerical characters. 
+  (ie. `email.replace(/[^a-zA-Z0-9]/g,'')`)
   - Example: `example@email.com` uploads `example.jpg` -> file is saved at `/storage/uploads/exampleemailcom/example.jpg`
 - height: Number - First dimension (height) of the upload
 - width: Number - Second dimension (width) of the upload
