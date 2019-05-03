@@ -1,5 +1,30 @@
 # Feature Map
 
+## File Structure
+- app
+    - controllers
+    - models
+    - routes
+    - utils
+- configs
+- dev-tools
+- docs
+- lib
+- node_modules
+- storage
+- uploads
+- .env
+- .gitignore
+- app.yaml
+- database.js
+- firebase.js
+- index.js
+- package-lock.json
+- package.json
+- README.md
+- sockets.js
+- storage.js
+
 ## Exposed Objects
 The following objects can be constructed, modified, and deleted through our API routes.
 Data is persisted inside of a MongoDB instance and files are stored inside of `storage/uploads/` and organized per user.
@@ -63,8 +88,6 @@ An `upload` represents an asset/object that is uploaded to the server by a user.
 ---
 
 ## Future Goals
-## Gotchas
-## Files
-## Libraries
+
 ## Need to dos - Important stuff
 uploads resolve duplicate names
