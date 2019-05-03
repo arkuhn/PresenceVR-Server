@@ -1,19 +1,19 @@
 
-var firebase  = require('../../firebase')
+var firebase  = require('../../firebase');
 var Interview = require('../models/interview.model.js');
 var Upload = require('../models/upload.model.js');
-var errors = require('./errors')
+var errors = require('./errors');
 
 exports.authenticateRequest = function(req) {
     return firebase.authenticateToken(req.headers.authorization).then(({ email }) => {
         if ( email ) {
-            return email
+            return email;
         }
-        console.warn('Request could not be authenticated')
-        throw errors.badAuth()
+        console.warn('Request could not be authenticated');
+        throw errors.badAuth();
     }).catch((err) => {
-        console.error(err)
-        throw errors.badAuth()
+        console.error(err);
+        throw errors.badAuth();
     })
 }
 
@@ -21,19 +21,19 @@ exports.authenticateRequest = function(req) {
 Takes an optional description for uncaught errors
 */
 exports.handleErrors = function(err, res) {
-    console.error(err)
+    console.error(err);
     if (err.code && err.description) {
-        return res.status(err.code).send(err.description)
+        return res.status(err.code).send(err.description);
     }
     
-    return res.status(500).send()
+    return res.status(500).send();
 }
 
 exports.handleMongoErrors = function(err, res) {
-    console.error(err)
+    console.error(err);
     if (err.kind === 'ObjectId') {
-        res.status(404).send('Resource not found')
+        res.status(404).send('Resource not found');
     } else {
-        res.status(500).send('Mongo error')
+        res.status(500).send('Mongo error');
     }
 }

@@ -18,11 +18,11 @@ module.exports = function(app) {
 
     //Dont permit GETs in scratch directory
     app.get('/uploads/*', (req, res)=> {
-        res.status(500).send()
+        res.status(500).send();
     })
 
     //Dont permit GETs without token included
     app.get('/uploads/*/*', (req, res)=> {
-        res.status(500).send()
+        res.status(500).send();
     })
 }

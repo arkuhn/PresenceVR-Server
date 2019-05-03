@@ -1,5 +1,5 @@
-var db = require('../../database')
-var mongoose = require('mongoose')
+var db = require('../../database');
+var mongoose = require('mongoose');
 
 var InterviewSchema = new mongoose.Schema({
     host: String,

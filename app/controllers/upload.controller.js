@@ -1,13 +1,13 @@
 var Upload = require('../models/upload.model.js');
 var uploadUtils = require('../utils/uploadUtils');
-var firebase  = require('../../firebase')
-var Interview = require('../models/interview.model.js')
-var upload = require('../../storage')
-var fs = require('fs')
-var mv = require('mv')
+var firebase  = require('../../firebase');
+var Interview = require('../models/interview.model.js');
+var upload = require('../../storage');
+var fs = require('fs');
+var mv = require('mv');
 var getSize = require('image-size');
-var utils = require('../utils')
-var errors = require('../utils/errors')
+var utils = require('../utils');
+var errors = require('../utils/errors');
 var path = require('path');
 
 exports.create = function(req, res) {
@@ -15,12 +15,12 @@ exports.create = function(req, res) {
     .then((email) => {
         console.log('Received authenticated file upload request')
         upload(req, res, (err) => {           
-            if (err) { throw errors.uploadError()}       
+            if (err) { throw errors.uploadError()}    
             //Move the file to 
             //console.log(req.files[0])
             
-            let source = './uploads/' + req.files[0].filename
-            let destination = './storage/uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename
+            let source = './uploads/' + req.files[0].filename;
+            let destination = './storage/uploads/' + email.replace(/[^a-zA-Z0-9]/g, '') + '/' + req.files[0].filename;
             mv(source, destination, {mkdirp: true}, function(err) {               
                 if (err) { return utils.handleErrors(errors.uploadError(), res) }
 
@@ -28,7 +28,7 @@ exports.create = function(req, res) {
                     getSize(destination, function (err, size) {
                         
                         if (err) { console.error(err) 
-                            return utils.handleErrors(errors.uploadError(), res) 
+                            return utils.handleErrors(errors.uploadError(), res);
                         }
 
                         var upload = new Upload({
@@ -40,11 +40,11 @@ exports.create = function(req, res) {
                             fullpath: destination,
                             height: size.height,
                             width: size.width
-                        })
+                        });
 
                         upload.save(function(err, data) {
                             if (err) { return utils.handleMongoErrors(err, res) }
-                            console.log('Upload saved')
+                            console.log('Upload saved');
                             res.status(200).send({message: "File successfully uploaded"});  
                         })
                     });
@@ -60,21 +60,21 @@ exports.create = function(req, res) {
                         type: req.headers.type,
                         filetype: req.files[0].mimetype,
                         fullpath: destination
-                    })
-                    console.log(upload)
+                    });
+                    console.log(upload);
 
                     upload.save(function(err, data) {
                         if (err) { return utils.handleMongoErrors(err, res) }
-                        console.log('Upload saved')
+                        console.log('Upload saved');
                         res.status(200).send({message: "File successfully uploaded"});  
                     })
-                    console.log(err)
+                    console.log(err);
                 }
             });
         })
     })
     .catch((err) => {
-        utils.handleErrors(err, res)
+        utils.handleErrors(err, res);
     })
 };
 
@@ -85,10 +85,10 @@ exports.findAll = function(req, res) {
         Upload.find({'owner': email}, function(err, uploads){
             if (err) { return utils.handleMongoErrors(err, res) }
             else if(!uploads) {
-                return res.status(404)
+                return res.status(404);
             }
             else {
-                res.send(uploads)
+                res.send(uploads);
                 //uploadUtils.filterUploads(uploads, (modified, filteredUploads) => {
                 //    res.send(filteredUploads);
                 //});
@@ -96,25 +96,25 @@ exports.findAll = function(req, res) {
         });
     })
     .catch((err) => {
-        utils.handleErrors(err, res)
+        utils.handleErrors(err, res);
     })
 };
 
 exports.findOne = function(req, res) {
     utils.authenticateRequest(req)
     .then((email) => {
-        console.log('Finding upload with id: ', req.params.id)
+        console.log('Finding upload with id: ', req.params.id);
         return Upload.findOne({'_id': req.params.id}, function(err, upload) {
             if (err) { return utils.handleMongoErrors(err, res) }
             if(!upload) {
                 return res.status(404).send({message: "Upload not found with id " + req.params.id});
             }
             
-            return res.send(upload)
+            return res.send(upload);
         });
     })
     .catch((err) => {
-        utils.handleErrors(err, res)
+        utils.handleErrors(err, res);
     })
 };
 
@@ -123,27 +123,27 @@ exports.delete = function(req, res) {
     utils.authenticateRequest(req)
     .then((email) => {
         console.log("Recieved authenticated uploads delete by user: " + email);
-        var deleteUploadFromDB = Upload.findOneAndDelete({'owner': email, '_id': req.params.id}).exec()
+        var deleteUploadFromDB = Upload.findOneAndDelete({'owner': email, '_id': req.params.id}).exec();
         return deleteUploadFromDB
             .then((upload) => {
                 if(!upload || upload.owner != email) {
                     return res.status(404).send({message: "No upload found matching id and owner."});
                 }
-                return Promise.all([Promise.resolve(upload), Interview.find({loadedAssets: upload._id}).exec()])
+                return Promise.all([Promise.resolve(upload), Interview.find({loadedAssets: upload._id}).exec()]);
             })
             .then(([upload, interviewsWithUpload]) => {
                 var unloadPromises = interviewsWithUpload.map((interview) => {
-                    return Interview.findByIdAndUpdate(interview._id, interview.loadedAssets.splice(interview.loadedAssets.indexOf(upload._id, 1))).exec()
+                    return Interview.findByIdAndUpdate(interview._id, interview.loadedAssets.splice(interview.loadedAssets.indexOf(upload._id, 1))).exec();
                 })
 
                 Promise.all(unloadPromises).then((interviews) => {
-                    console.log(`Deleted Asset was unloaded from ${interviews.length} interviews`)
+                    console.log(`Deleted Asset was unloaded from ${interviews.length} interviews`);
                 })
 
                 return upload
             })
             .then((upload) => {
-                var path = upload.fullpath
+                var path = upload.fullpath;
                 if (!fs.existsSync(path)) {
                     return res.status(404).send({message: `No upload found`});
                 }
@@ -154,27 +154,27 @@ exports.delete = function(req, res) {
             })
     })
     .catch((err) => {
-        utils.handleErrors(err, res)
+        utils.handleErrors(err, res);
     })
 };
 
 exports.getFile = function(req, res) {
     //TODO JWT probably shouldnt be in the URL & set to headers here for utility function
     //Would be better off actually in the headers or body 
-    req.headers.authorization = req.params.token
+    req.headers.authorization = req.params.token;
     utils.authenticateRequest(req)
     .then((email) => {
-        console.log('Finding file with id: ', req.params.id)
+        console.log('Finding file with id: ', req.params.id);
          Upload.findOne({'_id': req.params.id}, function(err, upload) {
             if (err) { return utils.handleMongoErrors(err, res) }
             if(!upload) {
                 return res.status(404).send({message: "Upload not found with id " + req.params.id});
             }
-            return res.sendFile( path.resolve(upload.fullpath))
+            return res.sendFile( path.resolve(upload.fullpath));
         });
     })
     .catch((err) => {
-        utils.handleErrors(err, res)
+        utils.handleErrors(err, res);
     })
    
 }

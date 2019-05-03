@@ -1,6 +1,6 @@
 var Interview = require('../models/interview.model.js');
-var utils = require('../utils')
-var errors = require('../utils/errors')
+var utils = require('../utils');
+var errors = require('../utils/errors');
 var uploadUtils = require('../utils/uploadUtils');
 
 
@@ -9,18 +9,18 @@ function userIsHost(id, email) {
     return query.then((interview) => {
         if (!interview) { throw errors.notFound() }
         if (interview.host === email ) {
-            return true
+            return true;
         }
-        console.warn('User is not host')
-        throw errors.badAuth()
+        console.warn('User is not host');
+        throw errors.badAuth();
     })
 }
 
 
 function leavingInterview(id, email, newData) {
-    console.log("Checking if leaving Interview:")
+    console.log("Checking if leaving Interview:");
     Interview.findOne({'_id': id}, function(err, interview) {
-        console.log(email)
+        console.log(email);
         let reconstructedInterview = newData;
         reconstructedInterview.participants.push(email);
         return isEquivalent(interview, reconstructedInterview);
@@ -77,7 +77,7 @@ exports.create = function(req, res) {
         interview.save(function(err, data) {
             if (err) { return utils.handleMongoErrors(err, res) }
             else {
-                console.log('Interview saved')
+                console.log('Interview saved');
                 res.send(data);
             }
         });
@@ -90,7 +90,7 @@ exports.create = function(req, res) {
 exports.delete = function(req, res) {
     utils.authenticateRequest(req)
     .then((email) => {
-        return userIsHost(req.headers.id, email)
+        return userIsHost(req.headers.id, email);
     })
     .then(() => {
         Interview.findOneAndDelete({'_id': req.headers.id}, function(err, interview) { 
@@ -100,24 +100,24 @@ exports.delete = function(req, res) {
         })
     })
     .catch((err) => {
-        utils.handleErrors(err, res)
+        utils.handleErrors(err, res);
     })   
 };
 
 exports.update = function(req, res) {
     utils.authenticateRequest(req)
     .then((email) => {
-        return userIsHost(req.params.id, email)
+        return userIsHost(req.params.id, email);
     })
     .then(() => {
-        var payload = req.body.data
+        var payload = req.body.data;
 
         //Handle the special case of participants
         if (payload.participants) {
             if (payload.participants.length === 1 && payload.participants[0] === '') {
-                payload.participants = []
+                payload.participants = [];
             }   
-            payload.participants = payload.participants.split(',')
+            payload.participants = payload.participants.split(',');
         }
 
         //Update multiple fields at once
@@ -128,13 +128,13 @@ exports.update = function(req, res) {
     }).then((payload) => {
         Interview.findOneAndUpdate({'_id': req.params.id}, payload, function(err, interview) { 
             if (err) { return utils.handleMongoErrors(err, res) }
-            console.log('Interview updated')
+            console.log('Interview updated');
             res.send(interview);
         })
     })
     .catch((err) => {
-        console.error(err)
-        utils.handleErrors(err, res)
+        console.error(err);
+        utils.handleErrors(err, res);
     })  
 };
 
@@ -152,7 +152,7 @@ exports.findOne = function(req, res) {
         });
     })
     .catch((err) => {
-        utils.handleErrors(err, res)
+        utils.handleErrors(err, res);
     })  
 
     
@@ -164,16 +164,16 @@ exports.findAll = function(req, res) {
         Interview.find({$or: [{'host': email}, {'participants': email}]}, function(err, interviews){
             if (err) { return utils.handleMongoErrors(err, res) }
             else if(!interviews) {
-                return res.status(404)
+                return res.status(404);
             }
             else {
-                console.log('Sending all inteviews for ' + email)
+                console.log('Sending all inteviews for ' + email);
                 return res.send(interviews);
             }
         });
     })
     .catch((err) => {
-        utils.handleErrors(err, res)
+        utils.handleErrors(err, res);
     })  
 };
 
@@ -183,43 +183,43 @@ exports.patch = function(req, res) {
         Interview.find({$or: [{'host': email}, {'participants': email}], $and: [{'_id': req.params.id}] }, function(err, interviews){
             if (err) { return utils.handleMongoErrors(err, res) }
             if (interviews && interviews[0]) {
-                var interview = interviews[0]
-                var isHost = (interview.host === email)
-                var isParticipant = (interview.participants.includes(email))
+                var interview = interviews[0];
+                var isHost = (interview.host === email);
+                var isParticipant = (interview.participants.includes(email));
 
-                var isRenderOperation = (req.body.field === 'loadedAssets' && (req.body.op === 'remove' || req.body.op === 'add'))
-                var isLeaveOperation = (req.body.field==='participants' && req.body.op === 'remove')
+                var isRenderOperation = (req.body.field === 'loadedAssets' && (req.body.op === 'remove' || req.body.op === 'add'));
+                var isLeaveOperation = (req.body.field==='participants' && req.body.op === 'remove');
                 if (!isHost && !isParticipant) {
-                    return res.status(403).send({message: 'Unauthorized interview update'})
+                    return res.status(403).send({message: 'Unauthorized interview update'});
                 }
                 if (isParticipant && !isRenderOperation && !isLeaveOperation) {
-                    return res.status(403).send({message: 'Unauthorized interview update'})
+                    return res.status(403).send({message: 'Unauthorized interview update'});
                 }
 
                 if (req.body.op === 'add') {
-                    interview[req.body.field].push(req.body.value)
+                    interview[req.body.field].push(req.body.value);
                 }
                 if (req.body.op === 'remove') {
-                    var index = interview[req.body.field].indexOf(req.body.value)
+                    var index = interview[req.body.field].indexOf(req.body.value);
                     if (index === -1) {
-                        return res.status(404).send({message: 'Cannot remove element that does not exist'})
+                        return res.status(404).send({message: 'Cannot remove element that does not exist'});
                     }
-                    interview[req.body.field].splice(index, 1)
+                    interview[req.body.field].splice(index, 1);
                 }
                 if (req.body.op === 'replace') {
-                    interview[req.body.field] = req.body.value
+                    interview[req.body.field] = req.body.value;
                 }
 
                 return Interview.findByIdAndUpdate({'_id': req.params.id}, interview, function(err, newInterview){
                     if (err) { return utils.handleMongoErrors(err, res) }
                     else {
-                        console.log('Interview patched')
+                        console.log('Interview patched');
                         return res.send(interview);
                     }
                 });
 
             }
-            return res.status(500).send({message: 'User not host or participant of any such interview'})
+            return res.status(500).send({message: 'User not host or participant of any such interview'});
         })
     })
 }

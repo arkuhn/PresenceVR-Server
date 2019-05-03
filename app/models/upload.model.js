@@ -1,5 +1,5 @@
-var db = require('../../database')
-var mongoose = require('mongoose')
+var db = require('../../database');
+var mongoose = require('mongoose');
 
 var UploadSchema = new mongoose.Schema({
     name: String,

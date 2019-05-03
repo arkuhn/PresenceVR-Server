@@ -31,6 +31,6 @@ exports.getToken = function (req, res) {
                 token: token.toJwt()
             });
         }).catch((err) => {
-            utils.handleErrors(err, res)
+            utils.handleErrors(err, res);
         });
 }
