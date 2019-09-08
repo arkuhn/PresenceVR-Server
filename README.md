@@ -53,7 +53,7 @@
 
 2. Update the databaseConfig in '/configs/index.js' to point to your database
 
-![database_url](C:/Users/johnn/Documents/projects/PresenceVR-Server/docs/database_url.JPG)
+![database_url](/docs/database_url.JPG)
 
 
 
